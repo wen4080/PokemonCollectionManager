@@ -30,7 +30,6 @@ import tw.pokemon.collectionmanager.data.local.ThemeMode
 private object Routes {
     const val ACCOUNTS = "accounts"
     const val OVERVIEW = "overview"
-    const val SEARCH = "search"
     const val SETTINGS = "settings"
     const val ACCOUNT = "account/{accountId}"
     const val VARIANT = "variant/{variantId}/{accountId}"
@@ -65,7 +64,6 @@ fun CollectionApp(viewModel: CollectionViewModel) {
             listOf(
                 BottomDestination(Routes.OVERVIEW, "總覽", "▦"),
                 BottomDestination(Routes.ACCOUNTS, "帳號", "◎"),
-                BottomDestination(Routes.SEARCH, "搜尋", "⌕"),
                 BottomDestination(Routes.SETTINGS, "設定", "⚙"),
             )
         }
@@ -103,12 +101,6 @@ fun CollectionApp(viewModel: CollectionViewModel) {
                 }
                 composable(Routes.OVERVIEW) {
                     OverviewScreen(
-                        viewModel = viewModel,
-                        onOpenVariant = { id -> navController.navigate("variant/$id/all") },
-                    )
-                }
-                composable(Routes.SEARCH) {
-                    SearchScreen(
                         viewModel = viewModel,
                         onOpenVariant = { id -> navController.navigate("variant/$id/all") },
                     )

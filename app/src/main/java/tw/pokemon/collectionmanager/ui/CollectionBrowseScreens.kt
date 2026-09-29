@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -29,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import tw.pokemon.collectionmanager.data.local.AccountSummaryRow
 import tw.pokemon.collectionmanager.data.repository.SavedCollectionFilters
 
 private class CollectionFilterUiState {
@@ -213,50 +210,6 @@ fun OverviewScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Un
         } else {
             VariantGrid(visible, imageRepository = viewModel.imageRepository, onClick = { onOpenVariant(it.variantId) }, modifier = Modifier.weight(1f))
         }
-    }
-}
-
-@Composable
-fun SearchScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Unit) {
-    var query by remember { mutableStateOf("") }
-    val filterState = rememberCollectionFilterUiState(viewModel)
-    var selectedAccountId by remember { mutableStateOf<String?>(null) }
-    val variantsFlow = remember(selectedAccountId) { selectedAccountId?.let { viewModel.accountVariants(it) } ?: viewModel.allVariants() }
-    val variants by variantsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    val accounts by viewModel.accounts.collectAsStateWithLifecycle()
-    val backgrounds by viewModel.backgrounds.collectAsStateWithLifecycle()
-    val visible = variants.filter { it.matches(query, filterState.filters, filterState.backgroundIds, filterState.matchMode, filterState.minimumMatches) }
-
-    Column(Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 18.dp)) {
-        PageTitle("搜尋", subtitle = "快速回答：哪些帳號有這個完整收藏版本？")
-        Spacer(Modifier.padding(6.dp))
-        OutlinedTextField(
-            value = query,
-            onValueChange = { query = it },
-            label = { Text("搜尋名稱、圖鑑編號、型態、裝扮、背景") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(Modifier.padding(4.dp))
-        CollectionFilterControls(filterState, viewModel, backgrounds)
-        Spacer(Modifier.padding(4.dp))
-        LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(vertical = 4.dp)) {
-            item {
-                FilterChip(selected = selectedAccountId == null, onClick = { selectedAccountId = null }, label = { Text("全部帳號") })
-            }
-            items(accounts.filterNot { it.isArchived }, key = { it.id }) { account ->
-                FilterChip(
-                    selected = selectedAccountId == account.id,
-                    onClick = { selectedAccountId = account.id },
-                    label = { Text(account.name) },
-                )
-            }
-        }
-        val accountFiltered = visible
-        Text("找到 ${accountFiltered.size} 種收藏版本 · ${accountFiltered.sumOf { it.totalQuantity }} 隻", style = MaterialTheme.typography.labelLarge)
-        Spacer(Modifier.padding(8.dp))
-        if (accountFiltered.isEmpty()) EmptyState("沒有找到收藏", "請嘗試 Pokémon 名稱、背景名稱或其他篩選條件。")
-        else VariantGrid(accountFiltered, imageRepository = viewModel.imageRepository, onClick = { onOpenVariant(it.variantId) }, modifier = Modifier.weight(1f))
     }
 }
 

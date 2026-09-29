@@ -240,7 +240,7 @@ fun CollectionFilterPanel(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
                             Text("記住篩選條件")
-                            Text("下次開啟收藏、總覽或搜尋時沿用", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("下次開啟收藏或總覽時沿用", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         Switch(checked = rememberFilters, onCheckedChange = onRememberChanged)
                     }

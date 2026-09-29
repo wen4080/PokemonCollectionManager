@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -37,113 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import tw.pokemon.collectionmanager.data.local.AccountGroupEntity
 import tw.pokemon.collectionmanager.data.local.AccountSummaryRow
-
-@Composable
-fun HomeScreen(
-    viewModel: CollectionViewModel,
-    onOpenAccount: (String) -> Unit,
-    onOpenSearch: () -> Unit,
-    onOpenOverview: () -> Unit,
-    onOpenVariant: (String, String?) -> Unit,
-) {
-    val accounts by viewModel.accounts.collectAsStateWithLifecycle()
-    val activeAccounts = accounts.filterNot { it.isArchived }
-    val selectedId by viewModel.selectedAccountId.collectAsStateWithLifecycle()
-    val selected = activeAccounts.firstOrNull { it.id == selectedId } ?: activeAccounts.firstOrNull()
-    val variantsFlow = remember(selected?.id) { selected?.let { account -> viewModel.accountVariants(account.id) } ?: viewModel.allVariants() }
-    val variants by variantsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    var showAdd by remember { mutableStateOf(false) }
-
-    Box(Modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            overscrollEffect = null,
-            contentPadding = PaddingValues(start = 20.dp, top = 24.dp, end = 20.dp, bottom = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp),
-        ) {
-            item {
-                PageTitle(
-                    title = "收藏首頁",
-                    subtitle = "快速搜尋、進入總覽，或從最近收藏繼續整理。",
-                )
-            }
-            item {
-                OutlinedButton(onClick = onOpenSearch, modifier = Modifier.fillMaxWidth()) {
-                    Text("⌕  搜尋收藏、背景或帳號")
-                }
-            }
-            item {
-                SectionTitle("快速入口")
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
-                    Button(onClick = onOpenOverview, modifier = Modifier.weight(1f)) { Text("跨帳號總覽") }
-                    OutlinedButton(onClick = { onOpenAccount("") }, modifier = Modifier.weight(1f)) { Text("管理帳號") }
-                }
-                Text(
-                    "總覽負責跨帳號篩選與統計；帳號頁負責建立、編輯與封存帳號。",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 6.dp),
-                )
-            }
-            item {
-                SectionTitle("目前帳號", action = {
-                    TextButton(onClick = { onOpenAccount("") }) { Text("切換或管理") }
-                })
-            }
-            if (selected == null) {
-                item {
-                    EmptyState(
-                        title = "先建立第一個帳號",
-                        message = "帳號是每個收藏的歸屬，建立後就能開始用圖片卡片盤點。",
-                        actionLabel = "建立帳號",
-                        onAction = { onOpenAccount("") },
-                    )
-                }
-            } else {
-                item {
-                    AccountQuickCard(
-                        account = selected,
-                        selected = true,
-                        onClick = { onOpenAccount(selected.id) },
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            }
-            item {
-                SectionTitle("最近收藏", action = {
-                    TextButton(onClick = onOpenOverview) { Text("查看總覽") }
-                })
-            }
-            if (variants.isEmpty()) {
-                item { EmptyState("還沒有收藏卡片", "從右下角快速新增一筆，收藏版本與佔有數量會自動建立。", "新增收藏") { showAdd = true } }
-            } else {
-                item {
-                    LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        items(variants.take(6), key = { it.variantId }) { variant ->
-                            VariantCardItem(
-                                variant = variant,
-                                imageRepository = viewModel.imageRepository,
-                                onClick = { onOpenVariant(variant.variantId, selected?.id) },
-                            )
-                        }
-                    }
-                }
-            }
-        }
-        FloatingActionButton(
-            onClick = { showAdd = true },
-            modifier = Modifier.align(Alignment.BottomEnd).padding(20.dp),
-        ) { Text("＋", style = MaterialTheme.typography.headlineSmall) }
-    }
-
-    if (showAdd) {
-        QuickAddSheet(
-            viewModel = viewModel,
-            accountId = selected?.id,
-            onDismiss = { showAdd = false },
-        )
-    }
-}
 
 @Composable
 fun AccountsScreen(viewModel: CollectionViewModel, onOpenAccount: (String) -> Unit) {
@@ -216,23 +107,6 @@ fun AccountsScreen(viewModel: CollectionViewModel, onOpenAccount: (String) -> Un
             },
             dismissButton = { TextButton(onClick = { deleting = null }) { Text("取消") } },
         )
-    }
-}
-
-@Composable
-private fun AccountQuickCard(account: AccountSummaryRow, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier.clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(
-            containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainer,
-        ),
-    ) {
-        Column(Modifier.padding(14.dp)) {
-            Text(account.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            account.nickname?.takeIf { it.isNotBlank() }?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
-            Spacer(Modifier.height(8.dp))
-            Text("${account.variantCount} 種收藏版本 · ${account.pokemonCount} 隻", style = MaterialTheme.typography.labelMedium)
-        }
     }
 }
 
