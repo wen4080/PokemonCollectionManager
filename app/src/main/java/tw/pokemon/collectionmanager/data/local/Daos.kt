@@ -15,10 +15,10 @@ interface AccountGroupDao {
     @Query("SELECT * FROM account_groups ORDER BY sortOrder ASC, name ASC")
     suspend fun getAll(): List<AccountGroupEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsert(group: AccountGroupEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertAll(groups: List<AccountGroupEntity>)
 
     @Query("DELETE FROM account_groups WHERE id = :id")
@@ -55,13 +55,13 @@ interface AccountDao {
     @Query("SELECT * FROM accounts WHERE id = :id LIMIT 1")
     fun observeById(id: String): Flow<AccountEntity?>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsert(account: AccountEntity)
 
     @Query("UPDATE accounts SET name = :name, nickname = :nickname, groupId = :groupId, updatedAt = :updatedAt WHERE id = :id")
     suspend fun updateFields(id: String, name: String, nickname: String?, groupId: String?, updatedAt: Long)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertAll(accounts: List<AccountEntity>)
 
     @Query("DELETE FROM accounts WHERE id = :id")
@@ -175,12 +175,12 @@ interface VariantDao {
                cv.speciesId AS speciesId,
                cv.formId AS formId,
                cv.costumeId AS costumeId,
-               s.nameZhTw AS speciesName,
-               s.dexNumber AS dexNumber,
-               f.displayName AS formName,
-               c.displayName AS costumeName,
-               b.displayName AS backgroundName,
-               b.categoryName AS backgroundCategoryName,
+               COALESCE(s.nameZhTw, cv.speciesId) AS speciesName,
+               COALESCE(s.dexNumber, 0) AS dexNumber,
+               COALESCE(f.displayName, cv.formId) AS formName,
+               COALESCE(c.displayName, cv.costumeId) AS costumeName,
+               COALESCE(b.displayName, cv.backgroundId) AS backgroundName,
+               COALESCE(b.categoryName, cv.backgroundId) AS backgroundCategoryName,
                cv.backgroundId AS backgroundId,
                cv.isShiny AS isShiny,
                cv.gender AS gender,
@@ -193,10 +193,10 @@ interface VariantDao {
                COALESCE(SUM(CASE WHEN ob.tradeState = 'UNTRADED' THEN ob.quantity ELSE 0 END), 0) AS untradedQuantity,
                COALESCE(SUM(CASE WHEN ob.tradeState = 'TRADED' THEN ob.quantity ELSE 0 END), 0) AS tradedQuantity
         FROM collection_variants cv
-        JOIN pokemon_species s ON s.id = cv.speciesId
-        JOIN pokemon_forms f ON f.id = cv.formId
-        JOIN costumes c ON c.id = cv.costumeId
-        JOIN backgrounds b ON b.id = cv.backgroundId
+        LEFT JOIN pokemon_species s ON s.id = cv.speciesId
+        LEFT JOIN pokemon_forms f ON f.id = cv.formId
+        LEFT JOIN costumes c ON c.id = cv.costumeId
+        LEFT JOIN backgrounds b ON b.id = cv.backgroundId
         JOIN ownership_buckets ob ON ob.variantId = cv.id
         WHERE ob.accountId = :accountId AND ob.quantity > 0
         GROUP BY cv.id
@@ -211,12 +211,12 @@ interface VariantDao {
                cv.speciesId AS speciesId,
                cv.formId AS formId,
                cv.costumeId AS costumeId,
-               s.nameZhTw AS speciesName,
-               s.dexNumber AS dexNumber,
-               f.displayName AS formName,
-               c.displayName AS costumeName,
-               b.displayName AS backgroundName,
-               b.categoryName AS backgroundCategoryName,
+               COALESCE(s.nameZhTw, cv.speciesId) AS speciesName,
+               COALESCE(s.dexNumber, 0) AS dexNumber,
+               COALESCE(f.displayName, cv.formId) AS formName,
+               COALESCE(c.displayName, cv.costumeId) AS costumeName,
+               COALESCE(b.displayName, cv.backgroundId) AS backgroundName,
+               COALESCE(b.categoryName, cv.backgroundId) AS backgroundCategoryName,
                cv.backgroundId AS backgroundId,
                cv.isShiny AS isShiny,
                cv.gender AS gender,
@@ -229,10 +229,10 @@ interface VariantDao {
                COALESCE(SUM(CASE WHEN ob.tradeState = 'UNTRADED' THEN ob.quantity ELSE 0 END), 0) AS untradedQuantity,
                COALESCE(SUM(CASE WHEN ob.tradeState = 'TRADED' THEN ob.quantity ELSE 0 END), 0) AS tradedQuantity
         FROM collection_variants cv
-        JOIN pokemon_species s ON s.id = cv.speciesId
-        JOIN pokemon_forms f ON f.id = cv.formId
-        JOIN costumes c ON c.id = cv.costumeId
-        JOIN backgrounds b ON b.id = cv.backgroundId
+        LEFT JOIN pokemon_species s ON s.id = cv.speciesId
+        LEFT JOIN pokemon_forms f ON f.id = cv.formId
+        LEFT JOIN costumes c ON c.id = cv.costumeId
+        LEFT JOIN backgrounds b ON b.id = cv.backgroundId
         JOIN ownership_buckets ob ON ob.variantId = cv.id
         JOIN accounts a ON a.id = ob.accountId
         WHERE a.isArchived = 0 AND ob.quantity > 0
@@ -248,12 +248,12 @@ interface VariantDao {
                cv.speciesId AS speciesId,
                cv.formId AS formId,
                cv.costumeId AS costumeId,
-               s.nameZhTw AS speciesName,
-               s.dexNumber AS dexNumber,
-               f.displayName AS formName,
-               c.displayName AS costumeName,
-               b.displayName AS backgroundName,
-               b.categoryName AS backgroundCategoryName,
+               COALESCE(s.nameZhTw, cv.speciesId) AS speciesName,
+               COALESCE(s.dexNumber, 0) AS dexNumber,
+               COALESCE(f.displayName, cv.formId) AS formName,
+               COALESCE(c.displayName, cv.costumeId) AS costumeName,
+               COALESCE(b.displayName, cv.backgroundId) AS backgroundName,
+               COALESCE(b.categoryName, cv.backgroundId) AS backgroundCategoryName,
                cv.backgroundId AS backgroundId,
                cv.isShiny AS isShiny,
                cv.gender AS gender,
@@ -266,10 +266,10 @@ interface VariantDao {
                COALESCE(SUM(CASE WHEN ob.tradeState = 'UNTRADED' THEN ob.quantity ELSE 0 END), 0) AS untradedQuantity,
                COALESCE(SUM(CASE WHEN ob.tradeState = 'TRADED' THEN ob.quantity ELSE 0 END), 0) AS tradedQuantity
         FROM collection_variants cv
-        JOIN pokemon_species s ON s.id = cv.speciesId
-        JOIN pokemon_forms f ON f.id = cv.formId
-        JOIN costumes c ON c.id = cv.costumeId
-        JOIN backgrounds b ON b.id = cv.backgroundId
+        LEFT JOIN pokemon_species s ON s.id = cv.speciesId
+        LEFT JOIN pokemon_forms f ON f.id = cv.formId
+        LEFT JOIN costumes c ON c.id = cv.costumeId
+        LEFT JOIN backgrounds b ON b.id = cv.backgroundId
         JOIN ownership_buckets ob ON ob.variantId = cv.id
         WHERE ob.accountId IN (:accountIds) AND ob.quantity > 0
         GROUP BY cv.id
@@ -282,14 +282,14 @@ interface VariantDao {
         """
         SELECT cv.id AS variantId,
                cv.speciesId AS speciesId,
-               s.nameZhTw AS speciesName,
-               s.dexNumber AS dexNumber,
+               COALESCE(s.nameZhTw, cv.speciesId) AS speciesName,
+               COALESCE(s.dexNumber, 0) AS dexNumber,
                cv.formId AS formId,
-               f.displayName AS formName,
+               COALESCE(f.displayName, cv.formId) AS formName,
                cv.costumeId AS costumeId,
-               c.displayName AS costumeName,
-               b.displayName AS backgroundName,
-               b.categoryName AS backgroundCategoryName,
+               COALESCE(c.displayName, cv.costumeId) AS costumeName,
+               COALESCE(b.displayName, cv.backgroundId) AS backgroundName,
+               COALESCE(b.categoryName, cv.backgroundId) AS backgroundCategoryName,
                cv.backgroundId AS backgroundId,
                cv.isShiny AS isShiny,
                cv.gender AS gender,
@@ -297,10 +297,10 @@ interface VariantDao {
                cv.dynamaxState AS dynamaxState,
                cv.variantKey AS variantKey
         FROM collection_variants cv
-        JOIN pokemon_species s ON s.id = cv.speciesId
-        JOIN pokemon_forms f ON f.id = cv.formId
-        JOIN costumes c ON c.id = cv.costumeId
-        JOIN backgrounds b ON b.id = cv.backgroundId
+        LEFT JOIN pokemon_species s ON s.id = cv.speciesId
+        LEFT JOIN pokemon_forms f ON f.id = cv.formId
+        LEFT JOIN costumes c ON c.id = cv.costumeId
+        LEFT JOIN backgrounds b ON b.id = cv.backgroundId
         WHERE cv.id = :variantId
         LIMIT 1
         """,
@@ -329,10 +329,10 @@ interface VariantDao {
     @Query("SELECT * FROM collection_variants WHERE variantKey = :variantKey LIMIT 1")
     suspend fun findByKey(variantKey: String): CollectionVariantEntity?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsert(variant: CollectionVariantEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertAll(variants: List<CollectionVariantEntity>)
 
     @Query("DELETE FROM collection_variants WHERE id = :id")
@@ -366,10 +366,10 @@ interface OwnershipBucketDao {
     @Query("SELECT * FROM ownership_buckets ORDER BY createdAt ASC")
     suspend fun getAll(): List<OwnershipBucketEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsert(bucket: OwnershipBucketEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertAll(buckets: List<OwnershipBucketEntity>)
 
     @Query("DELETE FROM ownership_buckets WHERE id = :id")

@@ -1,8 +1,10 @@
 package tw.pokemon.collectionmanager.data.repository
 
+import android.util.Log
 import androidx.room.withTransaction
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import tw.pokemon.collectionmanager.data.local.AccountDao
 import tw.pokemon.collectionmanager.data.local.AccountEntity
 import tw.pokemon.collectionmanager.data.local.AccountGroupDao
@@ -31,20 +33,20 @@ class CollectionRepository(private val database: CollectionDatabase) {
     private val variants: VariantDao = database.variantDao()
     private val buckets: OwnershipBucketDao = database.ownershipBucketDao()
 
-    val accountSummaries: Flow<List<AccountSummaryRow>> = accounts.observeSummaries()
-    val accountGroups = groups.observeAll()
-    val species = master.observeSpecies()
-    val costumes = master.observeCostumes()
-    val backgrounds = master.observeBackgrounds()
+    val accountSummaries: Flow<List<AccountSummaryRow>> = accounts.observeSummaries().recoverToEmpty("帳號摘要")
+    val accountGroups = groups.observeAll().recoverToEmpty("帳號群組")
+    val species = master.observeSpecies().recoverToEmpty("寶可夢主資料")
+    val costumes = master.observeCostumes().recoverToEmpty("裝扮主資料")
+    val backgrounds = master.observeBackgrounds().recoverToEmpty("背景主資料")
 
-    fun forms(speciesId: String) = master.observeForms(speciesId)
-    fun account(id: String) = accounts.observeById(id)
-    fun variantsForAccount(accountId: String): Flow<List<VariantCardRow>> = variants.observeForAccount(accountId)
-    fun variantsForAllAccounts(): Flow<List<VariantCardRow>> = variants.observeForAllAccounts()
-    fun variantsForAccounts(accountIds: List<String>): Flow<List<VariantCardRow>> = variants.observeForAccounts(accountIds)
-    fun variantInfo(variantId: String): Flow<VariantInfoRow?> = variants.observeInfo(variantId)
-    fun variantSources(variantId: String): Flow<List<SourceAccountRow>> = variants.observeSources(variantId)
-    fun bucketsForVariant(accountId: String, variantId: String) = buckets.observeForVariant(accountId, variantId)
+    fun forms(speciesId: String) = master.observeForms(speciesId).recoverToEmpty("型態主資料")
+    fun account(id: String) = accounts.observeById(id).recoverToNull("帳號")
+    fun variantsForAccount(accountId: String): Flow<List<VariantCardRow>> = variants.observeForAccount(accountId).recoverToEmpty("帳號收藏")
+    fun variantsForAllAccounts(): Flow<List<VariantCardRow>> = variants.observeForAllAccounts().recoverToEmpty("全部收藏")
+    fun variantsForAccounts(accountIds: List<String>): Flow<List<VariantCardRow>> = variants.observeForAccounts(accountIds).recoverToEmpty("選取帳號收藏")
+    fun variantInfo(variantId: String): Flow<VariantInfoRow?> = variants.observeInfo(variantId).recoverToNull("收藏版本")
+    fun variantSources(variantId: String): Flow<List<SourceAccountRow>> = variants.observeSources(variantId).recoverToEmpty("收藏來源帳號")
+    fun bucketsForVariant(accountId: String, variantId: String) = buckets.observeForVariant(accountId, variantId).recoverToEmpty("收藏數量")
 
     suspend fun createGroup(name: String) {
         val clean = name.trim()
@@ -97,6 +99,7 @@ class CollectionRepository(private val database: CollectionDatabase) {
     suspend fun addOwnership(accountId: String, variantDraft: VariantDraft, bucketDraft: BucketDraft, quantity: Int) {
         require(quantity > 0) { "數量必須大於 0" }
         database.withTransaction {
+            validateAccountAndVariantDraft(accountId, variantDraft)
             val now = System.currentTimeMillis()
             val variantKey = VariantKeyFactory.build(variantDraft)
             val variant = variants.findByKey(variantKey) ?: CollectionVariantEntity(
@@ -136,6 +139,7 @@ class CollectionRepository(private val database: CollectionDatabase) {
     suspend fun updateVariant(variantId: String, draft: VariantDraft) {
         database.withTransaction {
             val current = variants.getById(variantId) ?: return@withTransaction
+            validateVariantDraft(draft)
             val newKey = VariantKeyFactory.build(draft)
             val collision = variants.findByKey(newKey)
             if (collision != null && collision.id != current.id) {
@@ -204,4 +208,29 @@ class CollectionRepository(private val database: CollectionDatabase) {
             buckets.upsertAll(bucketsToRestore.filter { it.quantity > 0 })
         }
     }
+
+    private suspend fun validateAccountAndVariantDraft(accountId: String, draft: VariantDraft) {
+        require(accounts.getById(accountId) != null) { "找不到要加入收藏的帳號" }
+        validateVariantDraft(draft)
+    }
+
+    private suspend fun validateVariantDraft(draft: VariantDraft) {
+        val species = master.getSpecies(draft.speciesId)
+        require(species != null) { "找不到 Pokémon 主資料，請重新選擇" }
+        val form = master.getForm(draft.formId)
+        require(form != null && form.speciesId == species.id) { "型態與 Pokémon 不相符，請重新選擇" }
+        require(master.getCostume(draft.costumeId) != null) { "找不到裝扮主資料，請重新選擇" }
+        require(master.getBackground(draft.backgroundId) != null) { "找不到背景主資料，請重新選擇" }
+    }
 }
+
+private fun <T> Flow<List<T>>.recoverToEmpty(label: String): Flow<List<T>> = catch { error ->
+    Log.e("收藏資料", "$label 查詢失敗，暫時顯示空清單", error)
+    emit(emptyList())
+}
+
+private fun <T> Flow<T?>.recoverToNull(label: String): Flow<T?> = catch { error ->
+    Log.e("收藏資料", "$label 查詢失敗，暫時顯示空資料", error)
+    emit(null)
+}
+

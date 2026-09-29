@@ -1,10 +1,12 @@
 package tw.pokemon.collectionmanager
 
 import android.app.Application
+import android.util.Log
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -127,20 +129,31 @@ class CollectionApplication : Application() {
     val backupManager: BackupManager by lazy { BackupManager(this) }
     val imageRepository by lazy { LocalFirstPokemonImageRepository(this, database) }
 
-    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val applicationScope = CoroutineScope(
+        SupervisorJob() +
+            Dispatchers.IO +
+            CoroutineExceptionHandler { _, error ->
+                Log.e("收藏應用程式", "背景初始化失敗，保留現有資料並讓應用程式繼續啟動", error)
+            },
+    )
 
     override fun onCreate() {
         super.onCreate()
         applicationScope.launch {
-            masterDataRepository.seedIfNeeded()
-            val enabled = preferencesRepository.automaticMasterDataUpdateEnabled.first()
-            val url = preferencesRepository.masterDataUpdateUrl.first().trim()
-            val lastCheck = preferencesRepository.lastMasterDataUpdateCheck.first()
-            val due = System.currentTimeMillis() - lastCheck >= 24L * 60L * 60L * 1000L
-            if (enabled && url.isNotBlank() && due) {
-                runCatching { masterDataRepository.checkAndImportUpdate(url) }
-                preferencesRepository.markMasterDataUpdateChecked()
-            }
+            runCatching { masterDataRepository.seedIfNeeded() }
+                .onFailure { Log.e("收藏應用程式", "內建主資料初始化失敗，保留現有資料", it) }
+            runCatching {
+                val enabled = preferencesRepository.automaticMasterDataUpdateEnabled.first()
+                val url = preferencesRepository.masterDataUpdateUrl.first().trim()
+                val lastCheck = preferencesRepository.lastMasterDataUpdateCheck.first()
+                val due = System.currentTimeMillis() - lastCheck >= 24L * 60L * 60L * 1000L
+                if (enabled && url.isNotBlank() && due) {
+                    runCatching { masterDataRepository.checkAndImportUpdate(url) }
+                        .onFailure { Log.e("收藏應用程式", "自動更新主資料失敗", it) }
+                    preferencesRepository.markMasterDataUpdateChecked()
+                }
+            }.onFailure { Log.e("收藏應用程式", "讀取自動更新設定失敗", it) }
         }
     }
 }
+

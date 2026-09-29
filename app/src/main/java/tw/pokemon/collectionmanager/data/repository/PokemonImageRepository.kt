@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import android.util.LruCache
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -114,11 +116,17 @@ class LocalFirstPokemonImageRepository(
         val dimension = maxDimension.coerceIn(96, 1024)
         val cacheKey = "${reference.cacheKey}:$dimension"
         memoryCache.get(cacheKey)?.let { return@withContext it }
-        val bitmap = when (reference) {
-            is ImageReference.LocalFile -> decodeFile(reference.file, dimension)
-            is ImageReference.BundledAsset -> decodeBundledAsset(reference.assetPath, dimension)
-            is ImageReference.RemoteStatic -> download(reference, dimension)
-            is ImageReference.Placeholder -> null
+        val bitmap = try {
+            when (reference) {
+                is ImageReference.LocalFile -> decodeFile(reference.file, dimension)
+                is ImageReference.BundledAsset -> decodeBundledAsset(reference.assetPath, dimension)
+                is ImageReference.RemoteStatic -> download(reference, dimension)
+                is ImageReference.Placeholder -> null
+            }
+        } catch (error: Throwable) {
+            if (error is CancellationException) throw error
+            Log.w("收藏圖片", "圖片載入失敗：${reference.cacheKey}", error)
+            null
         }
         bitmap?.let { memoryCache.put(cacheKey, it) }
         bitmap
@@ -166,7 +174,7 @@ class LocalFirstPokemonImageRepository(
         }
     }
 
-    private fun decodeFile(file: File, maxDimension: Int): Bitmap? {
+    private fun decodeFile(file: File, maxDimension: Int): Bitmap? = try {
         if (!file.isFile) return null
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeFile(file.absolutePath, bounds)
@@ -175,19 +183,25 @@ class LocalFirstPokemonImageRepository(
             inSampleSize = calculateInSampleSize(bounds.outWidth, bounds.outHeight, maxDimension)
             inPreferredConfig = Bitmap.Config.ARGB_8888
         }
-        return BitmapFactory.decodeFile(file.absolutePath, options)
+        BitmapFactory.decodeFile(file.absolutePath, options)
+    } catch (error: Throwable) {
+        Log.w("收藏圖片", "本機圖片解碼失敗：${file.name}", error)
+        null
     }
 
-    private fun decodeBundledAsset(assetPath: String, maxDimension: Int): Bitmap? = runCatching {
+    private fun decodeBundledAsset(assetPath: String, maxDimension: Int): Bitmap? = try {
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         context.assets.open(assetPath).use { BitmapFactory.decodeStream(it, null, bounds) }
-        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return@runCatching null
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
         val options = BitmapFactory.Options().apply {
             inSampleSize = calculateInSampleSize(bounds.outWidth, bounds.outHeight, maxDimension)
             inPreferredConfig = Bitmap.Config.ARGB_8888
         }
         context.assets.open(assetPath).use { BitmapFactory.decodeStream(it, null, options) }
-    }.getOrNull()
+    } catch (error: Throwable) {
+        Log.w("收藏圖片", "內建圖片解碼失敗：$assetPath", error)
+        null
+    }
 
     private fun calculateInSampleSize(width: Int, height: Int, maxDimension: Int): Int {
         var sample = 1
@@ -223,7 +237,22 @@ class LocalFirstPokemonImageRepository(
                     parent.mkdirs()
                     val temporary = File(parent, "${destination.name}.part")
                     temporary.delete()
-                    connection.inputStream.use { input -> temporary.outputStream().use { output -> input.copyTo(output) } }
+                    connection.inputStream.use { input ->
+                        temporary.outputStream().use { output ->
+                            val buffer = ByteArray(16 * 1024)
+                            var total = 0L
+                            while (true) {
+                                val count = input.read(buffer)
+                                if (count < 0) break
+                                total += count
+                                if (total > MAX_REMOTE_IMAGE_BYTES) {
+                                    temporary.delete()
+                                    return@runCatching null
+                                }
+                                output.write(buffer, 0, count)
+                            }
+                        }
+                    }
                     val decoded = decodeFile(temporary, maxDimension)
                     if (decoded == null) {
                         temporary.delete()
@@ -248,4 +277,5 @@ class LocalFirstPokemonImageRepository(
 
 private const val POGO_RAW_BASE = "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/"
 private const val BACKGROUND_IMAGE_INDEX = "master/background_image_index.json"
+private const val MAX_REMOTE_IMAGE_BYTES = 12L * 1024L * 1024L
 

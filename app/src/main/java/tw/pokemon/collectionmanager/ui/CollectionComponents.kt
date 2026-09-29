@@ -55,6 +55,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import android.util.Log
+import kotlinx.coroutines.CancellationException
 import tw.pokemon.collectionmanager.data.local.Gender
 import tw.pokemon.collectionmanager.data.local.BackgroundEntity
 import tw.pokemon.collectionmanager.data.local.VariantCardRow
@@ -423,12 +425,19 @@ fun PokemonArtwork(
     modifier: Modifier = Modifier,
 ) {
     val bitmap by produceState<android.graphics.Bitmap?>(initialValue = null, speciesId, formId, costumeId, shiny) {
-        val reference = imageRepository.getImage(speciesId, formId, costumeId, shiny)
-        value = imageRepository.loadBitmap(reference, maxDimension = 384)
+        try {
+            val reference = imageRepository.getImage(speciesId, formId, costumeId, shiny)
+            value = imageRepository.loadBitmap(reference, maxDimension = 384)
+        } catch (error: Throwable) {
+            if (error is CancellationException) throw error
+            Log.w("收藏畫面", "寶可夢圖片顯示失敗：$speciesId", error)
+            value = null
+        }
     }
-    if (bitmap != null) {
+    val loadedBitmap = bitmap
+    if (loadedBitmap != null) {
         Image(
-            bitmap = bitmap!!.asImageBitmap(),
+            bitmap = loadedBitmap.asImageBitmap(),
             contentDescription = label,
             modifier = modifier.size(132.dp),
         )
@@ -449,12 +458,19 @@ fun BackgroundArtwork(
     modifier: Modifier = Modifier,
 ) {
     val bitmap by produceState<android.graphics.Bitmap?>(initialValue = null, backgroundId) {
-        val reference = imageRepository.getBackgroundImage(backgroundId)
-        value = imageRepository.loadBitmap(reference, maxDimension = 192)
+        try {
+            val reference = imageRepository.getBackgroundImage(backgroundId)
+            value = imageRepository.loadBitmap(reference, maxDimension = 192)
+        } catch (error: Throwable) {
+            if (error is CancellationException) throw error
+            Log.w("收藏畫面", "背景縮圖顯示失敗：$backgroundId", error)
+            value = null
+        }
     }
-    if (bitmap != null) {
+    val loadedBitmap = bitmap
+    if (loadedBitmap != null) {
         Image(
-            bitmap = bitmap!!.asImageBitmap(),
+            bitmap = loadedBitmap.asImageBitmap(),
             contentDescription = label,
             modifier = modifier.size(72.dp),
         )
@@ -473,12 +489,18 @@ fun BackgroundLayer(
     modifier: Modifier = Modifier,
 ) {
     val bitmap by produceState<android.graphics.Bitmap?>(initialValue = null, backgroundId) {
-        val reference = imageRepository.getBackgroundImage(backgroundId)
-        value = imageRepository.loadBitmap(reference, maxDimension = 512)
+        try {
+            val reference = imageRepository.getBackgroundImage(backgroundId)
+            value = imageRepository.loadBitmap(reference, maxDimension = 512)
+        } catch (error: Throwable) {
+            if (error is CancellationException) throw error
+            Log.w("收藏畫面", "背景圖層顯示失敗：$backgroundId", error)
+            value = null
+        }
     }
-    bitmap?.let {
+    bitmap?.let { loadedBitmap ->
         Image(
-            bitmap = it.asImageBitmap(),
+            bitmap = loadedBitmap.asImageBitmap(),
             contentDescription = label,
             modifier = modifier,
             contentScale = ContentScale.Fit,
