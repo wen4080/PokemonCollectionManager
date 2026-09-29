@@ -696,7 +696,7 @@ internal fun BackgroundPickerSheet(
         }
     }
     ModalBottomSheet(
-        onDismissRequest = ::handleBack,
+        onDismissRequest = onDismiss,
         properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
     ) {
         Column(Modifier.fillMaxWidth().fillMaxHeight(0.82f).padding(horizontal = 18.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
