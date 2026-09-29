@@ -28,6 +28,7 @@ import tw.pokemon.collectionmanager.data.local.VariantCardRow
 import tw.pokemon.collectionmanager.data.local.VariantInfoRow
 import tw.pokemon.collectionmanager.data.local.SourceAccountRow
 import tw.pokemon.collectionmanager.data.repository.CollectionRepository
+import tw.pokemon.collectionmanager.data.repository.DEFAULT_OVERVIEW_SUMMARY_CODES
 import tw.pokemon.collectionmanager.data.repository.MasterDataRepository
 import tw.pokemon.collectionmanager.data.repository.MasterDataUpdateResult
 import tw.pokemon.collectionmanager.data.repository.MasterDataUpdateProgress
@@ -59,6 +60,12 @@ class CollectionViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
     val savedCollectionFilters = preferencesRepository.savedCollectionFilters
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SavedCollectionFilters())
+    val overviewSummaryStatCodes = preferencesRepository.overviewSummaryStatCodes
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            DEFAULT_OVERVIEW_SUMMARY_CODES.split('|').toSet(),
+        )
 
     private val _overviewAccountIds = MutableStateFlow<List<String>>(emptyList())
     val overviewAccountIds: StateFlow<List<String>> = _overviewAccountIds
@@ -121,7 +128,7 @@ class CollectionViewModel(
     fun updateVariant(variantId: String, accountId: String?, draft: VariantDraft) = launchAction {
         if (accountId == null) repository.updateVariant(variantId, draft)
         else repository.updateVariantForAccount(accountId, variantId, draft)
-        "收藏版本已更新"
+        "收藏組合已更新"
     }
 
     fun updateBucket(bucket: OwnershipBucketEntity, quantity: Int) = launchAction {
@@ -129,7 +136,7 @@ class CollectionViewModel(
         "數量已更新"
     }
 
-    fun deleteVariant(variantId: String) = launchAction { repository.deleteVariant(variantId); "收藏版本已刪除" }
+    fun deleteVariant(variantId: String) = launchAction { repository.deleteVariant(variantId); "收藏組合已刪除" }
 
     fun exportBackup(uri: Uri) = launchAction {
         backupManager.exportToUri(uri, repository)
@@ -156,6 +163,10 @@ class CollectionViewModel(
 
     fun saveCollectionFilters(filters: SavedCollectionFilters) = viewModelScope.launch {
         preferencesRepository.saveCollectionFilters(filters)
+    }
+
+    fun saveOverviewSummaryStatCodes(codes: Set<String>) = viewModelScope.launch {
+        preferencesRepository.saveOverviewSummaryStatCodes(codes)
     }
 
     fun checkMasterDataUpdate(requestedUrl: String = masterDataUpdateUrl.value) {

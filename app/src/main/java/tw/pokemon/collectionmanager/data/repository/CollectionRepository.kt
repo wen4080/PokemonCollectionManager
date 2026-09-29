@@ -44,7 +44,7 @@ class CollectionRepository(private val database: CollectionDatabase) {
     fun variantsForAccount(accountId: String): Flow<List<VariantCardRow>> = variants.observeForAccount(accountId).recoverToEmpty("帳號收藏")
     fun variantsForAllAccounts(): Flow<List<VariantCardRow>> = variants.observeForAllAccounts().recoverToEmpty("全部收藏")
     fun variantsForAccounts(accountIds: List<String>): Flow<List<VariantCardRow>> = variants.observeForAccounts(accountIds).recoverToEmpty("選取帳號收藏")
-    fun variantInfo(variantId: String): Flow<VariantInfoRow?> = variants.observeInfo(variantId).recoverToNull("收藏版本")
+    fun variantInfo(variantId: String): Flow<VariantInfoRow?> = variants.observeInfo(variantId).recoverToNull("收藏組合")
     fun variantSources(variantId: String): Flow<List<SourceAccountRow>> = variants.observeSources(variantId).recoverToEmpty("收藏來源帳號")
     fun bucketsForVariant(accountId: String, variantId: String) = buckets.observeForVariant(accountId, variantId).recoverToEmpty("收藏數量")
 
@@ -165,7 +165,7 @@ class CollectionRepository(private val database: CollectionDatabase) {
     }
 
     /**
-     * 編輯單一帳號中的收藏版本時，不能直接改寫共用的 CollectionVariant。
+     * 編輯單一帳號中的收藏組合時，不能直接改寫共用的 CollectionVariant。
      * 若同一版本同時被其他帳號使用，先把目前帳號的數量搬到新版本，
      * 讓其他帳號仍保留原本的版本。
      */
@@ -175,7 +175,7 @@ class CollectionRepository(private val database: CollectionDatabase) {
             val current = variants.getById(variantId) ?: return@withTransaction
             validateVariantDraft(draft)
             val sourceBuckets = buckets.getForVariant(accountId, variantId).filter { it.quantity > 0 }
-            require(sourceBuckets.isNotEmpty()) { "此帳號沒有這個收藏版本的數量" }
+            require(sourceBuckets.isNotEmpty()) { "此帳號沒有這個收藏組合的數量" }
 
             val newKey = VariantKeyFactory.build(draft)
             val collision = variants.findByKey(newKey)?.takeUnless { it.id == current.id }

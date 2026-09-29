@@ -79,7 +79,7 @@ fun SettingsScreen(
         Card {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("備份 / 還原", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                Text("備份會包含帳號、群組、收藏版本與佔有數量，不會包含任何 Pokémon GO 登入資料。", style = MaterialTheme.typography.bodyMedium)
+                Text("備份會包含帳號、群組、收藏組合與數量，不會包含任何 Pokémon GO 登入資料。", style = MaterialTheme.typography.bodyMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Button(onClick = onExport) { Text("匯出備份") }
                     OutlinedButton(onClick = onImport) { Text("匯入備份") }

@@ -55,7 +55,7 @@ fun AccountsScreen(viewModel: CollectionViewModel, onOpenAccount: (String) -> Un
             item {
                 PageTitle(
                     "帳號",
-                    subtitle = "區分收藏版本數量與實際 Pokémon 總隻數。封存帳號不會出現在預設首頁。",
+                    subtitle = "區分收藏組合數量與實際 Pokémon 總隻數。封存帳號不會出現在總覽。",
                 )
             }
             item {
@@ -101,7 +101,7 @@ fun AccountsScreen(viewModel: CollectionViewModel, onOpenAccount: (String) -> Un
         AlertDialog(
             onDismissRequest = { deleting = null },
             title = { Text("刪除 ${account.name}？") },
-            text = { Text("此帳號目前有 ${account.variantCount} 種收藏版本、${account.pokemonCount} 隻 Pokémon。刪除後會一併移除其佔有數量，無法復原。") },
+            text = { Text("此帳號目前有 ${account.variantCount} 種收藏組合、${account.pokemonCount} 隻 Pokémon。刪除後會一併移除其數量，無法復原。") },
             confirmButton = {
                 Button(onClick = { viewModel.deleteAccount(account.id); deleting = null }) { Text("確定刪除") }
             },
@@ -131,7 +131,7 @@ private fun AccountListCard(
                 if (account.isArchived) Text("已封存", color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(Modifier.height(6.dp))
-            Text("${account.variantCount} 種收藏版本 · ${account.pokemonCount} 隻 Pokémon", style = MaterialTheme.typography.bodyMedium)
+            Text("${account.variantCount} 種收藏組合 · ${account.pokemonCount} 隻 Pokémon", style = MaterialTheme.typography.bodyMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 8.dp)) {
                 OutlinedButton(onClick = onEdit) { Text("編輯") }
                 OutlinedButton(onClick = onArchive) { Text(if (account.isArchived) "恢復" else "封存") }

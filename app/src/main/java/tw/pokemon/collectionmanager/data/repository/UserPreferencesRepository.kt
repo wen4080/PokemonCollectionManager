@@ -15,6 +15,9 @@ import tw.pokemon.collectionmanager.data.local.ThemeMode
 const val DEFAULT_MASTER_DATA_UPDATE_URL =
     "https://wen4080.github.io/PokemonCollectionManager/master-data/master_manifest.json"
 
+const val DEFAULT_OVERVIEW_SUMMARY_CODES =
+    "COLLECTION_SET|SPECIES_COUNT|POKEMON_COUNT|SHINY|BACKGROUND|COSTUME|XXL|SPECIAL_MOVE"
+
 data class SavedCollectionFilters(
     val remember: Boolean = false,
     val filterCodes: Set<String> = emptySet(),
@@ -37,6 +40,7 @@ class UserPreferencesRepository(private val context: Context) {
         val collectionBackgroundIds = stringPreferencesKey("collection_background_ids")
         val collectionFilterMatchMode = stringPreferencesKey("collection_filter_match_mode")
         val collectionFilterMinimum = intPreferencesKey("collection_filter_minimum")
+        val overviewSummaryStatCodes = stringPreferencesKey("overview_summary_stat_codes")
     }
 
     val themeMode: Flow<ThemeMode> = context.collectionPreferencesDataStore.data
@@ -71,6 +75,14 @@ class UserPreferencesRepository(private val context: Context) {
             )
         }
 
+    val overviewSummaryStatCodes: Flow<Set<String>> = context.collectionPreferencesDataStore.data
+        .catch { emit(androidx.datastore.preferences.core.emptyPreferences()) }
+        .map { preferences ->
+            preferences[Keys.overviewSummaryStatCodes]
+                ?.toCodeSet()
+                ?: DEFAULT_OVERVIEW_SUMMARY_CODES.toCodeSet()
+        }
+
     suspend fun setThemeMode(mode: ThemeMode) {
         context.collectionPreferencesDataStore.edit { it[Keys.theme] = mode.code }
     }
@@ -102,6 +114,12 @@ class UserPreferencesRepository(private val context: Context) {
             preferences[Keys.collectionFilterMinimum] = filters.minimumMatches.coerceAtLeast(1)
         }
     }
+
+    suspend fun saveOverviewSummaryStatCodes(codes: Set<String>) {
+        context.collectionPreferencesDataStore.edit { preferences ->
+            preferences[Keys.overviewSummaryStatCodes] = codes.sorted().joinToString("|")
+        }
+    }
 }
 
 private fun String?.toCodeSet(): Set<String> = this
@@ -110,3 +128,4 @@ private fun String?.toCodeSet(): Set<String> = this
     ?.filter(String::isNotEmpty)
     ?.toSet()
     .orEmpty()
+
