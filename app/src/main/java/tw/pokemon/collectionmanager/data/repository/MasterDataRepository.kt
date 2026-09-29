@@ -3,6 +3,8 @@ package tw.pokemon.collectionmanager.data.repository
 import android.content.Context
 import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import tw.pokemon.collectionmanager.data.local.BackgroundEntity
@@ -108,7 +110,7 @@ class MasterDataRepository(
         }
     }
 
-    suspend fun checkAndImportUpdate(url: String): MasterDataUpdateResult {
+    suspend fun checkAndImportUpdate(url: String): MasterDataUpdateResult = withContext(Dispatchers.IO) {
         require(url.startsWith("https://")) { "主資料更新網址必須使用安全連線" }
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.connectTimeout = 15_000
@@ -132,9 +134,12 @@ class MasterDataRepository(
         require(remoteVersion.isNotBlank()) { "主資料缺少版本資訊" }
         require((root.optJSONArray("species")?.length() ?: 0) > 0) { "主資料缺少 Pokémon 清單" }
         val currentVersion = dao.getMeta()?.masterVersion
-        if (currentVersion == remoteVersion) return MasterDataUpdateResult.AlreadyCurrent(remoteVersion)
-        importManifest(json)
-        return MasterDataUpdateResult.Updated(currentVersion, remoteVersion)
+        if (currentVersion == remoteVersion) {
+            MasterDataUpdateResult.AlreadyCurrent(remoteVersion)
+        } else {
+            importManifest(json)
+            MasterDataUpdateResult.Updated(currentVersion, remoteVersion)
+        }
     }
 
     private fun JSONArray?.toSpecies(): List<PokemonSpeciesEntity> = buildList {
@@ -277,3 +282,4 @@ class MasterDataRepository(
         backgrounds: List<BackgroundEntity>,
     ): Int = (species.mapNotNull { it.defaultImageKey } + forms.mapNotNull { it.imageKey } + costumes.mapNotNull { it.imageKey } + backgrounds.flatMap { listOfNotNull(it.imageKey, it.previewImageKey) }).distinct().size
 }
+
