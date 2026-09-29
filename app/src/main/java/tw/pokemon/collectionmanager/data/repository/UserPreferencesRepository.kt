@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import tw.pokemon.collectionmanager.data.local.ThemeMode
 
+const val DEFAULT_MASTER_DATA_UPDATE_URL =
+    "https://wen4080.github.io/PokemonCollectionManager/master-data/master_manifest.json"
+
 data class SavedCollectionFilters(
     val remember: Boolean = false,
     val filterCodes: Set<String> = emptySet(),
@@ -46,7 +49,7 @@ class UserPreferencesRepository(private val context: Context) {
 
     val masterDataUpdateUrl: Flow<String> = context.collectionPreferencesDataStore.data
         .catch { emit(androidx.datastore.preferences.core.emptyPreferences()) }
-        .map { it[Keys.masterDataUpdateUrl].orEmpty() }
+        .map { it[Keys.masterDataUpdateUrl].orEmpty().ifBlank { DEFAULT_MASTER_DATA_UPDATE_URL } }
 
     val automaticMasterDataUpdateEnabled: Flow<Boolean> = context.collectionPreferencesDataStore.data
         .catch { emit(androidx.datastore.preferences.core.emptyPreferences()) }
