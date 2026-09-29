@@ -216,7 +216,7 @@ fun CollectionFilterPanel(
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(max = 420.dp)
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(rememberScrollState(), overscrollEffect = null)
                         .padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {

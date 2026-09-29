@@ -102,6 +102,7 @@ fun CollectionApp(viewModel: CollectionViewModel) {
                         viewModel = viewModel,
                         onOpenAccount = { id -> if (id.isBlank()) navController.navigate(Routes.ACCOUNTS) else navController.navigate("account/$id") },
                         onOpenSearch = { navController.navigate(Routes.SEARCH) },
+                        onOpenOverview = { navController.navigate(Routes.OVERVIEW) },
                         onOpenVariant = { id, accountId -> navController.navigate("variant/$id/${accountId ?: "all"}") },
                     )
                 }

@@ -43,6 +43,7 @@ fun HomeScreen(
     viewModel: CollectionViewModel,
     onOpenAccount: (String) -> Unit,
     onOpenSearch: () -> Unit,
+    onOpenOverview: () -> Unit,
     onOpenVariant: (String, String?) -> Unit,
 ) {
     val accounts by viewModel.accounts.collectAsStateWithLifecycle()
@@ -62,8 +63,8 @@ fun HomeScreen(
         ) {
             item {
                 PageTitle(
-                    title = "Pokémon 收藏",
-                    subtitle = "只記錄你主動收藏的版本，不把未登記誤解成未擁有。",
+                    title = "收藏首頁",
+                    subtitle = "快速搜尋、進入總覽，或從最近收藏繼續整理。",
                 )
             }
             item {
@@ -72,11 +73,24 @@ fun HomeScreen(
                 }
             }
             item {
-                SectionTitle("我的帳號", action = {
-                    TextButton(onClick = { onOpenAccount(activeAccounts.firstOrNull()?.id ?: "") }) { Text("查看全部") }
+                SectionTitle("快速入口")
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
+                    Button(onClick = onOpenOverview, modifier = Modifier.weight(1f)) { Text("跨帳號總覽") }
+                    OutlinedButton(onClick = { onOpenAccount("") }, modifier = Modifier.weight(1f)) { Text("管理帳號") }
+                }
+                Text(
+                    "總覽負責跨帳號篩選與統計；帳號頁負責建立、編輯與封存帳號。",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 6.dp),
+                )
+            }
+            item {
+                SectionTitle("目前帳號", action = {
+                    TextButton(onClick = { onOpenAccount("") }) { Text("切換或管理") }
                 })
             }
-            if (activeAccounts.isEmpty()) {
+            if (selected == null) {
                 item {
                     EmptyState(
                         title = "先建立第一個帳號",
@@ -87,30 +101,19 @@ fun HomeScreen(
                 }
             } else {
                 item {
-                    LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        items(activeAccounts, key = { it.id }) { account ->
-                            AccountQuickCard(
-                                account = account,
-                                selected = account.id == selected?.id,
-                                onClick = {
-                                    viewModel.setSelectedAccount(account.id)
-                                    onOpenAccount(account.id)
-                                },
-                                modifier = Modifier.width(190.dp),
-                            )
-                        }
-                    }
+                    AccountQuickCard(
+                        account = selected,
+                        selected = true,
+                        onClick = { onOpenAccount(selected.id) },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
             }
             item {
-                SectionTitle("收藏摘要")
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
-                    StatCard("收藏版本", variants.size.toString(), Modifier.weight(1f))
-                    StatCard("Pokémon 總數", variants.sumOf { it.totalQuantity }.toString(), Modifier.weight(1f))
-                    StatCard("異色", variants.count { it.isShiny }.toString(), Modifier.weight(1f))
-                }
+                SectionTitle("最近收藏", action = {
+                    TextButton(onClick = onOpenOverview) { Text("查看總覽") }
+                })
             }
-            item { SectionTitle("最近收藏") }
             if (variants.isEmpty()) {
                 item { EmptyState("還沒有收藏卡片", "從右下角快速新增一筆，收藏版本與佔有數量會自動建立。", "新增收藏") { showAdd = true } }
             } else {

@@ -425,7 +425,11 @@ private fun VariantConfiguration(
     val selectedCostume = costumeOptions.firstOrNull { it.id == selectedCostumeId }
     val selectedBackground = backgrounds.firstOrNull { it.id == selectedBackgroundId }
     Column(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f).verticalScroll(rememberScrollState()).padding(horizontal = 18.dp, vertical = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.9f)
+            .verticalScroll(rememberScrollState(), overscrollEffect = null)
+            .padding(horizontal = 18.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -548,11 +552,18 @@ private fun VariantConfiguration(
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
-                OutlinedButton(onClick = onCancel, modifier = Modifier.weight(1f)) { Text("取消") }
-                Button(onClick = onSave, enabled = canSave, modifier = Modifier.weight(1f)) { Text("儲存") }
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                    OutlinedButton(onClick = onCancel, modifier = Modifier.weight(1f)) { Text("取消", maxLines = 1) }
+                    Button(onClick = onSave, enabled = canSave, modifier = Modifier.weight(1f)) { Text("儲存", maxLines = 1) }
+                }
                 onSaveAndContinue?.let { action ->
-                    Button(onClick = action, enabled = canSave, modifier = Modifier.weight(1f)) { Text("儲存並繼續") }
+                    Button(onClick = action, enabled = canSave, modifier = Modifier.fillMaxWidth()) {
+                        Text("儲存並繼續", maxLines = 1)
+                    }
                 }
             }
         }
@@ -905,7 +916,13 @@ fun VariantDetailScreen(
     }
     val currentInfo = info!!
     val title = buildVariantTitle(currentInfo)
-    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState(), overscrollEffect = null)
+            .padding(horizontal = 20.dp, vertical = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             TextButton(onClick = onBack) { Text("‹ 返回") }
             Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
