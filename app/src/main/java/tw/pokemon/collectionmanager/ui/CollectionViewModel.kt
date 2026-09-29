@@ -118,8 +118,9 @@ class CollectionViewModel(
         if (continueAdding) "已加入，準備下一筆" else "收藏已加入"
     }
 
-    fun updateVariant(variantId: String, draft: VariantDraft) = launchAction {
-        repository.updateVariant(variantId, draft)
+    fun updateVariant(variantId: String, accountId: String?, draft: VariantDraft) = launchAction {
+        if (accountId == null) repository.updateVariant(variantId, draft)
+        else repository.updateVariantForAccount(accountId, variantId, draft)
         "收藏版本已更新"
     }
 

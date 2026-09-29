@@ -252,7 +252,7 @@ fun QuickAddSheet(
                             )
                             onDismiss()
                         } else {
-                            viewModel.updateVariant(initialInfo.variantId, VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax))
+                            viewModel.updateVariant(initialInfo.variantId, accountId, VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax))
                             onSaved()
                             onDismiss()
                         }

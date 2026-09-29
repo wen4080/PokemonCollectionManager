@@ -164,6 +164,76 @@ class CollectionRepository(private val database: CollectionDatabase) {
         }
     }
 
+    /**
+     * 編輯單一帳號中的收藏版本時，不能直接改寫共用的 CollectionVariant。
+     * 若同一版本同時被其他帳號使用，先把目前帳號的數量搬到新版本，
+     * 讓其他帳號仍保留原本的版本。
+     */
+    suspend fun updateVariantForAccount(accountId: String, variantId: String, draft: VariantDraft) {
+        database.withTransaction {
+            require(accounts.getById(accountId) != null) { "找不到要編輯的帳號" }
+            val current = variants.getById(variantId) ?: return@withTransaction
+            validateVariantDraft(draft)
+            val sourceBuckets = buckets.getForVariant(accountId, variantId).filter { it.quantity > 0 }
+            require(sourceBuckets.isNotEmpty()) { "此帳號沒有這個收藏版本的數量" }
+
+            val newKey = VariantKeyFactory.build(draft)
+            val collision = variants.findByKey(newKey)?.takeUnless { it.id == current.id }
+            val currentBuckets = buckets.getAll().filter { it.variantId == current.id && it.quantity > 0 }
+
+            if (collision == null && currentBuckets.all { it.accountId == accountId }) {
+                variants.upsert(current.withDraft(draft, newKey, System.currentTimeMillis()))
+                return@withTransaction
+            }
+
+            val destination = collision ?: CollectionVariantEntity(
+                id = UUID.randomUUID().toString(),
+                speciesId = draft.speciesId,
+                formId = draft.formId,
+                costumeId = draft.costumeId,
+                backgroundId = draft.backgroundId,
+                isShiny = draft.isShiny,
+                gender = draft.gender,
+                shadowState = draft.shadowState,
+                dynamaxState = draft.dynamaxState,
+                variantKey = newKey,
+                createdAt = System.currentTimeMillis(),
+                updatedAt = System.currentTimeMillis(),
+            )
+            variants.upsert(destination)
+            sourceBuckets.forEach { sourceBucket ->
+                val targetBucket = buckets.find(
+                    accountId = accountId,
+                    variantId = destination.id,
+                    sizeType = sourceBucket.sizeType,
+                    hasSpecialMove = sourceBucket.hasSpecialMove,
+                    tradeState = sourceBucket.tradeState,
+                )
+                if (targetBucket == null) {
+                    buckets.upsert(
+                        sourceBucket.copy(
+                            id = UUID.randomUUID().toString(),
+                            variantId = destination.id,
+                            createdAt = System.currentTimeMillis(),
+                            updatedAt = System.currentTimeMillis(),
+                        ),
+                    )
+                } else {
+                    buckets.upsert(
+                        targetBucket.copy(
+                            quantity = OwnershipRules.mergeQuantity(targetBucket.quantity, sourceBucket.quantity),
+                            updatedAt = System.currentTimeMillis(),
+                        ),
+                    )
+                }
+                buckets.deleteById(sourceBucket.id)
+            }
+            if (buckets.getAll().none { it.variantId == current.id && it.quantity > 0 }) {
+                variants.deleteById(current.id)
+            }
+        }
+    }
+
     private suspend fun mergeVariantBuckets(fromVariantId: String, toVariantId: String) {
         val now = System.currentTimeMillis()
         val source = buckets.getAll().filter { it.variantId == fromVariantId }
@@ -222,6 +292,23 @@ class CollectionRepository(private val database: CollectionDatabase) {
         require(master.getCostume(draft.costumeId) != null) { "找不到裝扮主資料，請重新選擇" }
         require(master.getBackground(draft.backgroundId) != null) { "找不到背景主資料，請重新選擇" }
     }
+
+    private fun CollectionVariantEntity.withDraft(
+        draft: VariantDraft,
+        variantKey: String,
+        updatedAt: Long,
+    ): CollectionVariantEntity = copy(
+        speciesId = draft.speciesId,
+        formId = draft.formId,
+        costumeId = draft.costumeId,
+        backgroundId = draft.backgroundId,
+        isShiny = draft.isShiny,
+        gender = draft.gender,
+        shadowState = draft.shadowState,
+        dynamaxState = draft.dynamaxState,
+        variantKey = variantKey,
+        updatedAt = updatedAt,
+    )
 }
 
 private fun <T> Flow<List<T>>.recoverToEmpty(label: String): Flow<List<T>> = catch { error ->
