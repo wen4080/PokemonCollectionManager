@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -144,25 +145,25 @@ interface MasterDataDao {
     @Query("UPDATE pokemon_background_compatibilities SET isActive = 0")
     suspend fun deactivateBackgroundCompatibility()
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertSpecies(items: List<PokemonSpeciesEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertForms(items: List<PokemonFormEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertCostumes(items: List<CostumeEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertBackgrounds(items: List<BackgroundEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertCostumeCompatibility(items: List<PokemonCostumeCompatibilityEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertBackgroundCompatibility(items: List<PokemonBackgroundCompatibilityEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsertMeta(meta: MasterDataMetaEntity)
 }
 
@@ -377,3 +378,4 @@ interface OwnershipBucketDao {
     @Query("DELETE FROM ownership_buckets WHERE variantId = :variantId")
     suspend fun deleteForVariant(variantId: String)
 }
+

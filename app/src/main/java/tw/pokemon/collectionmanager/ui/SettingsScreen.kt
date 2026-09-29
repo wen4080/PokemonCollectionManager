@@ -130,7 +130,7 @@ fun SettingsScreen(
                     Switch(checked = automaticUpdate, onCheckedChange = viewModel::setAutomaticMasterDataUpdateEnabled)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(onClick = { viewModel.setMasterDataUpdateUrl(updateUrl) }) { Text("儲存更新網址") }
+                    OutlinedButton(onClick = { viewModel.setMasterDataUpdateUrl(updateUrl) }) { Text("已儲存更新網址") }
                     Button(onClick = { viewModel.checkMasterDataUpdate(updateUrl) }) { Text("立即檢查更新") }
                 }
             }
@@ -154,3 +154,4 @@ fun SettingsScreen(
         }
     }
 }
+

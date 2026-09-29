@@ -168,7 +168,7 @@ class CollectionViewModel(
     private fun launchAction(action: suspend () -> String) = viewModelScope.launch {
         runCatching { action() }
             .onSuccess { _messages.emit(it) }
-            .onFailure { _messages.emit("操作失敗：${it.message ?: "未知錯誤"}") }
+            .onFailure { _messages.emit("操作失敗：${it.message?.takeIf(String::isNotBlank) ?: "未提供詳細錯誤，請稍後再試"}") }
     }
 }
 
@@ -188,3 +188,4 @@ class CollectionViewModelFactory(
         imageRepository,
     ) as T
 }
+
