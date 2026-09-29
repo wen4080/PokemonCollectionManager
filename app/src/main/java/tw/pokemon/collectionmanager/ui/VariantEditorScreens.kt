@@ -174,15 +174,19 @@ fun QuickAddSheet(
         }
     }
 
-    BackHandler(enabled = !showCostumePicker && !showBackgroundPicker) {
-        if (step == AddStep.CONFIGURE_VARIANT && initialInfo == null) {
-            step = AddStep.PICK_POKEMON
-        } else {
-            onDismiss()
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
+    ) {
+        BackHandler(enabled = !showCostumePicker && !showBackgroundPicker) {
+            if (step == AddStep.CONFIGURE_VARIANT && initialInfo == null) {
+                step = AddStep.PICK_POKEMON
+            } else {
+                onDismiss()
+            }
         }
-    }
 
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         if (accountId == null && initialInfo == null) {
             EmptyState("尚未選擇帳號", "請先建立並選擇一個帳號，才能新增收藏。")
             Spacer(Modifier.height(24.dp))
@@ -581,8 +585,12 @@ private fun CostumePickerSheet(
         .groupBy { it.releaseYear }
         .toList()
         .sortedWith(compareByDescending<Pair<Int?, List<CostumeEntity>>> { it.first ?: 0 })
-    BackHandler(onBack = onDismiss)
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
+    ) {
+        BackHandler(onBack = onDismiss)
+
         Column(
             Modifier.fillMaxWidth().fillMaxHeight(0.82f).padding(horizontal = 18.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
