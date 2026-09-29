@@ -5,7 +5,14 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import sys
 import urllib.request
+
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
 
 
 SOURCES = {
