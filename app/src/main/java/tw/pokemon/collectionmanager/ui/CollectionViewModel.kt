@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ import tw.pokemon.collectionmanager.data.local.SourceAccountRow
 import tw.pokemon.collectionmanager.data.repository.CollectionRepository
 import tw.pokemon.collectionmanager.data.repository.MasterDataRepository
 import tw.pokemon.collectionmanager.data.repository.MasterDataUpdateResult
+import tw.pokemon.collectionmanager.data.repository.MasterDataUpdateProgress
 import tw.pokemon.collectionmanager.data.repository.PokemonImageRepository
 import tw.pokemon.collectionmanager.data.repository.SavedCollectionFilters
 import tw.pokemon.collectionmanager.data.repository.UserPreferencesRepository
@@ -62,6 +64,8 @@ class CollectionViewModel(
     val overviewAccountIds: StateFlow<List<String>> = _overviewAccountIds
     private val _messages = MutableSharedFlow<String>(extraBufferCapacity = 8)
     val messages = _messages.asSharedFlow()
+    private val _masterDataUpdateProgress = MutableStateFlow<MasterDataUpdateProgress?>(null)
+    val masterDataUpdateProgress: StateFlow<MasterDataUpdateProgress?> = _masterDataUpdateProgress.asStateFlow()
 
     fun forms(speciesId: String) = masterDataRepository.forms(speciesId)
     fun searchSpecies(query: String, generation: Int?) = masterDataRepository.searchSpecies(query, generation)
@@ -153,15 +157,29 @@ class CollectionViewModel(
         preferencesRepository.saveCollectionFilters(filters)
     }
 
-    fun checkMasterDataUpdate(requestedUrl: String = masterDataUpdateUrl.value) = launchAction {
-        val url = requestedUrl.trim()
-        require(url.isNotBlank()) { "請先設定主資料更新網址" }
-        preferencesRepository.setMasterDataUpdateUrl(url)
-        val result = masterDataRepository.checkAndImportUpdate(url)
-        preferencesRepository.markMasterDataUpdateChecked()
-        when (result) {
-            is MasterDataUpdateResult.Updated -> "主資料已更新：${result.newVersion}"
-            is MasterDataUpdateResult.AlreadyCurrent -> "目前已是最新主資料：${result.version}"
+    fun checkMasterDataUpdate(requestedUrl: String = masterDataUpdateUrl.value) {
+        if (_masterDataUpdateProgress.value != null) return
+        _masterDataUpdateProgress.value = MasterDataUpdateProgress("準備更新", 0f, "正在準備更新")
+        viewModelScope.launch {
+            try {
+                val url = requestedUrl.trim()
+                require(url.isNotBlank()) { "請先設定主資料更新網址" }
+                preferencesRepository.setMasterDataUpdateUrl(url)
+                val result = masterDataRepository.checkAndImportUpdate(url) { progress ->
+                    _masterDataUpdateProgress.value = progress
+                }
+                preferencesRepository.markMasterDataUpdateChecked()
+                _messages.emit(
+                    when (result) {
+                        is MasterDataUpdateResult.Updated -> "主資料已更新：${result.newVersion}"
+                        is MasterDataUpdateResult.AlreadyCurrent -> "目前已是最新主資料：${result.version}"
+                    },
+                )
+            } catch (error: Exception) {
+                _messages.emit("操作失敗：${error.message?.takeIf(String::isNotBlank) ?: "未提供詳細錯誤，請稍後再試"}")
+            } finally {
+                _masterDataUpdateProgress.value = null
+            }
         }
     }
 

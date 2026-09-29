@@ -16,6 +16,7 @@ import tw.pokemon.collectionmanager.data.local.PokemonBackgroundCompatibilityEnt
 import tw.pokemon.collectionmanager.data.local.PokemonCostumeCompatibilityEntity
 import tw.pokemon.collectionmanager.data.local.PokemonFormEntity
 import tw.pokemon.collectionmanager.data.local.PokemonSpeciesEntity
+import java.io.ByteArrayOutputStream
 import java.util.UUID
 import java.net.HttpURLConnection
 import java.net.URL
@@ -24,6 +25,12 @@ sealed interface MasterDataUpdateResult {
     data class Updated(val previousVersion: String?, val newVersion: String) : MasterDataUpdateResult
     data class AlreadyCurrent(val version: String) : MasterDataUpdateResult
 }
+
+data class MasterDataUpdateProgress(
+    val stage: String,
+    val fraction: Float?,
+    val detail: String,
+)
 
 /**
  * 主資料只由 JSON 匯入，畫面不直接建立 Pokémon、型態、裝扮或背景選項。
@@ -67,7 +74,10 @@ class MasterDataRepository(
         importManifest(manifest)
     }
 
-    suspend fun importManifest(json: String) {
+    suspend fun importManifest(
+        json: String,
+        onProgress: (MasterDataUpdateProgress) -> Unit = {},
+    ) {
         val root = JSONObject(json)
         val masterVersion = root.optString("masterVersion", root.optString("version", "未指定"))
         val species = root.optJSONArray("species").toSpecies()
@@ -78,9 +88,18 @@ class MasterDataRepository(
         val backgroundCompatibility = root.optJSONArray("backgroundCompatibility").toBackgroundCompatibility()
         require(species.isNotEmpty()) { "主資料至少要包含一種 Pokémon" }
 
+        onProgress(
+            MasterDataUpdateProgress(
+                stage = "解析主資料",
+                fraction = 0.72f,
+                detail = "已讀取 ${species.size} 種 Pokémon、${forms.size} 種型態、${costumes.size} 項裝扮與 ${backgrounds.size} 張背景",
+            ),
+        )
+
         val imageCount = root.optInt("imageCount", countImageKeys(species, forms, costumes, backgrounds))
         val missingImageCount = root.optInt("missingImageCount", 0)
         val generatedAt = root.optString("generatedAt").ifBlank { null }
+        onProgress(MasterDataUpdateProgress("更新本機資料庫", 0.84f, "正在保留收藏資料並更新主資料"))
         database.withTransaction {
             dao.deactivateSpecies()
             dao.deactivateForms()
@@ -108,9 +127,14 @@ class MasterDataRepository(
                 ),
             )
         }
+        onProgress(MasterDataUpdateProgress("更新完成", 1f, "主資料已安全更新"))
     }
 
-    suspend fun checkAndImportUpdate(url: String): MasterDataUpdateResult = withContext(Dispatchers.IO) {
+    suspend fun checkAndImportUpdate(
+        url: String,
+        onProgress: (MasterDataUpdateProgress) -> Unit = {},
+    ): MasterDataUpdateResult = withContext(Dispatchers.IO) {
+        onProgress(MasterDataUpdateProgress("準備更新", 0f, "正在連線到主資料來源"))
         require(url.startsWith("https://")) { "主資料更新網址必須使用安全連線" }
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.connectTimeout = 15_000
@@ -121,14 +145,30 @@ class MasterDataRepository(
             require(connection.responseCode in 200..299) { "下載失敗（${connection.responseCode}）" }
             val length = connection.contentLengthLong
             require(length <= 20L * 1024L * 1024L || length < 0) { "主資料檔案超過 20 MB" }
-            connection.inputStream.bufferedReader(Charsets.UTF_8).use { reader ->
-                val text = reader.readText()
-                require(text.toByteArray(Charsets.UTF_8).size <= 20 * 1024 * 1024) { "主資料檔案超過 20 MB" }
-                text
+            val downloaded = ByteArrayOutputStream(if (length > 0) length.toInt() else 16 * 1024)
+            val buffer = ByteArray(16 * 1024)
+            var total = 0L
+            connection.inputStream.use { input ->
+                while (true) {
+                    val count = input.read(buffer)
+                    if (count < 0) break
+                    downloaded.write(buffer, 0, count)
+                    total += count
+                    require(total <= 20L * 1024L * 1024L) { "主資料檔案超過 20 MB" }
+                    val fraction = if (length > 0) (total.toFloat() / length.toFloat()).coerceIn(0f, 1f) else null
+                    val detail = if (length > 0) {
+                        "已下載 ${formatBytes(total)} / ${formatBytes(length)}"
+                    } else {
+                        "已下載 ${formatBytes(total)}"
+                    }
+                    onProgress(MasterDataUpdateProgress("下載主資料", fraction, detail))
+                }
             }
+            String(downloaded.toByteArray(), Charsets.UTF_8)
         } finally {
             connection.disconnect()
         }
+        onProgress(MasterDataUpdateProgress("驗證主資料", 0.68f, "正在檢查版本與資料格式"))
         val root = JSONObject(json)
         val remoteVersion = root.optString("masterVersion", root.optString("version", "")).trim()
         require(remoteVersion.isNotBlank()) { "主資料缺少版本資訊" }
@@ -137,9 +177,15 @@ class MasterDataRepository(
         if (currentVersion == remoteVersion) {
             MasterDataUpdateResult.AlreadyCurrent(remoteVersion)
         } else {
-            importManifest(json)
+            importManifest(json, onProgress)
             MasterDataUpdateResult.Updated(currentVersion, remoteVersion)
         }
+    }
+
+    private fun formatBytes(bytes: Long): String = when {
+        bytes >= 1024L * 1024L -> "%.1f MB".format(java.util.Locale.ROOT, bytes / (1024f * 1024f))
+        bytes >= 1024L -> "%.0f KB".format(java.util.Locale.ROOT, bytes / 1024f)
+        else -> "$bytes B"
     }
 
     private fun JSONArray?.toSpecies(): List<PokemonSpeciesEntity> = buildList {

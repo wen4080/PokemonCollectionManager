@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -44,6 +45,7 @@ fun SettingsScreen(
     val masterDataMeta by viewModel.masterDataMeta.collectAsStateWithLifecycle()
     val savedUpdateUrl by viewModel.masterDataUpdateUrl.collectAsStateWithLifecycle()
     val automaticUpdate by viewModel.automaticMasterDataUpdateEnabled.collectAsStateWithLifecycle()
+    val updateProgress by viewModel.masterDataUpdateProgress.collectAsStateWithLifecycle()
     val bundledBackgroundImageCount by viewModel.bundledBackgroundImageCount.collectAsStateWithLifecycle()
     var updateUrl by remember { mutableStateOf(savedUpdateUrl) }
     LaunchedEffect(savedUpdateUrl) { if (updateUrl != savedUpdateUrl) updateUrl = savedUpdateUrl }
@@ -129,9 +131,33 @@ fun SettingsScreen(
                     }
                     Switch(checked = automaticUpdate, onCheckedChange = viewModel::setAutomaticMasterDataUpdateEnabled)
                 }
+                updateProgress?.let { progress ->
+                    Card {
+                        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text(progress.stage, fontWeight = FontWeight.Bold)
+                                Text(
+                                    progress.fraction?.let { "${(it * 100).toInt()}%" } ?: "處理中",
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                            if (progress.fraction == null) {
+                                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                            } else {
+                                LinearProgressIndicator(
+                                    progress = { progress.fraction.coerceIn(0f, 1f) },
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                            }
+                            Text(progress.detail, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(onClick = { viewModel.setMasterDataUpdateUrl(updateUrl) }) { Text("已儲存更新網址") }
-                    Button(onClick = { viewModel.checkMasterDataUpdate(updateUrl) }) { Text("立即檢查更新") }
+                    Button(enabled = updateProgress == null, onClick = { viewModel.checkMasterDataUpdate(updateUrl) }) {
+                        Text(if (updateProgress == null) "立即檢查更新" else "更新中…")
+                    }
                 }
             }
         }
