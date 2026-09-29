@@ -1,5 +1,6 @@
 package tw.pokemon.collectionmanager.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
@@ -72,6 +73,9 @@ fun CollectionApp(viewModel: CollectionViewModel) {
         }
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
+        BackHandler(enabled = navController.previousBackStackEntry != null) {
+            navController.popBackStack()
+        }
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             bottomBar = {
@@ -159,3 +163,4 @@ fun CollectionApp(viewModel: CollectionViewModel) {
         }
     }
 }
+

@@ -1,5 +1,6 @@
 package tw.pokemon.collectionmanager.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -71,6 +72,12 @@ private const val NO_COSTUME_ID = "COSTUME_NONE"
 private const val NO_BACKGROUND_ID = "BACKGROUND_NONE"
 
 private enum class BackgroundBrowseMode { BY_YEAR, OVERVIEW }
+
+internal fun backgroundEventListKey(eventKey: String, eventName: String?): String =
+    "$eventKey\u0000${eventName.orEmpty()}"
+
+internal fun backgroundCategoryListKey(categoryKey: String, categoryName: String): String =
+    "$categoryKey\u0000$categoryName"
 
 private enum class AddStep {
     PICK_POKEMON,
@@ -148,6 +155,14 @@ fun QuickAddSheet(
             "GIGANTAMAX" -> dynamax = DynamaxState.GIGANTAMAX
             "DYNAMAX" -> dynamax = DynamaxState.DYNAMAX
             else -> if (dynamax == DynamaxState.GIGANTAMAX) dynamax = DynamaxState.NONE
+        }
+    }
+
+    BackHandler(enabled = !showCostumePicker && !showBackgroundPicker) {
+        if (step == AddStep.CONFIGURE_VARIANT && initialInfo == null) {
+            step = AddStep.PICK_POKEMON
+        } else {
+            onDismiss()
         }
     }
 
@@ -550,6 +565,7 @@ private fun CostumePickerSheet(
         .groupBy { it.releaseYear }
         .toList()
         .sortedWith(compareByDescending<Pair<Int?, List<CostumeEntity>>> { it.first ?: 0 })
+    BackHandler(onBack = onDismiss)
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(
             Modifier.fillMaxWidth().fillMaxHeight(0.82f).padding(horizontal = 18.dp, vertical = 8.dp),
@@ -647,6 +663,13 @@ internal fun BackgroundPickerSheet(
     }.filter { selectedCategoryKey == null || it.categoryKey == selectedCategoryKey }
     val yearGroups = realBackgrounds.groupBy { it.year ?: 0 }.toList().sortedByDescending { it.first }
     val categoryGroups = realBackgrounds.groupBy { it.categoryKey to it.categoryName }.toList().sortedBy { it.first.second }
+    BackHandler {
+        when {
+            selectedEventKey != null -> selectedEventKey = null
+            selectedYear != null -> selectedYear = null
+            else -> onDismiss()
+        }
+    }
     fun toggleSelection(id: String) {
         if (!multiple) {
             onSelectionChanged(setOf(id))
@@ -713,9 +736,11 @@ internal fun BackgroundPickerSheet(
                     Text(if (year == 0) "年份待確認" else "${year} 年的活動", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 }
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(bottom = 20.dp), modifier = Modifier.weight(1f)) {
-                    items(events, key = { it.first.first }) { (event, cards) ->
+                    items(events, key = { backgroundEventListKey(it.first.first, it.first.second) }) { (event, cards) ->
                         Card(
-                            modifier = Modifier.fillMaxWidth().clickable { selectedEventKey = event.first },
+                            modifier = Modifier.fillMaxWidth().clickable {
+                                selectedEventKey = backgroundEventListKey(event.first, event.second)
+                            },
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
                         ) {
                             Column(Modifier.padding(14.dp)) {
@@ -726,7 +751,10 @@ internal fun BackgroundPickerSheet(
                     }
                 }
             } else if (mode == BackgroundBrowseMode.BY_YEAR) {
-                val eventCards = realBackgrounds.filter { (it.year ?: 0) == (selectedYear ?: 0) && it.eventKey == selectedEventKey }
+                val eventCards = realBackgrounds.filter {
+                    (it.year ?: 0) == (selectedYear ?: 0) &&
+                        backgroundEventListKey(it.eventKey, it.eventName ?: it.categoryName) == selectedEventKey
+                }
                     .sortedWith(compareBy<BackgroundEntity> { it.sortOrder }.thenBy { it.displayName })
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     TextButton(onClick = { selectedEventKey = null }) { Text("‹ 活動") }
@@ -736,7 +764,7 @@ internal fun BackgroundPickerSheet(
             } else {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     item { FilterChip(selected = selectedCategoryKey == null, onClick = { selectedCategoryKey = null }, label = { Text("全部活動") }) }
-                    items(categoryGroups, key = { it.first.first }) { (category, _) ->
+                    items(categoryGroups, key = { backgroundCategoryListKey(it.first.first, it.first.second) }) { (category, _) ->
                         FilterChip(selected = selectedCategoryKey == category.first, onClick = { selectedCategoryKey = category.first }, label = { Text(category.second) })
                     }
                 }
@@ -936,3 +964,4 @@ private fun buildVariantTitle(info: VariantInfoRow): String = buildString {
     if (info.costumeId != NO_COSTUME_ID) append(info.costumeName)
     append(info.speciesName)
 }
+

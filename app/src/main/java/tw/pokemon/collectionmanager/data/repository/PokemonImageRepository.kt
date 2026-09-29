@@ -27,7 +27,7 @@ interface PokemonImageRepository {
 
     suspend fun getBackgroundImage(backgroundId: String): ImageReference
     suspend fun countBundledBackgroundImages(backgrounds: List<BackgroundEntity>): Int
-    suspend fun loadBitmap(reference: ImageReference): Bitmap?
+    suspend fun loadBitmap(reference: ImageReference, maxDimension: Int = 512): Bitmap?
 }
 
 sealed interface ImageReference {
@@ -44,7 +44,13 @@ class LocalFirstPokemonImageRepository(
     private val database: CollectionDatabase,
 ) : PokemonImageRepository {
     private val master = database.masterDataDao()
-    private val memoryCache = object : LruCache<String, Bitmap>(48) {}
+    private val memoryCache = object : LruCache<String, Bitmap>(
+        (Runtime.getRuntime().maxMemory() / 8L)
+            .coerceIn(4L * 1024L * 1024L, 32L * 1024L * 1024L)
+            .toInt(),
+    ) {
+        override fun sizeOf(key: String, value: Bitmap): Int = value.byteCount
+    }
     private val bundledBackgroundImageIndex: Map<String, String> by lazy {
         runCatching {
             context.assets.open(BACKGROUND_IMAGE_INDEX).bufferedReader().use { reader ->
@@ -104,17 +110,17 @@ class LocalFirstPokemonImageRepository(
         }
     }
 
-    override suspend fun loadBitmap(reference: ImageReference): Bitmap? = withContext(Dispatchers.IO) {
-        memoryCache.get(reference.cacheKey)?.let { return@withContext it }
+    override suspend fun loadBitmap(reference: ImageReference, maxDimension: Int): Bitmap? = withContext(Dispatchers.IO) {
+        val dimension = maxDimension.coerceIn(96, 1024)
+        val cacheKey = "${reference.cacheKey}:$dimension"
+        memoryCache.get(cacheKey)?.let { return@withContext it }
         val bitmap = when (reference) {
-            is ImageReference.LocalFile -> BitmapFactory.decodeFile(reference.file.absolutePath)
-            is ImageReference.BundledAsset -> runCatching {
-                context.assets.open(reference.assetPath).use(BitmapFactory::decodeStream)
-            }.getOrNull()
-            is ImageReference.RemoteStatic -> download(reference)
+            is ImageReference.LocalFile -> decodeFile(reference.file, dimension)
+            is ImageReference.BundledAsset -> decodeBundledAsset(reference.assetPath, dimension)
+            is ImageReference.RemoteStatic -> download(reference, dimension)
             is ImageReference.Placeholder -> null
         }
-        bitmap?.let { memoryCache.put(reference.cacheKey, it) }
+        bitmap?.let { memoryCache.put(cacheKey, it) }
         bitmap
     }
 
@@ -160,11 +166,42 @@ class LocalFirstPokemonImageRepository(
         }
     }
 
-    private fun download(reference: ImageReference.RemoteStatic): Bitmap? {
+    private fun decodeFile(file: File, maxDimension: Int): Bitmap? {
+        if (!file.isFile) return null
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(file.absolutePath, bounds)
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
+        val options = BitmapFactory.Options().apply {
+            inSampleSize = calculateInSampleSize(bounds.outWidth, bounds.outHeight, maxDimension)
+            inPreferredConfig = Bitmap.Config.ARGB_8888
+        }
+        return BitmapFactory.decodeFile(file.absolutePath, options)
+    }
+
+    private fun decodeBundledAsset(assetPath: String, maxDimension: Int): Bitmap? = runCatching {
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        context.assets.open(assetPath).use { BitmapFactory.decodeStream(it, null, bounds) }
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return@runCatching null
+        val options = BitmapFactory.Options().apply {
+            inSampleSize = calculateInSampleSize(bounds.outWidth, bounds.outHeight, maxDimension)
+            inPreferredConfig = Bitmap.Config.ARGB_8888
+        }
+        context.assets.open(assetPath).use { BitmapFactory.decodeStream(it, null, options) }
+    }.getOrNull()
+
+    private fun calculateInSampleSize(width: Int, height: Int, maxDimension: Int): Int {
+        var sample = 1
+        while (maxOf(width / sample, height / sample) > maxDimension) {
+            sample *= 2
+        }
+        return sample
+    }
+
+    private fun download(reference: ImageReference.RemoteStatic, maxDimension: Int): Bitmap? {
         val safeKey = reference.cacheKey.replace(Regex("[^A-Za-z0-9._-]"), "_")
         val destination = File(context.cacheDir, "pokemon_assets/$safeKey.png")
         if (destination.isFile) {
-            BitmapFactory.decodeFile(destination.absolutePath)?.let { return it }
+            decodeFile(destination, maxDimension)?.let { return it }
             destination.delete()
         }
         repeat(2) { attempt ->
@@ -187,7 +224,7 @@ class LocalFirstPokemonImageRepository(
                     val temporary = File(parent, "${destination.name}.part")
                     temporary.delete()
                     connection.inputStream.use { input -> temporary.outputStream().use { output -> input.copyTo(output) } }
-                    val decoded = BitmapFactory.decodeFile(temporary.absolutePath)
+                    val decoded = decodeFile(temporary, maxDimension)
                     if (decoded == null) {
                         temporary.delete()
                         null
@@ -211,3 +248,4 @@ class LocalFirstPokemonImageRepository(
 
 private const val POGO_RAW_BASE = "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/"
 private const val BACKGROUND_IMAGE_INDEX = "master/background_image_index.json"
+

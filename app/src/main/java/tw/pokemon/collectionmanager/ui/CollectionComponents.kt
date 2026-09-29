@@ -424,7 +424,7 @@ fun PokemonArtwork(
 ) {
     val bitmap by produceState<android.graphics.Bitmap?>(initialValue = null, speciesId, formId, costumeId, shiny) {
         val reference = imageRepository.getImage(speciesId, formId, costumeId, shiny)
-        value = imageRepository.loadBitmap(reference)
+        value = imageRepository.loadBitmap(reference, maxDimension = 384)
     }
     if (bitmap != null) {
         Image(
@@ -450,7 +450,7 @@ fun BackgroundArtwork(
 ) {
     val bitmap by produceState<android.graphics.Bitmap?>(initialValue = null, backgroundId) {
         val reference = imageRepository.getBackgroundImage(backgroundId)
-        value = imageRepository.loadBitmap(reference)
+        value = imageRepository.loadBitmap(reference, maxDimension = 192)
     }
     if (bitmap != null) {
         Image(
@@ -474,7 +474,7 @@ fun BackgroundLayer(
 ) {
     val bitmap by produceState<android.graphics.Bitmap?>(initialValue = null, backgroundId) {
         val reference = imageRepository.getBackgroundImage(backgroundId)
-        value = imageRepository.loadBitmap(reference)
+        value = imageRepository.loadBitmap(reference, maxDimension = 512)
     }
     bitmap?.let {
         Image(
@@ -529,3 +529,4 @@ fun HorizontalChoices(content: @Composable () -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) { content() }
 }
+
