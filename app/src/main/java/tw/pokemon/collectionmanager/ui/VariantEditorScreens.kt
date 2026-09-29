@@ -686,7 +686,6 @@ internal fun BackgroundPickerSheet(
             BackgroundPickerBackTarget.DISMISS -> onDismiss()
         }
     }
-    BackHandler(onBack = ::handleBack)
     fun toggleSelection(id: String) {
         if (!multiple) {
             onSelectionChanged(setOf(id))
@@ -699,6 +698,10 @@ internal fun BackgroundPickerSheet(
         onDismissRequest = onDismiss,
         properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
     ) {
+        // 背景選擇器使用獨立的對話框視窗，返回處理器必須放在視窗內，
+        // Android 返回手勢才能回到目前的選擇層級，而不是被對話框吃掉。
+        BackHandler(onBack = ::handleBack)
+
         Column(Modifier.fillMaxWidth().fillMaxHeight(0.82f).padding(horizontal = 18.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(if (multiple) "篩選多個背景" else "選擇背景", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
@@ -984,3 +987,4 @@ private fun buildVariantTitle(info: VariantInfoRow): String = buildString {
     if (info.costumeId != NO_COSTUME_ID) append(info.costumeName)
     append(info.speciesName)
 }
+
