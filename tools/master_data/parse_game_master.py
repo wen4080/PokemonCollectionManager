@@ -1011,6 +1011,181 @@ def apply_known_background_metadata(backgrounds: list[dict]) -> None:
     for background in backgrounds:
         background.update(overrides.get(background["backgroundKey"], {}))
 
+    # 部分 LocationCards 只有圖片檔，沒有在當期 Game Master 留下可解析的
+    # locationCard 設定，因此原本會被錯誤放進「年份待確認」。這些活動已有
+    # 公開活動名稱／年份，集中在這裡補上可讀資料；不會建立不存在的卡片。
+    def apply_event(
+        background: dict,
+        *,
+        display_name: str,
+        category_key: str,
+        category_name: str,
+        event_key: str,
+        event_name: str,
+        year: int,
+        available_from: str | None = None,
+        available_until: str | None = None,
+        effect_note: str | None = None,
+    ) -> None:
+        background.update(
+            {
+                "displayName": display_name,
+                "categoryKey": category_key,
+                "categoryName": category_name,
+                "eventKey": event_key,
+                "eventName": event_name,
+                "year": year,
+                "availableFrom": available_from,
+                "availableUntil": available_until,
+            }
+        )
+        if effect_note:
+            background["effectNote"] = effect_note
+
+    for background in backgrounds:
+        key = background["backgroundKey"]
+        if key == "ID_CAR_FREE_DAY":
+            apply_event(
+                background,
+                display_name="Car Free Day Indonesia 2026｜無車日活動背卡",
+                category_key="SEASONAL_EVENT",
+                category_name="節慶活動背卡",
+                event_key="CAR_FREE_DAY_2026_INDONESIA",
+                event_name="Car Free Day Indonesia 2026",
+                year=2026,
+            )
+        elif key.startswith("JAPAN_STAMP_RALLY_"):
+            location = background.get("locationName") or background["displayName"].split("｜")[-1]
+            apply_event(
+                background,
+                display_name=f"Pokémon Center 2026｜{location}",
+                category_key="POKEMON_CENTER",
+                category_name="Pokémon Center 背卡",
+                event_key="POKEMON_CENTER_2026",
+                event_name="Pokémon Center 2026",
+                year=2026,
+            )
+        elif key == "JEJU_STAMP_RALLY":
+            apply_event(
+                background,
+                display_name="Stamp Rally 2025｜濟州島",
+                category_key="STAMP_RALLY",
+                category_name="Stamp Rally 背卡",
+                event_key="STAMP_RALLY_2025_JEJU",
+                event_name="Stamp Rally 2025",
+                year=2025,
+            )
+        elif key.startswith("NT_"):
+            location = background.get("locationName") or background["displayName"].split("｜")[-1]
+            apply_event(
+                background,
+                display_name=f"National Trust 2026｜{location}",
+                category_key="NATIONAL_TRUST",
+                category_name="National Trust 背卡",
+                event_key="NATIONAL_TRUST_2026",
+                event_name="National Trust 2026",
+                year=2026,
+            )
+        elif key.startswith("POKELID_"):
+            location = background.get("locationName") or background["displayName"].split("｜")[-1]
+            old_2025_locations = {"FUKUOKA", "KAGOSHIMA", "MIYAZAKI", "NAGASAKI", "OKINAWA", "SAGA"}
+            location_key = key.removeprefix("POKELID_")
+            year = 2025 if location_key in old_2025_locations else 2026
+            apply_event(
+                background,
+                display_name=f"Poké Lid {year}｜{location}",
+                category_key="POKELID",
+                category_name="Poké Lid 背卡",
+                event_key=f"POKELID_{year}",
+                event_name=f"Poké Lid {year}",
+                year=year,
+            )
+        elif key == "SPECIALBACKGROUND_OBSERVATORY_EXHIBITION_TOUR":
+            apply_event(
+                background,
+                display_name="Observatory Exhibition Tour 2025",
+                category_key="OTHER_SPECIAL",
+                category_name="特殊活動背卡",
+                event_key="OBSERVATORY_EXHIBITION_TOUR_2025",
+                event_name="Observatory Exhibition Tour 2025",
+                year=2025,
+            )
+        elif key.startswith("SPECIALBACKGROUND_TEAM_"):
+            team = key.removeprefix("SPECIALBACKGROUND_TEAM_")
+            team_name = {"BLUE": "藍隊", "RED": "紅隊", "YELLOW": "黃隊"}.get(team, team)
+            apply_event(
+                background,
+                display_name=f"隊長活動 2024｜{team_name}款",
+                category_key="TEAM_LEADER",
+                category_name="隊長活動背卡",
+                event_key="TEAM_LEADER_2024",
+                event_name="隊長活動 2024",
+                year=2024,
+            )
+        elif key.startswith("TOKMUN_STAMP_"):
+            location = background.get("locationName") or background["displayName"].split("｜")[-1]
+            apply_event(
+                background,
+                display_name=f"Stamp Rally Tokyo Bay 2026｜{location}",
+                category_key="STAMP_RALLY",
+                category_name="Stamp Rally 背卡",
+                event_key="STAMP_RALLY_2026_TOKYO_BAY",
+                event_name="Stamp Rally Tokyo Bay 2026",
+                year=2026,
+            )
+        elif key.startswith("ASSET_LC_ESA_"):
+            location = background["displayName"].split("｜")[-1]
+            apply_event(
+                background,
+                display_name=f"Pokémon GO × ESA 2026｜{location}",
+                category_key="SPACE_EVENT",
+                category_name="太空景點背卡",
+                event_key="ESA_2026",
+                event_name="Pokémon GO × ESA 2026",
+                year=2026,
+            )
+        elif key.startswith("ASSET_LC_TPC30TH_"):
+            location = {
+                "ASSET_LC_TPC30TH_MALAYSIA": "馬來西亞",
+                "ASSET_LC_TPC30TH_PHILIPPINES": "菲律賓",
+                "ASSET_LC_TPC30TH_SINGAPORE": "新加坡",
+                "ASSET_LC_TPC30TH_TAIWAN": "台灣",
+            }.get(key, "地區款")
+            apply_event(
+                background,
+                display_name=f"Pokémon 30 週年活動 2026｜{location}",
+                category_key="ANNIVERSARY",
+                category_name="週年活動背卡",
+                event_key="TPC_30TH_ANNIVERSARY_2026",
+                event_name="Pokémon 30 週年活動 2026",
+                year=2026,
+            )
+        elif key == "ASSET_SB_MIDAUTUMN":
+            apply_event(
+                background,
+                display_name="Dancing in the Moonlight 2026｜Clefairy 月光特殊背卡",
+                category_key="SEASONAL_EVENT",
+                category_name="節慶活動背卡",
+                event_key="DANCING_IN_THE_MOONLIGHT_2026",
+                event_name="Dancing in the Moonlight 2026",
+                year=2026,
+                available_from="2026-09-23",
+                available_until="2026-09-28",
+                effect_note="目前公開資產只提供一張靜態底圖；遊戲內月光效果不另拆成可收藏背卡。",
+            )
+        elif key == "ASSET_SB_PATTERNWILD":
+            apply_event(
+                background,
+                display_name="Patterns of the Wild 2026｜Pikachu 蠟染服裝背卡",
+                category_key="SEASONAL_EVENT",
+                category_name="節慶活動背卡",
+                event_key="PATTERNS_OF_THE_WILD_2026",
+                event_name="Patterns of the Wild 2026",
+                year=2026,
+                available_from="2026-10-02",
+                effect_note="已在公開資產中發現；活動尚未開始時標示為拆包資訊。",
+            )
+
 
 def disambiguate_background_names(backgrounds: list[dict]) -> None:
     """同名但不同 ID 的背卡以穩定款式編號區分，避免使用者只能猜資料代號。"""

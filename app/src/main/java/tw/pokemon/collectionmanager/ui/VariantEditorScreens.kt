@@ -34,6 +34,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -78,6 +79,21 @@ internal fun backgroundEventListKey(eventKey: String, eventName: String?): Strin
 
 internal fun backgroundCategoryListKey(categoryKey: String, categoryName: String): String =
     "$categoryKey\u0000$categoryName"
+
+internal enum class BackgroundPickerBackTarget {
+    EVENT_LIST,
+    YEAR_LIST,
+    DISMISS,
+}
+
+internal fun backgroundPickerBackTarget(
+    selectedYear: Int?,
+    selectedEventKey: String?,
+): BackgroundPickerBackTarget = when {
+    selectedEventKey != null -> BackgroundPickerBackTarget.EVENT_LIST
+    selectedYear != null -> BackgroundPickerBackTarget.YEAR_LIST
+    else -> BackgroundPickerBackTarget.DISMISS
+}
 
 private enum class AddStep {
     PICK_POKEMON,
@@ -663,13 +679,14 @@ internal fun BackgroundPickerSheet(
     }.filter { selectedCategoryKey == null || it.categoryKey == selectedCategoryKey }
     val yearGroups = realBackgrounds.groupBy { it.year ?: 0 }.toList().sortedByDescending { it.first }
     val categoryGroups = realBackgrounds.groupBy { it.categoryKey to it.categoryName }.toList().sortedBy { it.first.second }
-    BackHandler {
-        when {
-            selectedEventKey != null -> selectedEventKey = null
-            selectedYear != null -> selectedYear = null
-            else -> onDismiss()
+    fun handleBack() {
+        when (backgroundPickerBackTarget(selectedYear, selectedEventKey)) {
+            BackgroundPickerBackTarget.EVENT_LIST -> selectedEventKey = null
+            BackgroundPickerBackTarget.YEAR_LIST -> selectedYear = null
+            BackgroundPickerBackTarget.DISMISS -> onDismiss()
         }
     }
+    BackHandler(onBack = ::handleBack)
     fun toggleSelection(id: String) {
         if (!multiple) {
             onSelectionChanged(setOf(id))
@@ -678,7 +695,10 @@ internal fun BackgroundPickerSheet(
             onSelectionChanged(if (id in selectedIds) selectedIds - id else selectedIds + id)
         }
     }
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    ModalBottomSheet(
+        onDismissRequest = ::handleBack,
+        properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
+    ) {
         Column(Modifier.fillMaxWidth().fillMaxHeight(0.82f).padding(horizontal = 18.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(if (multiple) "篩選多個背景" else "選擇背景", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
@@ -964,4 +984,3 @@ private fun buildVariantTitle(info: VariantInfoRow): String = buildString {
     if (info.costumeId != NO_COSTUME_ID) append(info.costumeName)
     append(info.speciesName)
 }
-

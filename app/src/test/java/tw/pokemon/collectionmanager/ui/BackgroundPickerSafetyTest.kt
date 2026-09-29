@@ -20,5 +20,28 @@ class BackgroundPickerSafetyTest {
             backgroundCategoryListKey("GO_FEST_REGION", "GO Fest 地區背卡"),
         )
     }
-}
 
+    @Test
+    fun systemBackFromEventReturnsToEventList() {
+        assertEquals(
+            BackgroundPickerBackTarget.EVENT_LIST,
+            backgroundPickerBackTarget(selectedYear = 2026, selectedEventKey = "CITY_SAFARI_2026"),
+        )
+    }
+
+    @Test
+    fun systemBackFromYearReturnsToYearList() {
+        assertEquals(
+            BackgroundPickerBackTarget.YEAR_LIST,
+            backgroundPickerBackTarget(selectedYear = 2026, selectedEventKey = null),
+        )
+    }
+
+    @Test
+    fun systemBackAtRootDismissesPicker() {
+        assertEquals(
+            BackgroundPickerBackTarget.DISMISS,
+            backgroundPickerBackTarget(selectedYear = null, selectedEventKey = null),
+        )
+    }
+}
