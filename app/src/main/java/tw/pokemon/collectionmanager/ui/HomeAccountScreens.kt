@@ -56,6 +56,7 @@ fun HomeScreen(
     Box(Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            overscrollEffect = null,
             contentPadding = PaddingValues(start = 20.dp, top = 24.dp, end = 20.dp, bottom = 100.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
@@ -86,7 +87,7 @@ fun HomeScreen(
                 }
             } else {
                 item {
-                    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         items(activeAccounts, key = { it.id }) { account ->
                             AccountQuickCard(
                                 account = account,
@@ -114,7 +115,7 @@ fun HomeScreen(
                 item { EmptyState("還沒有收藏卡片", "從右下角快速新增一筆，收藏版本與佔有數量會自動建立。", "新增收藏") { showAdd = true } }
             } else {
                 item {
-                    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         items(variants.take(6), key = { it.variantId }) { variant ->
                             VariantCardItem(
                                 variant = variant,
@@ -153,6 +154,7 @@ fun AccountsScreen(viewModel: CollectionViewModel, onOpenAccount: (String) -> Un
     Box(Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            overscrollEffect = null,
             contentPadding = PaddingValues(start = 20.dp, top = 24.dp, end = 20.dp, bottom = 100.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -327,3 +329,4 @@ fun EmptyState(title: String, message: String, actionLabel: String? = null, onAc
         }
     }
 }
+

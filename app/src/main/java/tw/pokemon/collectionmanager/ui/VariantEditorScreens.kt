@@ -333,7 +333,7 @@ private fun PokemonPicker(
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
         )
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             item {
                 FilterChip(selected = generation == null, onClick = { onGenerationChanged(null) }, label = { Text("全部世代") })
             }
@@ -346,6 +346,7 @@ private fun PokemonPicker(
         } else {
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(118.dp),
+                overscrollEffect = null,
                 contentPadding = PaddingValues(bottom = 24.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -470,7 +471,7 @@ private fun VariantConfiguration(
             if (forms.size <= 1) {
                 Text(selectedForm?.displayName ?: "一般型態", color = MaterialTheme.colorScheme.onSurfaceVariant)
             } else {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(forms, key = { it.id }) { form ->
                         Card(
                             modifier = Modifier.width(130.dp).clickable { onFormSelected(form.id) },
@@ -609,6 +610,7 @@ private fun CostumePickerSheet(
             } else {
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(128.dp),
+                    overscrollEffect = null,
                     contentPadding = PaddingValues(bottom = 24.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -740,6 +742,7 @@ internal fun BackgroundPickerSheet(
                 Text("先選年份", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(116.dp),
+                    overscrollEffect = null,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(bottom = 20.dp),
@@ -766,7 +769,7 @@ internal fun BackgroundPickerSheet(
                     TextButton(onClick = { selectedYear = null }) { Text("‹ 年份") }
                     Text(if (year == 0) "年份待確認" else "${year} 年的活動", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 }
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(bottom = 20.dp), modifier = Modifier.weight(1f)) {
+                LazyColumn(overscrollEffect = null, verticalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(bottom = 20.dp), modifier = Modifier.weight(1f)) {
                     items(events, key = { backgroundEventListKey(it.first.first, it.first.second) }) { (event, cards) ->
                         Card(
                             modifier = Modifier.fillMaxWidth().clickable {
@@ -793,7 +796,7 @@ internal fun BackgroundPickerSheet(
                 }
                 BackgroundChoiceList(imageRepository, eventCards, verifiedIds, selectedIds, ::toggleSelection, Modifier.weight(1f))
             } else {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     item { FilterChip(selected = selectedCategoryKey == null, onClick = { selectedCategoryKey = null }, label = { Text("全部活動") }) }
                     items(categoryGroups, key = { backgroundCategoryListKey(it.first.first, it.first.second) }) { (category, _) ->
                         FilterChip(selected = selectedCategoryKey == category.first, onClick = { selectedCategoryKey = category.first }, label = { Text(category.second) })
@@ -815,7 +818,7 @@ private fun BackgroundChoiceList(
     onSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(bottom = 20.dp)) {
+    LazyColumn(overscrollEffect = null, modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(bottom = 20.dp)) {
         items(backgrounds, key = { it.id }) { background ->
             Card(
                 modifier = Modifier.fillMaxWidth().clickable { onSelected(background.id) },

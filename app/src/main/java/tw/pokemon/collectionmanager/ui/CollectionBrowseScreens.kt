@@ -166,7 +166,7 @@ fun OverviewScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Un
         Spacer(Modifier.padding(6.dp))
         Text("帳號篩選", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         Spacer(Modifier.padding(2.dp))
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(vertical = 4.dp)) {
+        LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(vertical = 4.dp)) {
             item {
                 FilterChip(
                     selected = selectedIds.isEmpty(),
@@ -240,7 +240,7 @@ fun SearchScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Unit
         Spacer(Modifier.padding(4.dp))
         CollectionFilterControls(filterState, viewModel, backgrounds)
         Spacer(Modifier.padding(4.dp))
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(vertical = 4.dp)) {
+        LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(vertical = 4.dp)) {
             item {
                 FilterChip(selected = selectedAccountId == null, onClick = { selectedAccountId = null }, label = { Text("全部帳號") })
             }
@@ -259,3 +259,4 @@ fun SearchScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Unit
         else VariantGrid(accountFiltered, imageRepository = viewModel.imageRepository, onClick = { onOpenVariant(it.variantId) }, modifier = Modifier.weight(1f))
     }
 }
+

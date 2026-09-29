@@ -296,6 +296,7 @@ fun VariantGrid(
     androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
         columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(150.dp),
         modifier = modifier,
+        overscrollEffect = null,
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -382,6 +383,7 @@ fun VariantCardItem(variant: VariantCardRow, imageRepository: PokemonImageReposi
 }
 
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 fun BadgeRow(variant: VariantCardRow, compact: Boolean = true) {
     val badges = buildList {
         if (variant.isShiny) add("✨ 異色")
@@ -396,19 +398,26 @@ fun BadgeRow(variant: VariantCardRow, compact: Boolean = true) {
         if (variant.specialMoveQuantity > 0) add("特招 ×${variant.specialMoveQuantity}")
     }
     if (badges.isNotEmpty()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
-                .padding(top = 5.dp),
+        // 卡片內不再放水平可滾動列。非預設版本一定會產生徽章，
+        // 讓徽章換行可避免巢狀滾動造成快速滑動時的邊界回彈或版面例外。
+        FlowRow(
+            modifier = Modifier.fillMaxWidth().padding(top = 5.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             badges.take(if (compact) 3 else badges.size).forEach { badge ->
-                AssistChip(
-                    onClick = {},
-                    label = { Text(badge, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                    modifier = Modifier.height(28.dp),
-                )
+                Surface(
+                    shape = MaterialTheme.shapes.small,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                ) {
+                    Text(
+                        text = badge,
+                        modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
             }
         }
     }
