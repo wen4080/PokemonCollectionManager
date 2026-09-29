@@ -439,7 +439,7 @@ private fun VariantConfiguration(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             onBack?.let { TextButton(onClick = it) { Text("‹ 返回") } }
-            Text(if (isEditing) "編輯收藏版本" else "設定收藏版本", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(if (isEditing) "編輯收藏組合" else "設定收藏組合", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         }
         if (selectedSpecies == null) {
             EmptyState("尚未選擇 Pokémon", "請返回上一頁選擇 Pokémon。")
@@ -542,8 +542,8 @@ private fun VariantConfiguration(
             }
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
-            Text("佔有數量", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Text("尺寸、特招與交換狀態只會合併數量，不會建立新的收藏版本。", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("收藏數量", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text("尺寸、特招與交換狀態只會合併數量，不會建立新的收藏組合。", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             HorizontalChoices { SizeType.entries.forEach { value -> ChoiceChip(value.label, size == value) { onSizeChanged(value) } } }
             HorizontalChoices {
                 ChoiceChip("無特招", !specialMove) { onSpecialMoveChanged(false) }
@@ -692,6 +692,7 @@ internal fun BackgroundPickerSheet(
     multiple: Boolean,
     onSelectionChanged: (Set<String>) -> Unit,
     onDismiss: () -> Unit,
+    quantityByBackground: Map<String, Long> = emptyMap(),
 ) {
     var query by remember { mutableStateOf("") }
     var mode by remember { mutableStateOf(BackgroundBrowseMode.BY_YEAR) }
@@ -753,7 +754,7 @@ internal fun BackgroundPickerSheet(
 
             if (query.isNotBlank()) {
                 Text("搜尋結果：${visible.size} 張背卡", style = MaterialTheme.typography.labelLarge)
-                BackgroundChoiceList(imageRepository, visible, verifiedIds, selectedIds, ::toggleSelection, Modifier.weight(1f))
+                BackgroundChoiceList(imageRepository, visible, verifiedIds, selectedIds, ::toggleSelection, Modifier.weight(1f), quantityByBackground)
             } else if (mode == BackgroundBrowseMode.BY_YEAR && selectedYear == null) {
                 Text("先選年份", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 LazyVerticalGrid(
@@ -810,7 +811,7 @@ internal fun BackgroundPickerSheet(
                     TextButton(onClick = { selectedEventKey = null }) { Text("‹ 活動") }
                     Text(eventCards.firstOrNull()?.eventName ?: "活動背卡", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 }
-                BackgroundChoiceList(imageRepository, eventCards, verifiedIds, selectedIds, ::toggleSelection, Modifier.weight(1f))
+                BackgroundChoiceList(imageRepository, eventCards, verifiedIds, selectedIds, ::toggleSelection, Modifier.weight(1f), quantityByBackground)
             } else {
                 LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     item { FilterChip(selected = selectedCategoryKey == null, onClick = { selectedCategoryKey = null }, label = { Text("全部活動") }) }
@@ -819,7 +820,7 @@ internal fun BackgroundPickerSheet(
                     }
                 }
                 Text("總覽：${visible.size} 張背卡", style = MaterialTheme.typography.labelLarge)
-                BackgroundChoiceList(imageRepository, visible.sortedWith(compareByDescending<BackgroundEntity> { it.year ?: 0 }.thenBy { it.eventName }.thenBy { it.sortOrder }), verifiedIds, selectedIds, ::toggleSelection, Modifier.weight(1f))
+                BackgroundChoiceList(imageRepository, visible.sortedWith(compareByDescending<BackgroundEntity> { it.year ?: 0 }.thenBy { it.eventName }.thenBy { it.sortOrder }), verifiedIds, selectedIds, ::toggleSelection, Modifier.weight(1f), quantityByBackground)
             }
         }
     }
@@ -833,6 +834,7 @@ private fun BackgroundChoiceList(
     selectedIds: Set<String>,
     onSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
+    quantityByBackground: Map<String, Long> = emptyMap(),
 ) {
     LazyColumn(overscrollEffect = null, modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(bottom = 20.dp)) {
         items(backgrounds, key = { it.id }) { background ->
@@ -849,6 +851,13 @@ private fun BackgroundChoiceList(
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
+                        if (quantityByBackground.isNotEmpty()) {
+                            Text(
+                                "目前收藏：${quantityByBackground[background.id] ?: 0} 隻",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        }
                         if (!background.previewImageKey.isNullOrBlank()) {
                             Text(
                                 "完整靜態預覽${background.previewSource?.let { " · 來源：$it" }.orEmpty()}；遊戲內動畫可能略有差異",
@@ -916,7 +925,7 @@ fun VariantDetailScreen(
     var showDelete by remember { mutableStateOf(false) }
 
     if (info == null) {
-        EmptyState("找不到這個收藏版本", "它可能已被刪除或備份尚未完成。", "返回", onBack)
+        EmptyState("找不到這個收藏組合", "它可能已被刪除或備份尚未完成。", "返回", onBack)
         return
     }
     val currentInfo = info!!
@@ -945,7 +954,7 @@ fun VariantDetailScreen(
             }
             PokemonArtwork(viewModel.imageRepository, currentInfo.speciesId, currentInfo.formId, currentInfo.costumeId, currentInfo.isShiny, currentInfo.speciesName)
         }
-        SectionTitle("收藏版本資訊")
+        SectionTitle("收藏組合資訊")
         InfoLine("Pokémon", "${currentInfo.speciesName}（#${currentInfo.dexNumber}）")
         InfoLine("型態", currentInfo.formName)
         InfoLine("異色", if (currentInfo.isShiny) "是" else "否")
@@ -961,7 +970,7 @@ fun VariantDetailScreen(
             SectionTitle("${currentInfo.speciesName} · ${sources.firstOrNull { it.accountId == accountId }?.accountName ?: "此帳號"}")
             Text("總數：$total", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             buckets.forEach { bucket -> BucketLine(bucket, viewModel) }
-            if (buckets.isEmpty()) Text("此帳號目前沒有這個收藏版本的佔有數量。", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (buckets.isEmpty()) Text("此帳號目前沒有這個收藏組合的數量。", color = MaterialTheme.colorScheme.onSurfaceVariant)
         } else {
             SectionTitle("來源帳號")
             Text("總數：${aggregate?.totalQuantity ?: selectedSourceRows.sumOf { it.quantity }}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -976,7 +985,7 @@ fun VariantDetailScreen(
                     TextButton(onClick = { onOpenAccount(source.accountId) }) { Text("查看") }
                 }
             }
-            if (selectedSourceRows.isEmpty()) Text("目前選取的帳號沒有這個收藏版本。", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (selectedSourceRows.isEmpty()) Text("目前選取的帳號沒有這個收藏組合。", color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Spacer(Modifier.height(20.dp))
     }
@@ -985,8 +994,8 @@ fun VariantDetailScreen(
     if (showDelete) {
         AlertDialog(
             onDismissRequest = { showDelete = false },
-            title = { Text("刪除這個收藏版本？") },
-            text = { Text("會刪除所有帳號下此收藏版本的佔有數量，且無法復原。") },
+            title = { Text("刪除這個收藏組合？") },
+            text = { Text("會刪除所有帳號下此收藏組合的數量，且無法復原。") },
             confirmButton = { Button(onClick = { viewModel.deleteVariant(variantId); showDelete = false; onBack() }) { Text("確定刪除") } },
             dismissButton = { TextButton(onClick = { showDelete = false }) { Text("取消") } },
         )

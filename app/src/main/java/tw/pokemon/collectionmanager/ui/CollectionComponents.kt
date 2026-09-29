@@ -91,6 +91,12 @@ enum class FilterMatchMode(val code: String, val label: String) {
     }
 }
 
+fun VariantCardRow.matchesQuery(query: String): Boolean {
+    val normalized = query.trim()
+    return normalized.isBlank() || listOf(speciesName, formName, costumeName, backgroundName, backgroundCategoryName, dexNumber.toString())
+        .any { it.contains(normalized, ignoreCase = true) }
+}
+
 fun VariantCardRow.matches(
     query: String,
     filters: Set<VariantFilterMode> = emptySet(),
@@ -98,9 +104,7 @@ fun VariantCardRow.matches(
     matchMode: FilterMatchMode = FilterMatchMode.ALL,
     minimumMatches: Int = 2,
 ): Boolean {
-    val normalized = query.trim()
-    val textMatches = normalized.isBlank() || listOf(speciesName, formName, costumeName, backgroundName, backgroundCategoryName, dexNumber.toString())
-        .any { it.contains(normalized, ignoreCase = true) }
+    val textMatches = matchesQuery(query)
     val activeFilters = filters - VariantFilterMode.ALL
     val exclusiveGroups = listOf(
         setOf(VariantFilterMode.XXL, VariantFilterMode.XXS),
@@ -139,28 +143,39 @@ fun filterCriterionCount(filters: Set<VariantFilterMode>, backgroundIds: Set<Str
     return (activeFilters - groupedModes).size + groupedSelections + if (backgroundIds.isEmpty()) 0 else 1
 }
 
-private fun VariantCardRow.matchesFilter(filter: VariantFilterMode): Boolean = when (filter) {
-    VariantFilterMode.ALL -> true
-    VariantFilterMode.SHINY -> isShiny
-    VariantFilterMode.BACKGROUND -> backgroundId != "BACKGROUND_NONE"
-    VariantFilterMode.COSTUME -> costumeName != "無裝扮"
-    VariantFilterMode.FORM -> formName != "一般型態"
-    VariantFilterMode.XXL -> xxlQuantity > 0
-    VariantFilterMode.XXS -> xxsQuantity > 0
-    VariantFilterMode.SPECIAL_MOVE -> specialMoveQuantity > 0
-    VariantFilterMode.AVAILABLE -> untradedQuantity > 0
-    VariantFilterMode.TRADED -> tradedQuantity > 0
-    VariantFilterMode.MALE -> gender == Gender.MALE
-    VariantFilterMode.FEMALE -> gender == Gender.FEMALE
-    VariantFilterMode.SHADOW -> shadowState.code == "SHADOW"
-    VariantFilterMode.PURIFIED -> shadowState.code == "PURIFIED"
-    VariantFilterMode.DYNAMAX -> dynamaxState.code == "DYNAMAX"
-    VariantFilterMode.GIGANTAMAX -> dynamaxState.code == "GIGANTAMAX"
+fun VariantCardRow.quantityForFilter(filter: VariantFilterMode): Long = when (filter) {
+    VariantFilterMode.ALL -> totalQuantity
+    VariantFilterMode.SHINY -> if (isShiny) totalQuantity else 0
+    VariantFilterMode.BACKGROUND -> if (backgroundId != "BACKGROUND_NONE") totalQuantity else 0
+    VariantFilterMode.COSTUME -> if (costumeName != "無裝扮") totalQuantity else 0
+    VariantFilterMode.FORM -> if (formName != "一般型態") totalQuantity else 0
+    VariantFilterMode.XXL -> xxlQuantity
+    VariantFilterMode.XXS -> xxsQuantity
+    VariantFilterMode.SPECIAL_MOVE -> specialMoveQuantity
+    VariantFilterMode.AVAILABLE -> untradedQuantity
+    VariantFilterMode.TRADED -> tradedQuantity
+    VariantFilterMode.MALE -> if (gender == Gender.MALE) totalQuantity else 0
+    VariantFilterMode.FEMALE -> if (gender == Gender.FEMALE) totalQuantity else 0
+    VariantFilterMode.SHADOW -> if (shadowState.code == "SHADOW") totalQuantity else 0
+    VariantFilterMode.PURIFIED -> if (shadowState.code == "PURIFIED") totalQuantity else 0
+    VariantFilterMode.DYNAMAX -> if (dynamaxState.code == "DYNAMAX") totalQuantity else 0
+    VariantFilterMode.GIGANTAMAX -> if (dynamaxState.code == "GIGANTAMAX") totalQuantity else 0
 }
+
+fun List<VariantCardRow>.quantityForFilter(filter: VariantFilterMode): Long = sumOf { it.quantityForFilter(filter) }
+
+private fun VariantCardRow.matchesFilter(filter: VariantFilterMode): Boolean = quantityForFilter(filter) > 0
+
+private fun List<VariantCardRow>.quantityByBackground(): Map<String, Long> =
+    groupBy { it.backgroundId }.mapValues { (_, rows) -> rows.sumOf { it.totalQuantity } }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun FilterBar(selected: Set<VariantFilterMode>, onSelected: (Set<VariantFilterMode>) -> Unit) {
+fun FilterBar(
+    selected: Set<VariantFilterMode>,
+    countSource: List<VariantCardRow>,
+    onSelected: (Set<VariantFilterMode>) -> Unit,
+) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text("收藏條件", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         FlowRow(
@@ -171,13 +186,13 @@ fun FilterBar(selected: Set<VariantFilterMode>, onSelected: (Set<VariantFilterMo
         FilterChip(
             selected = selected.isEmpty(),
             onClick = { onSelected(emptySet()) },
-            label = { Text("全部") },
+            label = { Text("全部（${countSource.quantityForFilter(VariantFilterMode.ALL)}）") },
         )
         VariantFilterMode.entries.filterNot { it == VariantFilterMode.ALL }.forEach { filter ->
             FilterChip(
                 selected = filter in selected,
                 onClick = { onSelected(if (filter in selected) selected - filter else selected + filter) },
-                label = { Text(filter.label) },
+                label = { Text("${filter.label}（${countSource.quantityForFilter(filter)}）") },
             )
         }
         }
@@ -194,6 +209,7 @@ fun CollectionFilterPanel(
     rememberFilters: Boolean,
     backgrounds: List<BackgroundEntity>,
     imageRepository: PokemonImageRepository,
+    countSource: List<VariantCardRow>,
     onFiltersChanged: (Set<VariantFilterMode>) -> Unit,
     onBackgroundsChanged: (Set<String>) -> Unit,
     onMatchModeChanged: (FilterMatchMode) -> Unit,
@@ -220,8 +236,8 @@ fun CollectionFilterPanel(
                         .padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    FilterBar(filters, onFiltersChanged)
-                    BackgroundFilterRow(backgroundIds, backgrounds, imageRepository, onBackgroundsChanged)
+                    FilterBar(filters, countSource, onFiltersChanged)
+                    BackgroundFilterRow(backgroundIds, backgrounds, imageRepository, countSource, onBackgroundsChanged)
                     Text("條件配對方式", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         FilterMatchMode.entries.forEach { mode ->
@@ -256,17 +272,23 @@ fun BackgroundFilterRow(
     selectedIds: Set<String>,
     backgrounds: List<BackgroundEntity>,
     imageRepository: PokemonImageRepository,
+    countSource: List<VariantCardRow>,
     onSelected: (Set<String>) -> Unit,
 ) {
     if (backgrounds.isEmpty()) return
     var showPicker by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    val quantityByBackground = countSource
+        .groupBy { it.backgroundId }
+        .mapValues { (_, rows) -> rows.sumOf { it.totalQuantity } }
+        .let { counts -> backgrounds.associate { it.id to (counts[it.id] ?: 0L) } }
+    val backgroundQuantity = countSource.quantityForFilter(VariantFilterMode.BACKGROUND)
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        Text("背景條件", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        Text("指定背卡", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        FilterChip(selected = selectedIds.isEmpty(), onClick = { onSelected(emptySet()) }, label = { Text("背景：全部") })
+        FilterChip(selected = selectedIds.isEmpty(), onClick = { onSelected(emptySet()) }, label = { Text("全部背卡（$backgroundQuantity）") })
         androidx.compose.material3.AssistChip(
             onClick = { showPicker = true },
-            label = { Text(if (selectedIds.isEmpty()) "選擇多個背景" else "已選 ${selectedIds.size} 張背景") },
+            label = { Text(if (selectedIds.isEmpty()) "選擇多個背卡" else "已選 ${selectedIds.size} 張背卡") },
         )
         if (selectedIds.isNotEmpty()) {
             androidx.compose.material3.AssistChip(onClick = { onSelected(emptySet()) }, label = { Text("清除背景") })
@@ -282,6 +304,7 @@ fun BackgroundFilterRow(
             multiple = true,
             onSelectionChanged = onSelected,
             onDismiss = { showPicker = false },
+            quantityByBackground = quantityByBackground,
         )
     }
 }

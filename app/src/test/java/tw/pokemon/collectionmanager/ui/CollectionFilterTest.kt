@@ -1,6 +1,7 @@
 package tw.pokemon.collectionmanager.ui
 
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import tw.pokemon.collectionmanager.data.local.DynamaxState
@@ -15,6 +16,7 @@ class CollectionFilterTest {
         gender: Gender = Gender.MALE,
         shadow: ShadowState = ShadowState.NORMAL,
         dynamax: DynamaxState = DynamaxState.NONE,
+        quantity: Long = 1,
         xxl: Long = 1,
         xxs: Long = 0,
         untraded: Long = 1,
@@ -35,7 +37,7 @@ class CollectionFilterTest {
         gender = gender,
         shadowState = shadow,
         dynamaxState = dynamax,
-        totalQuantity = 1,
+        totalQuantity = quantity,
         xxlQuantity = xxl,
         xxsQuantity = xxs,
         specialMoveQuantity = 1,
@@ -70,4 +72,19 @@ class CollectionFilterTest {
         assertTrue(row(shiny = true, xxl = 1).matches("", filters, matchMode = FilterMatchMode.AT_LEAST, minimumMatches = 2))
         assertFalse(row(shiny = true, xxl = 0).matches("", filters, matchMode = FilterMatchMode.AT_LEAST, minimumMatches = 2))
     }
+
+    @Test
+    fun filterCountsUseActualPokemonQuantity() {
+        val rows = listOf(
+            row(quantity = 3, shiny = true, xxl = 2, untraded = 3),
+            row(quantity = 2, shiny = false, xxl = 0, untraded = 0, traded = 2),
+        )
+
+        assertEquals(5, rows.quantityForFilter(VariantFilterMode.ALL))
+        assertEquals(3, rows.quantityForFilter(VariantFilterMode.SHINY))
+        assertEquals(2, rows.quantityForFilter(VariantFilterMode.XXL))
+        assertEquals(3, rows.quantityForFilter(VariantFilterMode.AVAILABLE))
+        assertEquals(2, rows.quantityForFilter(VariantFilterMode.TRADED))
+    }
 }
+
