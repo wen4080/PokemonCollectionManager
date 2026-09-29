@@ -28,7 +28,6 @@ import tw.pokemon.collectionmanager.BuildConfig
 import tw.pokemon.collectionmanager.data.local.ThemeMode
 
 private object Routes {
-    const val HOME = "home"
     const val ACCOUNTS = "accounts"
     const val OVERVIEW = "overview"
     const val SEARCH = "search"
@@ -64,9 +63,8 @@ fun CollectionApp(viewModel: CollectionViewModel) {
 
         val destinations = remember {
             listOf(
-                BottomDestination(Routes.HOME, "首頁", "⌂"),
-                BottomDestination(Routes.ACCOUNTS, "帳號", "◎"),
                 BottomDestination(Routes.OVERVIEW, "總覽", "▦"),
+                BottomDestination(Routes.ACCOUNTS, "帳號", "◎"),
                 BottomDestination(Routes.SEARCH, "搜尋", "⌕"),
                 BottomDestination(Routes.SETTINGS, "設定", "⚙"),
             )
@@ -94,18 +92,9 @@ fun CollectionApp(viewModel: CollectionViewModel) {
         ) { padding ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.HOME,
+                startDestination = Routes.OVERVIEW,
                 modifier = Modifier.padding(padding),
             ) {
-                composable(Routes.HOME) {
-                    HomeScreen(
-                        viewModel = viewModel,
-                        onOpenAccount = { id -> if (id.isBlank()) navController.navigate(Routes.ACCOUNTS) else navController.navigate("account/$id") },
-                        onOpenSearch = { navController.navigate(Routes.SEARCH) },
-                        onOpenOverview = { navController.navigate(Routes.OVERVIEW) },
-                        onOpenVariant = { id, accountId -> navController.navigate("variant/$id/${accountId ?: "all"}") },
-                    )
-                }
                 composable(Routes.ACCOUNTS) {
                     AccountsScreen(
                         viewModel = viewModel,

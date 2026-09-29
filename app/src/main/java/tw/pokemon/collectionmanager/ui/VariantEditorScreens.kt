@@ -37,9 +37,9 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,6 +51,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.flowOf
 import tw.pokemon.collectionmanager.data.local.BackgroundEntity
@@ -109,7 +111,6 @@ fun QuickAddSheet(
     onDismiss: () -> Unit,
     onSaved: () -> Unit = {},
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val allSpecies by viewModel.species.collectAsStateWithLifecycle()
     val costumes by viewModel.costumes.collectAsStateWithLifecycle()
     val backgrounds by viewModel.backgrounds.collectAsStateWithLifecycle()
@@ -174,113 +175,117 @@ fun QuickAddSheet(
         }
     }
 
-    ModalBottomSheet(
+    Dialog(
         onDismissRequest = onDismiss,
-        sheetState = sheetState,
-        properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
-        BackHandler(enabled = !showCostumePicker && !showBackgroundPicker) {
-            if (step == AddStep.CONFIGURE_VARIANT && initialInfo == null) {
-                step = AddStep.PICK_POKEMON
-            } else {
-                onDismiss()
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            BackHandler(enabled = !showCostumePicker && !showBackgroundPicker) {
+                if (step == AddStep.CONFIGURE_VARIANT && initialInfo == null) {
+                    step = AddStep.PICK_POKEMON
+                } else {
+                    onDismiss()
+                }
             }
-        }
 
-        if (accountId == null && initialInfo == null) {
-            EmptyState("尚未選擇帳號", "請先建立並選擇一個帳號，才能新增收藏。")
-            Spacer(Modifier.height(24.dp))
-        } else if (step == AddStep.PICK_POKEMON) {
-            PokemonPicker(
-                imageRepository = viewModel.imageRepository,
-                species = pickerSpecies,
-                searchText = searchText,
-                generation = generation,
-                onSearchTextChanged = { searchText = it },
-                onGenerationChanged = { generation = it },
-                onSelected = { selected ->
-                    speciesId = selected.id
-                    formId = ""
-                    costumeId = NO_COSTUME_ID
-                    backgroundId = NO_BACKGROUND_ID
-                    step = AddStep.CONFIGURE_VARIANT
-                },
-            )
-        } else {
-            VariantConfiguration(
-                viewModel = viewModel,
-                selectedSpecies = selectedSpecies,
-                forms = forms,
-                selectedFormId = formId,
-                onFormSelected = { formId = it },
-                costumeOptions = costumeOptions,
-                selectedCostumeId = costumeId,
-                onCostumePicker = { showCostumePicker = true },
-                backgrounds = backgrounds,
-                backgroundCompatibilityCount = backgroundCompatibility.size,
-                selectedBackgroundId = backgroundId,
-                onBackgroundPicker = { showBackgroundPicker = true },
-                shiny = shiny,
-                onShinyChanged = { shiny = it },
-                gender = gender,
-                onGenderChanged = { gender = it },
-                shadow = shadow,
-                onShadowChanged = { shadow = it },
-                dynamax = dynamax,
-                onDynamaxChanged = { dynamax = it },
-                size = size,
-                onSizeChanged = { size = it },
-                specialMove = specialMove,
-                onSpecialMoveChanged = { specialMove = it },
-                tradeState = tradeState,
-                onTradeStateChanged = { tradeState = it },
-                quantityText = quantityText,
-                onQuantityChanged = { quantityText = it.filter(Char::isDigit).take(5) },
-                isEditing = initialInfo != null,
-                canSave = accountId != null && speciesId.isNotBlank() && formId.isNotBlank() && (quantityText.toIntOrNull() ?: 0) > 0,
-                onBack = if (initialInfo == null) ({ step = AddStep.PICK_POKEMON }) else null,
-                onCancel = onDismiss,
-                onSave = {
-                    val quantity = quantityText.toIntOrNull() ?: 0
-                    if (accountId != null && quantity > 0) {
-                        if (initialInfo == null) {
-                            viewModel.addCollection(
-                                accountId,
-                                VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax),
-                                BucketDraft(size, specialMove, tradeState),
-                                quantity,
-                            )
-                            onDismiss()
-                        } else {
-                            viewModel.updateVariant(initialInfo.variantId, accountId, VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax))
-                            onSaved()
-                            onDismiss()
-                        }
-                    }
-                },
-                onSaveAndContinue = if (initialInfo == null) {
-                    {
+            if (accountId == null && initialInfo == null) {
+                EmptyState("尚未選擇帳號", "請先建立並選擇一個帳號，才能新增收藏。")
+                Spacer(Modifier.height(24.dp))
+            } else if (step == AddStep.PICK_POKEMON) {
+                PokemonPicker(
+                    imageRepository = viewModel.imageRepository,
+                    species = pickerSpecies,
+                    searchText = searchText,
+                    generation = generation,
+                    onSearchTextChanged = { searchText = it },
+                    onGenerationChanged = { generation = it },
+                    onSelected = { selected ->
+                        speciesId = selected.id
+                        formId = ""
+                        costumeId = NO_COSTUME_ID
+                        backgroundId = NO_BACKGROUND_ID
+                        step = AddStep.CONFIGURE_VARIANT
+                    },
+                )
+            } else {
+                VariantConfiguration(
+                    viewModel = viewModel,
+                    selectedSpecies = selectedSpecies,
+                    forms = forms,
+                    selectedFormId = formId,
+                    onFormSelected = { formId = it },
+                    costumeOptions = costumeOptions,
+                    selectedCostumeId = costumeId,
+                    onCostumePicker = { showCostumePicker = true },
+                    backgrounds = backgrounds,
+                    backgroundCompatibilityCount = backgroundCompatibility.size,
+                    selectedBackgroundId = backgroundId,
+                    onBackgroundPicker = { showBackgroundPicker = true },
+                    shiny = shiny,
+                    onShinyChanged = { shiny = it },
+                    gender = gender,
+                    onGenderChanged = { gender = it },
+                    shadow = shadow,
+                    onShadowChanged = { shadow = it },
+                    dynamax = dynamax,
+                    onDynamaxChanged = { dynamax = it },
+                    size = size,
+                    onSizeChanged = { size = it },
+                    specialMove = specialMove,
+                    onSpecialMoveChanged = { specialMove = it },
+                    tradeState = tradeState,
+                    onTradeStateChanged = { tradeState = it },
+                    quantityText = quantityText,
+                    onQuantityChanged = { quantityText = it.filter(Char::isDigit).take(5) },
+                    isEditing = initialInfo != null,
+                    canSave = accountId != null && speciesId.isNotBlank() && formId.isNotBlank() && (quantityText.toIntOrNull() ?: 0) > 0,
+                    onBack = if (initialInfo == null) ({ step = AddStep.PICK_POKEMON }) else null,
+                    onCancel = onDismiss,
+                    onSave = {
                         val quantity = quantityText.toIntOrNull() ?: 0
                         if (accountId != null && quantity > 0) {
-                            viewModel.addCollection(
-                                accountId,
-                                VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax),
-                                BucketDraft(size, specialMove, tradeState),
-                                quantity,
-                                continueAdding = true,
-                            )
-                            searchText = ""
-                            generation = null
-                            speciesId = ""
-                            formId = ""
-                            costumeId = NO_COSTUME_ID
-                            backgroundId = NO_BACKGROUND_ID
-                            quantityText = "1"
-                            step = AddStep.PICK_POKEMON
+                            if (initialInfo == null) {
+                                viewModel.addCollection(
+                                    accountId,
+                                    VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax),
+                                    BucketDraft(size, specialMove, tradeState),
+                                    quantity,
+                                )
+                                onDismiss()
+                            } else {
+                                viewModel.updateVariant(initialInfo.variantId, accountId, VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax))
+                                onSaved()
+                                onDismiss()
+                            }
                         }
-                    }
-                } else null,
-            )
+                    },
+                    onSaveAndContinue = if (initialInfo == null) {
+                        {
+                            val quantity = quantityText.toIntOrNull() ?: 0
+                            if (accountId != null && quantity > 0) {
+                                viewModel.addCollection(
+                                    accountId,
+                                    VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax),
+                                    BucketDraft(size, specialMove, tradeState),
+                                    quantity,
+                                    continueAdding = true,
+                                )
+                                searchText = ""
+                                generation = null
+                                speciesId = ""
+                                formId = ""
+                                costumeId = NO_COSTUME_ID
+                                backgroundId = NO_BACKGROUND_ID
+                                quantityText = "1"
+                                step = AddStep.PICK_POKEMON
+                            }
+                        }
+                    } else null,
+                )
+            }
         }
     }
 
@@ -321,7 +326,7 @@ private fun PokemonPicker(
     onSelected: (PokemonSpeciesEntity) -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f).padding(horizontal = 18.dp, vertical = 8.dp),
+        modifier = Modifier.fillMaxSize().padding(horizontal = 18.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text("選擇 Pokémon", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
@@ -427,7 +432,7 @@ private fun VariantConfiguration(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)
+            .fillMaxSize()
             .verticalScroll(rememberScrollState(), overscrollEffect = null)
             .padding(horizontal = 18.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
