@@ -1,0 +1,58 @@
+name: 儲存庫定期保活
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每週檢查一次；只有最新提交距今達 45 天才會真的提交。
+    - cron: "23 3 * * 1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repository-heartbeat
+  cancel-in-progress: false
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 取得專案
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 檢查是否需要保活提交
+        id: check
+        shell: bash
+        run: |
+          set -euo pipefail
+          latest_commit_epoch="$(git log -1 --format=%ct)"
+          now_epoch="$(date -u +%s)"
+          age_seconds=$((now_epoch - latest_commit_epoch))
+          threshold_seconds=$((45 * 24 * 60 * 60))
+
+          echo "最新提交距今約 $((age_seconds / 86400)) 天"
+          if [ "$age_seconds" -ge "$threshold_seconds" ]; then
+            echo "should_commit=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_commit=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 更新保活時間戳
+        if: steps.check.outputs.should_commit == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          date -u '+%Y-%m-%dT%H:%M:%SZ' > .github/heartbeat/last-heartbeat.txt
+
+      - name: 提交保活變更
+        if: steps.check.outputs.should_commit == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/heartbeat/last-heartbeat.txt
+          git commit -m "chore: keep repository active"
+          git push origin HEAD:main
