@@ -1,6 +1,6 @@
 {
-  "masterVersion": "2026.09.29.2",
-  "generatedAt": "2026-09-29T05:13:55.499726+00:00",
+  "masterVersion": "2026.09.29.3",
+  "generatedAt": "2026-09-29T05:36:38.421082+00:00",
   "source": [
     "PokeMiners game_masters",
     "PokeMiners pogo_assets",
@@ -30333,7 +30333,7 @@
     {
       "id": "BACKGROUND_SPECIALBACKGROUND_2026_MEWTWO_001",
       "backgroundKey": "SPECIALBACKGROUND_2026_MEWTWO_001",
-      "displayName": "GO Fest 全球 2026｜超夢專屬背卡",
+      "displayName": "GO Fest 全球 2026｜超夢款式 1",
       "backgroundType": "SPECIAL",
       "categoryKey": "GO_FEST_GLOBAL",
       "categoryName": "GO Fest 全球背卡",
@@ -30345,15 +30345,36 @@
       "availableUntil": "2026-07-12",
       "dataSource": "GAME_MASTER",
       "vfxKey": "bgfx_goFest_2026_mewtwo_001",
-      "vfxKeys": "bgfx_goFest_2026_mewtwo_001|bgfx_goFest_2026_mewtwo_002",
-      "effectNote": "同一張收藏背卡；縮圖採超級進化完整預覽，超級超夢Ｘ／Ｙ的遊戲內動畫會不同",
+      "vfxKeys": "bgfx_goFest_2026_mewtwo_001",
+      "effectNote": "Game Master 提供獨立 vfxAddress；目前公開靜態資產未提供可驗證的獨立圖層，先以款式 1 區分。",
       "previewImageKey": "background_previews/go-fest-2026-mega-mewtwo.png",
       "previewSource": "Bulbagarden Archives",
       "sortOrder": 2270,
       "imageKey": "pogo/Images/LocationCards/sb_GoFest2026_mewtwo.png",
-      "aliasBackgroundKeys": [
-        "SPECIALBACKGROUND_2026_MEWTWO_002"
-      ]
+      "aliasBackgroundKeys": []
+    },
+    {
+      "id": "BACKGROUND_SPECIALBACKGROUND_2026_MEWTWO_002",
+      "backgroundKey": "SPECIALBACKGROUND_2026_MEWTWO_002",
+      "displayName": "GO Fest 全球 2026｜超夢款式 2",
+      "backgroundType": "SPECIAL",
+      "categoryKey": "GO_FEST_GLOBAL",
+      "categoryName": "GO Fest 全球背卡",
+      "eventKey": "GO_FEST_GLOBAL_2026_GO_FEST_2026",
+      "eventName": "GO Fest 全球 2026",
+      "locationName": null,
+      "year": 2026,
+      "availableFrom": "2026-07-11",
+      "availableUntil": "2026-07-12",
+      "dataSource": "GAME_MASTER",
+      "vfxKey": "bgfx_goFest_2026_mewtwo_002",
+      "vfxKeys": "bgfx_goFest_2026_mewtwo_002",
+      "effectNote": "Game Master 提供獨立 vfxAddress；目前公開靜態資產未提供可驗證的獨立圖層，先以款式 2 區分。",
+      "previewImageKey": "background_previews/sb-gofest2026-mewtwo.jpg",
+      "previewSource": "Dittobase",
+      "sortOrder": 2280,
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2026_mewtwo.png",
+      "aliasBackgroundKeys": []
     },
     {
       "id": "BACKGROUND_SPECIALBACKGROUND_2026_WCS",
@@ -30404,7 +30425,7 @@
     {
       "id": "BACKGROUND_SPECIALBACKGROUND_EXTRA_2025_01",
       "backgroundKey": "SPECIALBACKGROUND_EXTRA_2025_01",
-      "displayName": "未確認活動背卡 2026｜款式 7",
+      "displayName": "未確認活動背卡 2025",
       "backgroundType": "SPECIAL",
       "categoryKey": "OTHER_SPECIAL",
       "categoryName": "其他特殊背卡",
@@ -30427,12 +30448,12 @@
     {
       "id": "BACKGROUND_SPECIALBACKGROUND_EXTRA_2025_02",
       "backgroundKey": "SPECIALBACKGROUND_EXTRA_2025_02",
-      "displayName": "節慶活動 2026｜台北",
+      "displayName": "節慶活動 2025｜台北",
       "backgroundType": "SPECIAL",
       "categoryKey": "OTHER_SPECIAL",
       "categoryName": "其他特殊背卡",
-      "eventKey": "OTHER_SPECIAL_2025_2026",
-      "eventName": "節慶活動 2026",
+      "eventKey": "OTHER_SPECIAL_2025_2025",
+      "eventName": "節慶活動 2025",
       "locationName": null,
       "year": 2025,
       "availableFrom": null,
@@ -30542,7 +30563,7 @@
     {
       "id": "BACKGROUND_SPECIALBACKGROUND_POK2026",
       "backgroundKey": "SPECIALBACKGROUND_POK2026",
-      "displayName": "未確認活動背卡 2026｜款式 8",
+      "displayName": "未確認活動背卡 2026｜款式 7",
       "backgroundType": "SPECIAL",
       "categoryKey": "OTHER_SPECIAL",
       "categoryName": "其他特殊背卡",
@@ -34264,7 +34285,7 @@
     }
   ],
   "backgroundCompatibility": [],
-  "imageCount": 3002,
+  "imageCount": 3003,
   "missingImageCount": 138,
   "sourceStats": {
     "pokemon2dFiles": 7170,
@@ -34283,6 +34304,6 @@
     "directLocationCardImages": 246,
     "matchedLocationCardImages": 246,
     "assetOnlyLocationCards": 25,
-    "knownLocationCards": 261
+    "knownLocationCards": 262
   }
 }

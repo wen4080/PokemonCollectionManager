@@ -902,6 +902,11 @@ def collectible_background_identity(background_key: str) -> str:
     流水號通常是依 Pokémon／型態切換的 VFX，不是玩家需要分開選擇的
     Collection Variant。劍／盾的一般與王者型態也是同一張收藏背卡。
     """
+    # 2026 GO Fest 的超夢 001／002 是不同的遊戲內款式。兩者共用
+    # sb_GoFest2026_mewtwo 靜態底圖，但 vfxAddress 不同，不能再以底圖
+    # 相同為理由合併，否則使用者無法登記真正的款式差異。
+    if background_key.startswith("SPECIALBACKGROUND_2026_MEWTWO_"):
+        return background_key
     if background_key == "SPECIALBACKGROUND_10ANI2026":
         return "SPECIALBACKGROUND_2026_10TH_ANNIVERSARY"
     identity = re.sub(r"_\d{3}$", "", background_key)
@@ -977,9 +982,24 @@ def apply_known_background_metadata(backgrounds: list[dict]) -> None:
             "effectNote": "完整預覽包含烈角犀獸圖騰；遊戲內另有粒子動畫",
         },
         "SPECIALBACKGROUND_2026_MEWTWO_001": {
+            "displayName": "GO Fest 全球 2026｜超夢款式 1",
+            "categoryKey": "GO_FEST_GLOBAL",
+            "categoryName": "GO Fest 全球背卡",
+            "eventKey": "GO_FEST_GLOBAL_2026_GO_FEST_2026",
+            "eventName": "GO Fest 全球 2026",
             "availableFrom": "2026-07-11",
             "availableUntil": "2026-07-12",
-            "effectNote": "同一張收藏背卡；縮圖採超級進化完整預覽，超級超夢Ｘ／Ｙ的遊戲內動畫會不同",
+            "effectNote": "Game Master 提供獨立 vfxAddress；目前公開靜態資產未提供可驗證的獨立圖層，先以款式 1 區分。",
+        },
+        "SPECIALBACKGROUND_2026_MEWTWO_002": {
+            "displayName": "GO Fest 全球 2026｜超夢款式 2",
+            "categoryKey": "GO_FEST_GLOBAL",
+            "categoryName": "GO Fest 全球背卡",
+            "eventKey": "GO_FEST_GLOBAL_2026_GO_FEST_2026",
+            "eventName": "GO Fest 全球 2026",
+            "availableFrom": "2026-07-11",
+            "availableUntil": "2026-07-12",
+            "effectNote": "Game Master 提供獨立 vfxAddress；目前公開靜態資產未提供可驗證的獨立圖層，先以款式 2 區分。",
         },
         "SPECIALBACKGROUND_2026_GLOBAL_MEGA_001": {
             "displayName": "GO Fest 2026：Mega Finale｜超級進化背卡",

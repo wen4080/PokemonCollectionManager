@@ -117,12 +117,14 @@ class GeneratedCatalogTest(unittest.TestCase):
         names = [item["displayName"] for item in self.manifest["backgrounds"]]
         self.assertEqual(len(names), len(set(names)))
 
-    def test_internal_effect_variants_are_one_collectible_background(self) -> None:
+    def test_verified_distinct_mewtwo_background_styles_are_not_merged(self) -> None:
         by_key = {item["backgroundKey"]: item for item in self.manifest["backgrounds"]}
-        self.assertNotIn("SPECIALBACKGROUND_2026_MEWTWO_002", by_key)
-        mewtwo = by_key["SPECIALBACKGROUND_2026_MEWTWO_001"]
-        self.assertEqual(2, len(mewtwo["vfxKeys"].split("|")))
-        self.assertIn("超夢專屬背卡", mewtwo["displayName"])
+        self.assertIn("SPECIALBACKGROUND_2026_MEWTWO_001", by_key)
+        self.assertIn("SPECIALBACKGROUND_2026_MEWTWO_002", by_key)
+        self.assertNotEqual(by_key["SPECIALBACKGROUND_2026_MEWTWO_001"]["id"], by_key["SPECIALBACKGROUND_2026_MEWTWO_002"]["id"])
+        self.assertIn("款式 1", by_key["SPECIALBACKGROUND_2026_MEWTWO_001"]["displayName"])
+        self.assertIn("款式 2", by_key["SPECIALBACKGROUND_2026_MEWTWO_002"]["displayName"])
+        self.assertNotEqual(by_key["SPECIALBACKGROUND_2026_MEWTWO_001"]["vfxKey"], by_key["SPECIALBACKGROUND_2026_MEWTWO_002"]["vfxKey"])
         regi = [item for item in self.manifest["backgrounds"] if "GLOBAL_GOFEST_REGI" in item["backgroundKey"]]
         self.assertEqual(1, len(regi))
         self.assertEqual(5, len(regi[0]["aliasBackgroundKeys"]))
@@ -138,9 +140,9 @@ class GeneratedCatalogTest(unittest.TestCase):
             "SPECIALBACKGROUND_2026_GLOBAL_MEGA_001",
         ):
             self.assertTrue(by_key[key].get("previewImageKey"), key)
-            relative = by_key[key]["previewImageKey"]
+            relative = self.background_image_index[by_key[key]["id"]]
             self.assertTrue((ROOT.parent.parent / "app" / "src" / "main" / "assets" / "images" / relative).exists(), relative)
-            self.assertTrue(by_key[key].get("sourcePreviewImageKey"), key)
+            self.assertTrue(by_key[key].get("previewSource"), key)
 
     def test_every_background_image_is_resolvable_by_stable_id(self) -> None:
         backgrounds = [item for item in self.app_manifest["backgrounds"] if item.get("imageKey") or item.get("previewImageKey")]

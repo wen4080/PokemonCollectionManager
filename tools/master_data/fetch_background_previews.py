@@ -93,6 +93,12 @@ DIRECT_PREVIEWS = {
         "image": "https://archives.bulbagarden.net/wiki/Special:Redirect/file/GO_Fest_2026_Mega_Mewtwo_background.png",
         "source": "Bulbagarden Archives",
     },
+    "SPECIALBACKGROUND_2026_MEWTWO_002": {
+        "slug": "go-fest-2026-mega-mewtwo",
+        "page": "https://archives.bulbagarden.net/wiki/File:GO_Fest_2026_Mega_Mewtwo_background.png",
+        "image": "https://archives.bulbagarden.net/wiki/Special:Redirect/file/GO_Fest_2026_Mega_Mewtwo_background.png",
+        "source": "Bulbagarden Archives",
+    },
     "SPECIALBACKGROUND_2026_WCS": {
         "slug": "worlds-special-blue-2026",
         "page": "https://archives.bulbagarden.net/wiki/File:GO_2026_Worlds_background.png",
