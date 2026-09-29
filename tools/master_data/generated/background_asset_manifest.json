@@ -1,0 +1,1496 @@
+{
+  "manifestVersion": "2026.09.29.1",
+  "images": [
+    {
+      "imageKey": "background_previews/10th-anniversary-celebration-mewtwo-2026.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/10th-anniversary-celebration-mewtwo-2026.png"
+    },
+    {
+      "imageKey": "background_previews/10th-anniversary-gimmighoul-2026.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/10th-anniversary-gimmighoul-2026.png"
+    },
+    {
+      "imageKey": "background_previews/go-fest-2026-mega-mewtwo.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/go-fest-2026-mega-mewtwo.png"
+    },
+    {
+      "imageKey": "background_previews/sb-2024-december-cd-recap.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-2024-december-cd-recap.png"
+    },
+    {
+      "imageKey": "background_previews/sb-9th-anniversary.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-9th-anniversary.png"
+    },
+    {
+      "imageKey": "background_previews/sb-arraia-2026.jpg",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-arraia-2026.jpg"
+    },
+    {
+      "imageKey": "background_previews/sb-community-days-2026.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-community-days-2026.png"
+    },
+    {
+      "imageKey": "background_previews/sb-concierge.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-concierge.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-festivalofcolors-2026.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-festivalofcolors-2026.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-fest-2024-radiance.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-fest-2024-radiance.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-fest-2024-umbra.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-fest-2024-umbra.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-fest-2024-wormhole-moon.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-fest-2024-wormhole-moon.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-fest-2024-wormhole-sun.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-fest-2024-wormhole-sun.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-fest-2024-wormhole.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-fest-2024-wormhole.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-fest-2025-dark-skies.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-fest-2025-dark-skies.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-fest-2025.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-fest-2025.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2025-black-white.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2025-black-white.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2025-black.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2025-black.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2025-enigma.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2025-enigma.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2025-white.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2025-white.png"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2026-diamond.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2026-diamond.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2026-gold.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2026-gold.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2026-mega.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2026-mega.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2026-pearl.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2026-pearl.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2026-ruby.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2026-ruby.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2026-silver.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2026-silver.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2026-x.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2026-x.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-go-tour-2026-y.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-go-tour-2026-y.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-gofest2026-global.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-gofest2026-global.png"
+    },
+    {
+      "imageKey": "background_previews/sb-gowildarea-2025-global.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-gowildarea-2025-global.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-lego-2026.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-lego-2026.png"
+    },
+    {
+      "imageKey": "background_previews/sb-observatory-exhibition-tour.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-observatory-exhibition-tour.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-s24-sep-2026.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-s24-sep-2026.png"
+    },
+    {
+      "imageKey": "background_previews/sb-sapphire.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-sapphire.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-season-17-duel-destiny.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-season-17-duel-destiny.png"
+    },
+    {
+      "imageKey": "background_previews/sb-season-18-might-and-mastery.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-season-18-might-and-mastery.png"
+    },
+    {
+      "imageKey": "background_previews/sb-season-19-delightful-days.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-season-19-delightful-days.png"
+    },
+    {
+      "imageKey": "background_previews/sb-season-20-tales-of-transformation.webp",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-season-20-tales-of-transformation.webp"
+    },
+    {
+      "imageKey": "background_previews/sb-team-leader-blue.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-team-leader-blue.png"
+    },
+    {
+      "imageKey": "background_previews/sb-team-leader-red.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-team-leader-red.png"
+    },
+    {
+      "imageKey": "background_previews/sb-team-leader-yellow.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-team-leader-yellow.png"
+    },
+    {
+      "imageKey": "background_previews/sb-zacian-go-fest-2025.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-zacian-go-fest-2025.png"
+    },
+    {
+      "imageKey": "background_previews/sb-zamazenta-go-fest-2025.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/sb-zamazenta-go-fest-2025.png"
+    },
+    {
+      "imageKey": "background_previews/worlds-special-blue-2026.png",
+      "remoteUrl": null,
+      "assetPath": "images/background_previews/worlds-special-blue-2026.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2025_kr_pyeongchangWinterFestival.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2025_kr_pyeongchangWinterFestival.png",
+      "assetPath": "images/Images/LocationCards/lc_2025_kr_pyeongchangWinterFestival.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_BR_001.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_BR_001.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_BR_001.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_ComicCon_Malaga.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_ComicCon_Malaga.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_ComicCon_Malaga.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_belluna.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_belluna.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_belluna.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_chunichiDragons.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_chunichiDragons.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_chunichiDragons.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_hiroshimaCarp.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_hiroshimaCarp.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_hiroshimaCarp.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_hokkaidoFighters.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_hokkaidoFighters.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_hokkaidoFighters.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_koshienHanshinTigers.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_koshienHanshinTigers.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_koshienHanshinTigers.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_kyocera.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_kyocera.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_kyocera.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_rakutenEagles.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_rakutenEagles.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_rakutenEagles.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_softbankHawks.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_softbankHawks.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_softbankHawks.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_tokyoSwallows.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_tokyoSwallows.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_tokyoSwallows.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_toyamaAllstars.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_toyamaAllstars.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_toyamaAllstars.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_yokohamaStadium.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_yokohamaStadium.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_yokohamaStadium.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_yomiuriGiants.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_yomiuriGiants.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_yomiuriGiants.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_NPB_zozoMarine.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_NPB_zozoMarine.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_NPB_zozoMarine.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_jp_green.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_jp_green.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_jp_green.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_jp_red.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_jp_red.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_jp_red.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_2026_ppk_001.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_2026_ppk_001.png",
+      "assetPath": "images/Images/LocationCards/lc_2026_ppk_001.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_AirAdv2024_bali.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_AirAdv2024_bali.png",
+      "assetPath": "images/Images/LocationCards/lc_AirAdv2024_bali.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_AirAdv2024_jakarta.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_AirAdv2024_jakarta.png",
+      "assetPath": "images/Images/LocationCards/lc_AirAdv2024_jakarta.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_AirAdv2024_surabaya.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_AirAdv2024_surabaya.png",
+      "assetPath": "images/Images/LocationCards/lc_AirAdv2024_surabaya.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_AirAdv2024_yogyakarta.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_AirAdv2024_yogyakarta.png",
+      "assetPath": "images/Images/LocationCards/lc_AirAdv2024_yogyakarta.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CR_2026_001.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CR_2026_001.png",
+      "assetPath": "images/Images/LocationCards/lc_CR_2026_001.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CherryBlossomFest2025_yeouido.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CherryBlossomFest2025_yeouido.png",
+      "assetPath": "images/Images/LocationCards/lc_CherryBlossomFest2025_yeouido.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2023_barcelona_2023.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2023_barcelona_2023.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2023_barcelona_2023.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2023_mexicoCity_2023.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2023_mexicoCity_2023.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2023_mexicoCity_2023.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2023_seoul_2023.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2023_seoul_2023.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2023_seoul_2023.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2024_hongkong.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2024_hongkong.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2024_hongkong.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2024_incheon.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2024_incheon.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2024_incheon.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2024_milan.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2024_milan.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2024_milan.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2024_mumbai.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2024_mumbai.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2024_mumbai.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2024_santiago.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2024_santiago.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2024_santiago.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2024_saopaulo.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2024_saopaulo.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2024_saopaulo.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2024_singapore.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2024_singapore.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2024_singapore.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2024_tainan.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2024_tainan.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2024_tainan.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2025_amsterdam.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2025_amsterdam.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2025_amsterdam.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2025_bangkok.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2025_bangkok.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2025_bangkok.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2025_buenosAires.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2025_buenosAires.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2025_buenosAires.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2025_cancun.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2025_cancun.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2025_cancun.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2025_miami.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2025_miami.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2025_miami.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2025_sydney.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2025_sydney.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2025_sydney.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2025_valencia.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2025_valencia.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2025_valencia.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2025_vancouver.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2025_vancouver.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2025_vancouver.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2026_boston.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2026_boston.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2026_boston.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2026_brisbane.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2026_brisbane.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2026_brisbane.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2026_lisbon.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2026_lisbon.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2026_lisbon.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2026_marseille.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2026_marseille.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2026_marseille.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2026_munich.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2026_munich.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2026_munich.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_CitySafari2026_rio.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_CitySafari2026_rio.png",
+      "assetPath": "images/Images/LocationCards/lc_CitySafari2026_rio.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_ESA_citeDeEspace.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_ESA_citeDeEspace.png",
+      "assetPath": "images/Images/LocationCards/lc_ESA_citeDeEspace.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_ESA_ciudadDeLasArtes.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_ESA_ciudadDeLasArtes.png",
+      "assetPath": "images/Images/LocationCards/lc_ESA_ciudadDeLasArtes.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_ESA_euroSpaceCenter.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_ESA_euroSpaceCenter.png",
+      "assetPath": "images/Images/LocationCards/lc_ESA_euroSpaceCenter.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_ESA_scienceMuseumLondon.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_ESA_scienceMuseumLondon.png",
+      "assetPath": "images/Images/LocationCards/lc_ESA_scienceMuseumLondon.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_ESA_spaceCenterGermany.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_ESA_spaceCenterGermany.png",
+      "assetPath": "images/Images/LocationCards/lc_ESA_spaceCenterGermany.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_ESA_spaceExpoNL.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_ESA_spaceExpoNL.png",
+      "assetPath": "images/Images/LocationCards/lc_ESA_spaceExpoNL.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GOWA_fukuoka.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GOWA_fukuoka.png",
+      "assetPath": "images/Images/LocationCards/lc_GOWA_fukuoka.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2023_london.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2023_london.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2023_london.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2023_newyork.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2023_newyork.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2023_newyork.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2023_osaka.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2023_osaka.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2023_osaka.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2024_madrid.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2024_madrid.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2024_madrid.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2024_newyork.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2024_newyork.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2024_newyork.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2024_sendai.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2024_sendai.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2024_sendai.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2025_jerseycity.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2025_jerseycity.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2025_jerseycity.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2025_osaka.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2025_osaka.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2025_osaka.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2025_paris.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2025_paris.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2025_paris.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2026_chicago.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2026_chicago.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2026_chicago.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2026_copenhagen.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2026_copenhagen.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2026_copenhagen.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoFest2026_tokyo.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoFest2026_tokyo.png",
+      "assetPath": "images/Images/LocationCards/lc_GoFest2026_tokyo.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoTour2023.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoTour2023.png",
+      "assetPath": "images/Images/LocationCards/lc_GoTour2023.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoTour2024_losAngeles.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoTour2024_losAngeles.png",
+      "assetPath": "images/Images/LocationCards/lc_GoTour2024_losAngeles.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoTour2025_losAngeles.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoTour2025_losAngeles.png",
+      "assetPath": "images/Images/LocationCards/lc_GoTour2025_losAngeles.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoTour2025_newTaipeiCity.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoTour2025_newTaipeiCity.png",
+      "assetPath": "images/Images/LocationCards/lc_GoTour2025_newTaipeiCity.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoTour2026_losAngeles.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoTour2026_losAngeles.png",
+      "assetPath": "images/Images/LocationCards/lc_GoTour2026_losAngeles.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_GoTour2026_tainan.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_GoTour2026_tainan.png",
+      "assetPath": "images/Images/LocationCards/lc_GoTour2026_tainan.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_ID_CarFreeDay.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_ID_CarFreeDay.png",
+      "assetPath": "images/Images/LocationCards/lc_ID_CarFreeDay.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_Jangheung_Water_Festival_2025.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_Jangheung_Water_Festival_2025.png",
+      "assetPath": "images/Images/LocationCards/lc_Jangheung_Water_Festival_2025.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_JejuAirAdv2023.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_JejuAirAdv2023.png",
+      "assetPath": "images/Images/LocationCards/lc_JejuAirAdv2023.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_LotteGiants.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_LotteGiants.png",
+      "assetPath": "images/Images/LocationCards/lc_LotteGiants.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_arizonaDiamondbacks.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_arizonaDiamondbacks.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_arizonaDiamondbacks.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_baltimoreOrioles.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_baltimoreOrioles.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_baltimoreOrioles.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_bostonRedSox.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_bostonRedSox.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_bostonRedSox.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_chicagoWhitesox.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_chicagoWhitesox.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_chicagoWhitesox.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_clevelandGuardians.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_clevelandGuardians.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_clevelandGuardians.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_mariners.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_mariners.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_mariners.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_marlins.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_marlins.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_marlins.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_milwaukeeBrewers.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_milwaukeeBrewers.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_milwaukeeBrewers.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_minnesotaTwins.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_minnesotaTwins.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_minnesotaTwins.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_newyorkMets.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_newyorkMets.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_newyorkMets.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_sanFranciscoGiants.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_sanFranciscoGiants.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_sanFranciscoGiants.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_tampaBayRays.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_tampaBayRays.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_tampaBayRays.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_tampaBayRays2.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_tampaBayRays2.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_tampaBayRays2.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_texasRangers.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_texasRangers.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_texasRangers.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_MLB_washingtonNationals.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_MLB_washingtonNationals.png",
+      "assetPath": "images/Images/LocationCards/lc_MLB_washingtonNationals.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_NFL_cardinals.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_NFL_cardinals.png",
+      "assetPath": "images/Images/LocationCards/lc_NFL_cardinals.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_OsakaEvent2025_01.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_OsakaEvent2025_01.png",
+      "assetPath": "images/Images/LocationCards/lc_OsakaEvent2025_01.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_OsakaEvent2025_02.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_OsakaEvent2025_02.png",
+      "assetPath": "images/Images/LocationCards/lc_OsakaEvent2025_02.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_OsakaEvent2025_03.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_OsakaEvent2025_03.png",
+      "assetPath": "images/Images/LocationCards/lc_OsakaEvent2025_03.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_Paris2025_01.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_Paris2025_01.png",
+      "assetPath": "images/Images/LocationCards/lc_Paris2025_01.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_Paris2025_02.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_Paris2025_02.png",
+      "assetPath": "images/Images/LocationCards/lc_Paris2025_02.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_TokMun_koto.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_TokMun_koto.png",
+      "assetPath": "images/Images/LocationCards/lc_TokMun_koto.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_TokMun_minato.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_TokMun_minato.png",
+      "assetPath": "images/Images/LocationCards/lc_TokMun_minato.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_TokMun_shinagawa.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_TokMun_shinagawa.png",
+      "assetPath": "images/Images/LocationCards/lc_TokMun_shinagawa.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_Wcs2024_honolulu.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_Wcs2024_honolulu.png",
+      "assetPath": "images/Images/LocationCards/lc_Wcs2024_honolulu.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_Wcs2025_anaheim.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_Wcs2025_anaheim.png",
+      "assetPath": "images/Images/LocationCards/lc_Wcs2025_anaheim.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_Wcs2026_sanFrancisco.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_Wcs2026_sanFrancisco.png",
+      "assetPath": "images/Images/LocationCards/lc_Wcs2026_sanFrancisco.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_busanFireworksFestival_2025.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_busanFireworksFestival_2025.png",
+      "assetPath": "images/Images/LocationCards/lc_busanFireworksFestival_2025.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_carnivalFlamigo_cologne_2026.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_carnivalFlamigo_cologne_2026.png",
+      "assetPath": "images/Images/LocationCards/lc_carnivalFlamigo_cologne_2026.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_carnivalFlamigo_rio_2026.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_carnivalFlamigo_rio_2026.png",
+      "assetPath": "images/Images/LocationCards/lc_carnivalFlamigo_rio_2026.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nagasaki2025.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nagasaki2025.png",
+      "assetPath": "images/Images/LocationCards/lc_nagasaki2025.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_angleseyAbbey.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_angleseyAbbey.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_angleseyAbbey.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_attinghampark.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_attinghampark.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_attinghampark.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_beltonHouse.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_beltonHouse.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_beltonHouse.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_calkeAbbey.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_calkeAbbey.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_calkeAbbey.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_chirk.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_chirk.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_chirk.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_cliveden.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_cliveden.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_cliveden.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_clumberPark.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_clumberPark.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_clumberPark.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_dunhamMassey.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_dunhamMassey.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_dunhamMassey.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_fountainsAbbeyEstate.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_fountainsAbbeyEstate.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_fountainsAbbeyEstate.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_gibslide.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_gibslide.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_gibslide.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_hanbury.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_hanbury.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_hanbury.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_hardwick.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_hardwick.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_hardwick.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_killerton.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_killerton.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_killerton.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_kingstonLacy.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_kingstonLacy.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_kingstonLacy.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_lacock.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_lacock.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_lacock.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_lymePark.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_lymePark.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_lymePark.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_mottisfont.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_mottisfont.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_mottisfont.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_mountStewart.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_mountStewart.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_mountStewart.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_nymans.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_nymans.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_nymans.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_polesden.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_polesden.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_polesden.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_scotneyCastle.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_scotneyCastle.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_scotneyCastle.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_stourhead.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_stourhead.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_stourhead.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_stoweGardenPark.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_stoweGardenPark.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_stoweGardenPark.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_tredegarHouse.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_tredegarHouse.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_tredegarHouse.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_trelissick.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_trelissick.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_trelissick.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_tyntesfield.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_tyntesfield.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_tyntesfield.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_nationalTrust_whimpole.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_nationalTrust_whimpole.png",
+      "assetPath": "images/Images/LocationCards/lc_nationalTrust_whimpole.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_GOLab.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_GOLab.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_GOLab.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_fukuoka.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_fukuoka.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_fukuoka.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_hiroshima.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_hiroshima.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_hiroshima.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_kagawa.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_kagawa.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_kagawa.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_kanazawa.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_kanazawa.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_kanazawa.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_kyoto.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_kyoto.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_kyoto.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_megaTokyo.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_megaTokyo.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_megaTokyo.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_nagoya.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_nagoya.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_nagoya.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_okinawa.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_okinawa.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_okinawa.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_osaka.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_osaka.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_osaka.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_osakaDX.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_osakaDX.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_osakaDX.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_sapporo.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_sapporo.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_sapporo.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_shibuya.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_shibuya.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_shibuya.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_skytreeTown.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_skytreeTown.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_skytreeTown.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_tohoku.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_tohoku.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_tohoku.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_tokyoBay.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_tokyoBay.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_tokyoBay.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_tokyoDX.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_tokyoDX.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_tokyoDX.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokecenter_yokohama.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokecenter_yokohama.png",
+      "assetPath": "images/Images/LocationCards/lc_pokecenter_yokohama.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_aichi.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_aichi.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_aichi.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_akita.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_akita.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_akita.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_aomori.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_aomori.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_aomori.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_chiba.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_chiba.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_chiba.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_ehime.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_ehime.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_ehime.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_fukui.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_fukui.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_fukui.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_fukuoka.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_fukuoka.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_fukuoka.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_fukushima.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_fukushima.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_fukushima.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_gifu.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_gifu.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_gifu.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_hokkaido.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_hokkaido.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_hokkaido.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_hyogo.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_hyogo.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_hyogo.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_ibaraki.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_ibaraki.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_ibaraki.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_ishikawa.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_ishikawa.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_ishikawa.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_iwate.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_iwate.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_iwate.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_kagawa.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_kagawa.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_kagawa.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_kagoshima.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_kagoshima.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_kagoshima.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_kanagawa.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_kanagawa.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_kanagawa.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_kochi.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_kochi.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_kochi.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_kyoto.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_kyoto.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_kyoto.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_mie.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_mie.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_mie.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_miyagi.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_miyagi.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_miyagi.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_miyazaki.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_miyazaki.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_miyazaki.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_nagasaki.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_nagasaki.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_nagasaki.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_nara.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_nara.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_nara.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_niigata.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_niigata.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_niigata.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_okayama.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_okayama.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_okayama.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_okinawa.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_okinawa.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_okinawa.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_osaka.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_osaka.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_osaka.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_saga.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_saga.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_saga.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_saitama.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_saitama.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_saitama.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_shiga.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_shiga.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_shiga.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_shimane.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_shimane.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_shimane.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_shizuoka.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_shizuoka.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_shizuoka.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_tochigi.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_tochigi.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_tochigi.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_tokushima.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_tokushima.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_tokushima.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_tokyo.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_tokyo.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_tokyo.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_tottori.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_tottori.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_tottori.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_toyama.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_toyama.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_toyama.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_wakayama.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_wakayama.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_wakayama.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_yamagata.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_yamagata.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_yamagata.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokelid_yamaguchi.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokelid_yamaguchi.png",
+      "assetPath": "images/Images/LocationCards/lc_pokelid_yamaguchi.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_pokopia2026.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_pokopia2026.png",
+      "assetPath": "images/Images/LocationCards/lc_pokopia2026.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_roadtrip2025_berlin.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_roadtrip2025_berlin.png",
+      "assetPath": "images/Images/LocationCards/lc_roadtrip2025_berlin.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_roadtrip2025_cologne.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_roadtrip2025_cologne.png",
+      "assetPath": "images/Images/LocationCards/lc_roadtrip2025_cologne.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_roadtrip2025_hague.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_roadtrip2025_hague.png",
+      "assetPath": "images/Images/LocationCards/lc_roadtrip2025_hague.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_roadtrip2025_london.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_roadtrip2025_london.png",
+      "assetPath": "images/Images/LocationCards/lc_roadtrip2025_london.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_roadtrip2025_manchester.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_roadtrip2025_manchester.png",
+      "assetPath": "images/Images/LocationCards/lc_roadtrip2025_manchester.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_roadtrip2025_paris.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_roadtrip2025_paris.png",
+      "assetPath": "images/Images/LocationCards/lc_roadtrip2025_paris.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_roadtrip2025_valencia.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_roadtrip2025_valencia.png",
+      "assetPath": "images/Images/LocationCards/lc_roadtrip2025_valencia.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_stampRally2025_Jeju.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_stampRally2025_Jeju.png",
+      "assetPath": "images/Images/LocationCards/lc_stampRally2025_Jeju.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_taipeiAmusementPark_2025.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_taipeiAmusementPark_2025.png",
+      "assetPath": "images/Images/LocationCards/lc_taipeiAmusementPark_2025.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_taipeiFlowerFestival_2026.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_taipeiFlowerFestival_2026.png",
+      "assetPath": "images/Images/LocationCards/lc_taipeiFlowerFestival_2026.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_tpc30th_malaysia.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_tpc30th_malaysia.png",
+      "assetPath": "images/Images/LocationCards/lc_tpc30th_malaysia.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_tpc30th_philippines.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_tpc30th_philippines.png",
+      "assetPath": "images/Images/LocationCards/lc_tpc30th_philippines.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_tpc30th_singapore.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_tpc30th_singapore.png",
+      "assetPath": "images/Images/LocationCards/lc_tpc30th_singapore.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/lc_tpc30th_taiwan.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/lc_tpc30th_taiwan.png",
+      "assetPath": "images/Images/LocationCards/lc_tpc30th_taiwan.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_2024_decemberCdRecap.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_2024_decemberCdRecap.png",
+      "assetPath": "images/Images/LocationCards/sb_2024_decemberCdRecap.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_9thAnniversary.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_9thAnniversary.png",
+      "assetPath": "images/Images/LocationCards/sb_9thAnniversary.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_Community_2026.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_Community_2026.png",
+      "assetPath": "images/Images/LocationCards/sb_Community_2026.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_Concierge2025.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_Concierge2025.png",
+      "assetPath": "images/Images/LocationCards/sb_Concierge2025.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_FestivalofColors_2026.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_FestivalofColors_2026.png",
+      "assetPath": "images/Images/LocationCards/sb_FestivalofColors_2026.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GOWA2025_Global.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GOWA2025_Global.png",
+      "assetPath": "images/Images/LocationCards/sb_GOWA2025_Global.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GOWA_fukuoka.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GOWA_fukuoka.png",
+      "assetPath": "images/Images/LocationCards/sb_GOWA_fukuoka.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2024_radiance.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoFest2024_radiance.png",
+      "assetPath": "images/Images/LocationCards/sb_GoFest2024_radiance.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2024_umbra.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoFest2024_umbra.png",
+      "assetPath": "images/Images/LocationCards/sb_GoFest2024_umbra.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2024_wormhole.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoFest2024_wormhole.png",
+      "assetPath": "images/Images/LocationCards/sb_GoFest2024_wormhole.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2024_wormhole_moon.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoFest2024_wormhole_moon.png",
+      "assetPath": "images/Images/LocationCards/sb_GoFest2024_wormhole_moon.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2024_wormhole_sun.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoFest2024_wormhole_sun.png",
+      "assetPath": "images/Images/LocationCards/sb_GoFest2024_wormhole_sun.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2025.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoFest2025.png",
+      "assetPath": "images/Images/LocationCards/sb_GoFest2025.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2025_Eternatus.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoFest2025_Eternatus.png",
+      "assetPath": "images/Images/LocationCards/sb_GoFest2025_Eternatus.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2026_global.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoFest2026_global.png",
+      "assetPath": "images/Images/LocationCards/sb_GoFest2026_global.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoFest2026_mewtwo.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoFest2026_mewtwo.png",
+      "assetPath": "images/Images/LocationCards/sb_GoFest2026_mewtwo.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2025_black.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2025_black.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2025_black.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2025_black_white.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2025_black_white.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2025_black_white.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2025_enigma.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2025_enigma.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2025_enigma.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2025_white.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2025_white.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2025_white.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2026_diamond.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2026_diamond.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2026_diamond.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2026_gold.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2026_gold.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2026_gold.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2026_mega.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2026_mega.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2026_mega.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2026_pearl.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2026_pearl.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2026_pearl.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2026_ruby.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2026_ruby.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2026_ruby.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2026_sapphire.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2026_sapphire.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2026_sapphire.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2026_silver.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2026_silver.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2026_silver.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2026_x.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2026_x.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2026_x.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_GoTour2026_y.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_GoTour2026_y.png",
+      "assetPath": "images/Images/LocationCards/sb_GoTour2026_y.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_MidAutumn.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_MidAutumn.png",
+      "assetPath": "images/Images/LocationCards/sb_MidAutumn.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_ObservatoryExhibitionTour.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_ObservatoryExhibitionTour.png",
+      "assetPath": "images/Images/LocationCards/sb_ObservatoryExhibitionTour.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_PatternWild.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_PatternWild.png",
+      "assetPath": "images/Images/LocationCards/sb_PatternWild.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_Season17_DuelDestiny.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_Season17_DuelDestiny.png",
+      "assetPath": "images/Images/LocationCards/sb_Season17_DuelDestiny.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_Season18_MightAndMastery.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_Season18_MightAndMastery.png",
+      "assetPath": "images/Images/LocationCards/sb_Season18_MightAndMastery.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_Season19_DelightfulDays.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_Season19_DelightfulDays.png",
+      "assetPath": "images/Images/LocationCards/sb_Season19_DelightfulDays.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_Season20_TalesOfTransformation.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_Season20_TalesOfTransformation.png",
+      "assetPath": "images/Images/LocationCards/sb_Season20_TalesOfTransformation.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_TeamLeader_blue.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_TeamLeader_blue.png",
+      "assetPath": "images/Images/LocationCards/sb_TeamLeader_blue.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_TeamLeader_red.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_TeamLeader_red.png",
+      "assetPath": "images/Images/LocationCards/sb_TeamLeader_red.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_TeamLeader_yellow.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_TeamLeader_yellow.png",
+      "assetPath": "images/Images/LocationCards/sb_TeamLeader_yellow.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_WorldSpecial_Blue.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_WorldSpecial_Blue.png",
+      "assetPath": "images/Images/LocationCards/sb_WorldSpecial_Blue.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_arraia_2026.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_arraia_2026.png",
+      "assetPath": "images/Images/LocationCards/sb_arraia_2026.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_lego_2026.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_lego_2026.png",
+      "assetPath": "images/Images/LocationCards/sb_lego_2026.png"
+    },
+    {
+      "imageKey": "pogo/Images/LocationCards/sb_s24_sep_2026.png",
+      "remoteUrl": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/LocationCards/sb_s24_sep_2026.png",
+      "assetPath": "images/Images/LocationCards/sb_s24_sep_2026.png"
+    }
+  ],
+  "missingImages": 0
+}

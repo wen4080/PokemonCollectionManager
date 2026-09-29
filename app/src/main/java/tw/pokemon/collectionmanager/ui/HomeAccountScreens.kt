@@ -1,0 +1,329 @@
+package tw.pokemon.collectionmanager.ui
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import tw.pokemon.collectionmanager.data.local.AccountGroupEntity
+import tw.pokemon.collectionmanager.data.local.AccountSummaryRow
+
+@Composable
+fun HomeScreen(
+    viewModel: CollectionViewModel,
+    onOpenAccount: (String) -> Unit,
+    onOpenSearch: () -> Unit,
+    onOpenVariant: (String, String?) -> Unit,
+) {
+    val accounts by viewModel.accounts.collectAsStateWithLifecycle()
+    val activeAccounts = accounts.filterNot { it.isArchived }
+    val selectedId by viewModel.selectedAccountId.collectAsStateWithLifecycle()
+    val selected = activeAccounts.firstOrNull { it.id == selectedId } ?: activeAccounts.firstOrNull()
+    val variantsFlow = remember(selected?.id) { selected?.let { account -> viewModel.accountVariants(account.id) } ?: viewModel.allVariants() }
+    val variants by variantsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    var showAdd by remember { mutableStateOf(false) }
+
+    Box(Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(start = 20.dp, top = 24.dp, end = 20.dp, bottom = 100.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+        ) {
+            item {
+                PageTitle(
+                    title = "Pokémon 收藏",
+                    subtitle = "只記錄你主動收藏的版本，不把未登記誤解成未擁有。",
+                )
+            }
+            item {
+                OutlinedButton(onClick = onOpenSearch, modifier = Modifier.fillMaxWidth()) {
+                    Text("⌕  搜尋收藏、背景或帳號")
+                }
+            }
+            item {
+                SectionTitle("我的帳號", action = {
+                    TextButton(onClick = { onOpenAccount(activeAccounts.firstOrNull()?.id ?: "") }) { Text("查看全部") }
+                })
+            }
+            if (activeAccounts.isEmpty()) {
+                item {
+                    EmptyState(
+                        title = "先建立第一個帳號",
+                        message = "帳號是每個收藏的歸屬，建立後就能開始用圖片卡片盤點。",
+                        actionLabel = "建立帳號",
+                        onAction = { onOpenAccount("") },
+                    )
+                }
+            } else {
+                item {
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        items(activeAccounts, key = { it.id }) { account ->
+                            AccountQuickCard(
+                                account = account,
+                                selected = account.id == selected?.id,
+                                onClick = {
+                                    viewModel.setSelectedAccount(account.id)
+                                    onOpenAccount(account.id)
+                                },
+                                modifier = Modifier.width(190.dp),
+                            )
+                        }
+                    }
+                }
+            }
+            item {
+                SectionTitle("收藏摘要")
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
+                    StatCard("收藏版本", variants.size.toString(), Modifier.weight(1f))
+                    StatCard("Pokémon 總數", variants.sumOf { it.totalQuantity }.toString(), Modifier.weight(1f))
+                    StatCard("異色", variants.count { it.isShiny }.toString(), Modifier.weight(1f))
+                }
+            }
+            item { SectionTitle("最近收藏") }
+            if (variants.isEmpty()) {
+                item { EmptyState("還沒有收藏卡片", "從右下角快速新增一筆，收藏版本與佔有數量會自動建立。", "新增收藏") { showAdd = true } }
+            } else {
+                item {
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        items(variants.take(6), key = { it.variantId }) { variant ->
+                            VariantCardItem(
+                                variant = variant,
+                                imageRepository = viewModel.imageRepository,
+                                onClick = { onOpenVariant(variant.variantId, selected?.id) },
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        FloatingActionButton(
+            onClick = { showAdd = true },
+            modifier = Modifier.align(Alignment.BottomEnd).padding(20.dp),
+        ) { Text("＋", style = MaterialTheme.typography.headlineSmall) }
+    }
+
+    if (showAdd) {
+        QuickAddSheet(
+            viewModel = viewModel,
+            accountId = selected?.id,
+            onDismiss = { showAdd = false },
+        )
+    }
+}
+
+@Composable
+fun AccountsScreen(viewModel: CollectionViewModel, onOpenAccount: (String) -> Unit) {
+    val accounts by viewModel.accounts.collectAsStateWithLifecycle()
+    val groups by viewModel.groups.collectAsStateWithLifecycle()
+    var showEditor by remember { mutableStateOf(false) }
+    var editing by remember { mutableStateOf<AccountSummaryRow?>(null) }
+    var showGroups by remember { mutableStateOf(false) }
+    var deleting by remember { mutableStateOf<AccountSummaryRow?>(null) }
+
+    Box(Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(start = 20.dp, top = 24.dp, end = 20.dp, bottom = 100.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            item {
+                PageTitle(
+                    "帳號",
+                    subtitle = "區分收藏版本數量與實際 Pokémon 總隻數。封存帳號不會出現在預設首頁。",
+                )
+            }
+            item {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(onClick = { editing = null; showEditor = true }) { Text("＋ 新增帳號") }
+                    OutlinedButton(onClick = { showGroups = true }) { Text("管理群組") }
+                }
+            }
+            if (accounts.isEmpty()) {
+                item { EmptyState("還沒有帳號", "先建立主帳或小帳，收藏才知道屬於哪個帳號。", "建立帳號") { showEditor = true } }
+            } else {
+                items(accounts, key = { it.id }) { account ->
+                    AccountListCard(
+                        account = account,
+                        onClick = { if (!account.isArchived) onOpenAccount(account.id) },
+                        onEdit = { editing = account; showEditor = true },
+                        onArchive = { viewModel.archiveAccount(account.id, !account.isArchived) },
+                        onDelete = { deleting = account },
+                    )
+                }
+            }
+        }
+        FloatingActionButton(
+            onClick = { editing = null; showEditor = true },
+            modifier = Modifier.align(Alignment.BottomEnd).padding(20.dp),
+        ) { Text("＋", style = MaterialTheme.typography.headlineSmall) }
+    }
+
+    if (showEditor) {
+        AccountEditorDialog(
+            account = editing,
+            groups = groups,
+            onDismiss = { showEditor = false },
+            onSave = { id, name, nickname, groupId ->
+                if (id == null) viewModel.addAccount(name, nickname, groupId)
+                else viewModel.updateAccount(id, name, nickname, groupId)
+                showEditor = false
+            },
+        )
+    }
+    if (showGroups) GroupManagerDialog(viewModel, groups) { showGroups = false }
+    deleting?.let { account ->
+        AlertDialog(
+            onDismissRequest = { deleting = null },
+            title = { Text("刪除 ${account.name}？") },
+            text = { Text("此帳號目前有 ${account.variantCount} 種收藏版本、${account.pokemonCount} 隻 Pokémon。刪除後會一併移除其佔有數量，無法復原。") },
+            confirmButton = {
+                Button(onClick = { viewModel.deleteAccount(account.id); deleting = null }) { Text("確定刪除") }
+            },
+            dismissButton = { TextButton(onClick = { deleting = null }) { Text("取消") } },
+        )
+    }
+}
+
+@Composable
+private fun AccountQuickCard(account: AccountSummaryRow, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier.clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainer,
+        ),
+    ) {
+        Column(Modifier.padding(14.dp)) {
+            Text(account.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            account.nickname?.takeIf { it.isNotBlank() }?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
+            Spacer(Modifier.height(8.dp))
+            Text("${account.variantCount} 種收藏版本 · ${account.pokemonCount} 隻", style = MaterialTheme.typography.labelMedium)
+        }
+    }
+}
+
+@Composable
+private fun AccountListCard(
+    account: AccountSummaryRow,
+    onClick: () -> Unit,
+    onEdit: () -> Unit,
+    onArchive: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable(enabled = !account.isArchived, onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = if (account.isArchived) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surfaceContainer),
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(account.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text(account.groupName ?: "未分組", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                }
+                if (account.isArchived) Text("已封存", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Spacer(Modifier.height(6.dp))
+            Text("${account.variantCount} 種收藏版本 · ${account.pokemonCount} 隻 Pokémon", style = MaterialTheme.typography.bodyMedium)
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 8.dp)) {
+                OutlinedButton(onClick = onEdit) { Text("編輯") }
+                OutlinedButton(onClick = onArchive) { Text(if (account.isArchived) "恢復" else "封存") }
+                TextButton(onClick = onDelete) { Text("刪除") }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AccountEditorDialog(
+    account: AccountSummaryRow?,
+    groups: List<AccountGroupEntity>,
+    onDismiss: () -> Unit,
+    onSave: (String?, String, String?, String?) -> Unit,
+) {
+    var name by remember(account?.id) { mutableStateOf(account?.name.orEmpty()) }
+    var nickname by remember(account?.id) { mutableStateOf(account?.nickname.orEmpty()) }
+    var groupId by remember(account?.id) { mutableStateOf(account?.groupId) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(if (account == null) "新增帳號" else "編輯帳號") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("帳號名稱") }, singleLine = true)
+                OutlinedTextField(value = nickname, onValueChange = { nickname = it }, label = { Text("暱稱（選填）") }, singleLine = true)
+                Text("帳號群組", style = MaterialTheme.typography.labelLarge)
+                HorizontalChoices {
+                    ChoiceChip("未分組", groupId == null) { groupId = null }
+                    groups.forEach { group -> ChoiceChip(group.name, groupId == group.id) { groupId = group.id } }
+                }
+            }
+        },
+        confirmButton = {
+            Button(enabled = name.trim().isNotEmpty(), onClick = { onSave(account?.id, name, nickname, groupId) }) { Text("儲存") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },
+    )
+}
+
+@Composable
+private fun GroupManagerDialog(viewModel: CollectionViewModel, groups: List<AccountGroupEntity>, onDismiss: () -> Unit) {
+    var name by remember { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("帳號群組") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("新群組名稱") }, singleLine = true, modifier = Modifier.weight(1f))
+                    Button(onClick = { viewModel.addGroup(name); name = "" }, enabled = name.trim().isNotEmpty()) { Text("新增") }
+                }
+                groups.forEach { group ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(group.name, modifier = Modifier.weight(1f))
+                        TextButton(onClick = { viewModel.deleteGroup(group.id) }) { Text("刪除") }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text("完成") } },
+    )
+}
+
+@Composable
+fun EmptyState(title: String, message: String, actionLabel: String? = null, onAction: (() -> Unit)? = null) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(message, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (actionLabel != null && onAction != null) Button(onClick = onAction) { Text(actionLabel) }
+        }
+    }
+}

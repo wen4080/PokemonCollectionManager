@@ -1,0 +1,1352 @@
+[
+  {
+    "id": "COSTUME_NONE",
+    "costumeKey": "NONE",
+    "displayName": "無裝扮",
+    "eventName": null,
+    "imageKey": null,
+    "releaseYear": null,
+    "sortOrder": 0
+  },
+  {
+    "id": "COSTUME_FALL_2019",
+    "costumeKey": "FALL_2019",
+    "displayName": "2019 萬聖節裝扮",
+    "eventName": "2019 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0001_00_pgo_fall2019.png",
+    "releaseYear": 2019,
+    "sortOrder": 250
+  },
+  {
+    "id": "COSTUME_JAN_2020_NOEVOLVE",
+    "costumeKey": "JAN_2020_NOEVOLVE",
+    "displayName": "派對帽（2020）",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm1.cJAN_2020_NOEVOLVE.icon.png",
+    "releaseYear": 2020,
+    "sortOrder": 920
+  },
+  {
+    "id": "COSTUME_SPRING_2020_NOEVOLVE",
+    "costumeKey": "SPRING_2020_NOEVOLVE",
+    "displayName": "皮卡丘遮陽帽（2020）",
+    "eventName": "春季活動 2020",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm1.cSPRING_2020_NOEVOLVE.icon.png",
+    "releaseYear": 2020,
+    "sortOrder": 1150
+  },
+  {
+    "id": "COSTUME_COPY_2019",
+    "costumeKey": "COPY_2019",
+    "displayName": "複製外觀（2019）",
+    "eventName": "2019 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0003_00_pgo_copy2019.png",
+    "releaseYear": 2019,
+    "sortOrder": 180
+  },
+  {
+    "id": "COSTUME_GOGGLES_2026",
+    "costumeKey": "GOGGLES_2026",
+    "displayName": "護目鏡 · 2026裝扮",
+    "eventName": "2026 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm4.fGOGGLES_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 620
+  },
+  {
+    "id": "COSTUME_SUMMER_2018",
+    "costumeKey": "SUMMER_2018",
+    "displayName": "夏季 · 2018裝扮",
+    "eventName": "夏季活動 2018",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm7.cSUMMER_2018.icon.png",
+    "releaseYear": 2018,
+    "sortOrder": 1240
+  },
+  {
+    "id": "COSTUME_GOFEST_2026",
+    "costumeKey": "GOFEST_2026",
+    "displayName": "Pokémon 大型慶典 · 2026裝扮",
+    "eventName": "Pokémon 大型慶典 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm10.fGOFEST_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 580
+  },
+  {
+    "id": "COSTUME_FASHION_2021_NOEVOLVE",
+    "costumeKey": "FASHION_2021_NOEVOLVE",
+    "displayName": "時尚 · 2021 · 不可進化裝扮",
+    "eventName": "時尚週活動 2021",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm12.cFASHION_2021_NOEVOLVE.icon.png",
+    "releaseYear": 2021,
+    "sortOrder": 320
+  },
+  {
+    "id": "COSTUME_ADVENTURE_HAT_2020",
+    "costumeKey": "ADVENTURE_HAT_2020",
+    "displayName": "冒險帽（2020）",
+    "eventName": "冒險活動 2020",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0025_00_pgo_movie2020.png",
+    "releaseYear": 2020,
+    "sortOrder": 50
+  },
+  {
+    "id": "COSTUME_ANNIVERSARY",
+    "costumeKey": "ANNIVERSARY",
+    "displayName": "週年紀念裝扮",
+    "eventName": "週年紀念活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cANNIVERSARY.icon.png",
+    "releaseYear": null,
+    "sortOrder": 60
+  },
+  {
+    "id": "COSTUME_ANNIVERSARY_2022_NOEVOLVE",
+    "costumeKey": "ANNIVERSARY_2022_NOEVOLVE",
+    "displayName": "週年紀念 · 2022 · 不可進化裝扮",
+    "eventName": "週年紀念活動 2022",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cANNIVERSARY_2022_NOEVOLVE.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 70
+  },
+  {
+    "id": "COSTUME_ANNIVERSARY_2026",
+    "costumeKey": "ANNIVERSARY_2026",
+    "displayName": "週年紀念 · 2026裝扮",
+    "eventName": "週年紀念活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fANNIVERSARY_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 90
+  },
+  {
+    "id": "COSTUME_ANNIVERSARY_2026_MALAYSIA_01",
+    "costumeKey": "ANNIVERSARY_2026_MALAYSIA_01",
+    "displayName": "週年紀念 · 2026 · 馬來西亞 · 01裝扮",
+    "eventName": "週年紀念活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fANNIVERSARY_2026_MALAYSIA_01.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 100
+  },
+  {
+    "id": "COSTUME_ANNIVERSARY_2026_PHILIPPINE_01",
+    "costumeKey": "ANNIVERSARY_2026_PHILIPPINE_01",
+    "displayName": "週年紀念 · 2026 · 菲律賓 · 01裝扮",
+    "eventName": "週年紀念活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fANNIVERSARY_2026_PHILIPPINE_01.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 110
+  },
+  {
+    "id": "COSTUME_ANNIVERSARY_2026_SINGAPORE_01",
+    "costumeKey": "ANNIVERSARY_2026_SINGAPORE_01",
+    "displayName": "週年紀念 · 2026 · 新加坡 · 01裝扮",
+    "eventName": "週年紀念活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fANNIVERSARY_2026_SINGAPORE_01.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 120
+  },
+  {
+    "id": "COSTUME_ANNIVERSARY_2026_TAIWAN_01",
+    "costumeKey": "ANNIVERSARY_2026_TAIWAN_01",
+    "displayName": "週年紀念 · 2026 · 台灣 · 01裝扮",
+    "eventName": "週年紀念活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fANNIVERSARY_2026_TAIWAN_01.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 130
+  },
+  {
+    "id": "COSTUME_APRIL_2020_NOEVOLVE",
+    "costumeKey": "APRIL_2020_NOEVOLVE",
+    "displayName": "2020 · 不可進化裝扮",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cAPRIL_2020_NOEVOLVE.icon.png",
+    "releaseYear": 2020,
+    "sortOrder": 140
+  },
+  {
+    "id": "COSTUME_BB_2026",
+    "costumeKey": "BB_2026",
+    "displayName": "棒球 · 2026裝扮",
+    "eventName": "2026 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fBB_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 150
+  },
+  {
+    "id": "COSTUME_COSTUME_1",
+    "costumeKey": "COSTUME_1",
+    "displayName": "1裝扮",
+    "eventName": "1裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cCOSTUME_1.icon.png",
+    "releaseYear": null,
+    "sortOrder": 190
+  },
+  {
+    "id": "COSTUME_COSTUME_2",
+    "costumeKey": "COSTUME_2",
+    "displayName": "2裝扮",
+    "eventName": "2裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cCOSTUME_2.icon.png",
+    "releaseYear": null,
+    "sortOrder": 200
+  },
+  {
+    "id": "COSTUME_COSTUME_2020",
+    "costumeKey": "COSTUME_2020",
+    "displayName": "4 週年飛行氣球裝扮",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0025_00_pgo_4thanniversary.png",
+    "releaseYear": 2020,
+    "sortOrder": 210
+  },
+  {
+    "id": "COSTUME_DIWALI_2024",
+    "costumeKey": "DIWALI_2024",
+    "displayName": "排燈節 · 2024裝扮",
+    "eventName": "2024 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fDIWALI_2024.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 220
+  },
+  {
+    "id": "COSTUME_DOCTOR",
+    "costumeKey": "DOCTOR",
+    "displayName": "醫生裝扮",
+    "eventName": "醫生裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fDOCTOR.icon.png",
+    "releaseYear": null,
+    "sortOrder": 230
+  },
+  {
+    "id": "COSTUME_FALL_2018",
+    "costumeKey": "FALL_2018",
+    "displayName": "秋季 · 2018裝扮",
+    "eventName": "2018 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cFALL_2018.icon.png",
+    "releaseYear": 2018,
+    "sortOrder": 240
+  },
+  {
+    "id": "COSTUME_FALL_2023_NOEVOLVE",
+    "costumeKey": "FALL_2023_NOEVOLVE",
+    "displayName": "2023 秋季活動裝扮",
+    "eventName": "2023 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cFALL_2023_NOEVOLVE.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 300
+  },
+  {
+    "id": "COSTUME_FEB_2019",
+    "costumeKey": "FEB_2019",
+    "displayName": "2月 · 2019裝扮",
+    "eventName": "2019 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cFEB_2019.icon.png",
+    "releaseYear": 2019,
+    "sortOrder": 340
+  },
+  {
+    "id": "COSTUME_FLYING_01",
+    "costumeKey": "FLYING_01",
+    "displayName": "飛行氣球 · 01裝扮",
+    "eventName": "飛行氣球 · 01裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fFLYING_01.icon.png",
+    "releaseYear": null,
+    "sortOrder": 350
+  },
+  {
+    "id": "COSTUME_FLYING_02",
+    "costumeKey": "FLYING_02",
+    "displayName": "飛行氣球 · 02裝扮",
+    "eventName": "飛行氣球 · 02裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fFLYING_02.icon.png",
+    "releaseYear": null,
+    "sortOrder": 360
+  },
+  {
+    "id": "COSTUME_FLYING_03",
+    "costumeKey": "FLYING_03",
+    "displayName": "飛行氣球 · 03裝扮",
+    "eventName": "飛行氣球 · 03裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fFLYING_03.icon.png",
+    "releaseYear": null,
+    "sortOrder": 370
+  },
+  {
+    "id": "COSTUME_FLYING_04",
+    "costumeKey": "FLYING_04",
+    "displayName": "飛行氣球 · 04裝扮",
+    "eventName": "飛行氣球 · 04裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fFLYING_04.icon.png",
+    "releaseYear": null,
+    "sortOrder": 380
+  },
+  {
+    "id": "COSTUME_FLYING_5TH_ANNIV",
+    "costumeKey": "FLYING_5TH_ANNIV",
+    "displayName": "5 週年飛行氣球裝扮",
+    "eventName": "5 週年飛行氣球裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0025_00_pgo_5thanniversary.png",
+    "releaseYear": null,
+    "sortOrder": 390
+  },
+  {
+    "id": "COSTUME_FLYING_OKINAWA",
+    "costumeKey": "FLYING_OKINAWA",
+    "displayName": "沖繩飛行氣球裝扮",
+    "eventName": "沖繩飛行氣球裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fFLYING_OKINAWA.icon.png",
+    "releaseYear": null,
+    "sortOrder": 400
+  },
+  {
+    "id": "COSTUME_FOSSIL_2026",
+    "costumeKey": "FOSSIL_2026",
+    "displayName": "化石 · 2026裝扮",
+    "eventName": "2026 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fFOSSIL_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 410
+  },
+  {
+    "id": "COSTUME_GOFEST_2021_NOEVOLVE",
+    "costumeKey": "GOFEST_2021_NOEVOLVE",
+    "displayName": "Pokémon 大型慶典 · 2021 · 不可進化裝扮",
+    "eventName": "Pokémon 大型慶典 2021",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cGOFEST_2021_NOEVOLVE.icon.png",
+    "releaseYear": 2021,
+    "sortOrder": 440
+  },
+  {
+    "id": "COSTUME_GOFEST_2022",
+    "costumeKey": "GOFEST_2022",
+    "displayName": "Pokémon 大型慶典 · 2022裝扮",
+    "eventName": "Pokémon 大型慶典 2022",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2022.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 450
+  },
+  {
+    "id": "COSTUME_GOFEST_2022_NOEVOLVE",
+    "costumeKey": "GOFEST_2022_NOEVOLVE",
+    "displayName": "Pokémon 大型慶典 · 2022 · 不可進化裝扮",
+    "eventName": "Pokémon 大型慶典 2022",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cGOFEST_2022_NOEVOLVE.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 460
+  },
+  {
+    "id": "COSTUME_GOFEST_2024_MTIARA",
+    "costumeKey": "GOFEST_2024_MTIARA",
+    "displayName": "Pokémon 大型慶典 · 2024 · 月亮頭冠裝扮",
+    "eventName": "Pokémon 大型慶典 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2024_MTIARA.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 480
+  },
+  {
+    "id": "COSTUME_GOFEST_2024_STIARA",
+    "costumeKey": "GOFEST_2024_STIARA",
+    "displayName": "Pokémon 大型慶典 · 2024 · 太陽頭冠裝扮",
+    "eventName": "Pokémon 大型慶典 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2024_STIARA.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 500
+  },
+  {
+    "id": "COSTUME_GOFEST_2025_GOGGLES_BLUE",
+    "costumeKey": "GOFEST_2025_GOGGLES_BLUE",
+    "displayName": "Pokémon 大型慶典 · 2025 · 護目鏡 · 藍色裝扮",
+    "eventName": "Pokémon 大型慶典 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2025_GOGGLES_BLUE.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 510
+  },
+  {
+    "id": "COSTUME_GOFEST_2025_GOGGLES_RED",
+    "costumeKey": "GOFEST_2025_GOGGLES_RED",
+    "displayName": "Pokémon 大型慶典 · 2025 · 護目鏡 · 紅色裝扮",
+    "eventName": "Pokémon 大型慶典 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2025_GOGGLES_RED.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 520
+  },
+  {
+    "id": "COSTUME_GOFEST_2025_GOGGLES_YELLOW",
+    "costumeKey": "GOFEST_2025_GOGGLES_YELLOW",
+    "displayName": "Pokémon 大型慶典 · 2025 · 護目鏡 · 黃色裝扮",
+    "eventName": "Pokémon 大型慶典 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2025_GOGGLES_YELLOW.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 530
+  },
+  {
+    "id": "COSTUME_GOFEST_2025_MONOCLE_BLUE",
+    "costumeKey": "GOFEST_2025_MONOCLE_BLUE",
+    "displayName": "Pokémon 大型慶典 · 2025 · 單片眼鏡 · 藍色裝扮",
+    "eventName": "Pokémon 大型慶典 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2025_MONOCLE_BLUE.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 540
+  },
+  {
+    "id": "COSTUME_GOFEST_2025_MONOCLE_RED",
+    "costumeKey": "GOFEST_2025_MONOCLE_RED",
+    "displayName": "Pokémon 大型慶典 · 2025 · 單片眼鏡 · 紅色裝扮",
+    "eventName": "Pokémon 大型慶典 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2025_MONOCLE_RED.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 550
+  },
+  {
+    "id": "COSTUME_GOFEST_2025_MONOCLE_YELLOW",
+    "costumeKey": "GOFEST_2025_MONOCLE_YELLOW",
+    "displayName": "Pokémon 大型慶典 · 2025 · 單片眼鏡 · 黃色裝扮",
+    "eventName": "Pokémon 大型慶典 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2025_MONOCLE_YELLOW.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 560
+  },
+  {
+    "id": "COSTUME_GOFEST_2026_CAP_BLUE",
+    "costumeKey": "GOFEST_2026_CAP_BLUE",
+    "displayName": "Pokémon 大型慶典 · 2026 · 帽子 · 藍色裝扮",
+    "eventName": "Pokémon 大型慶典 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2026_CAP_BLUE.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 590
+  },
+  {
+    "id": "COSTUME_GOFEST_2026_CAP_RED",
+    "costumeKey": "GOFEST_2026_CAP_RED",
+    "displayName": "Pokémon 大型慶典 · 2026 · 帽子 · 紅色裝扮",
+    "eventName": "Pokémon 大型慶典 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2026_CAP_RED.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 600
+  },
+  {
+    "id": "COSTUME_GOFEST_2026_CAP_YELLOW",
+    "costumeKey": "GOFEST_2026_CAP_YELLOW",
+    "displayName": "Pokémon 大型慶典 · 2026 · 帽子 · 黃色裝扮",
+    "eventName": "Pokémon 大型慶典 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOFEST_2026_CAP_YELLOW.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 610
+  },
+  {
+    "id": "COSTUME_GOTOUR_2023_BANDANA",
+    "costumeKey": "GOTOUR_2023_BANDANA",
+    "displayName": "Pokémon 巡迴活動 · 2023 · 頭巾裝扮",
+    "eventName": "Pokémon 巡迴活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cGOTOUR_2023_BANDANA.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 630
+  },
+  {
+    "id": "COSTUME_GOTOUR_2023_BANDANA_NOEVOLVE",
+    "costumeKey": "GOTOUR_2023_BANDANA_NOEVOLVE",
+    "displayName": "Pokémon 巡迴活動 · 2023 · 頭巾 · 不可進化裝扮",
+    "eventName": "Pokémon 巡迴活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cGOTOUR_2023_BANDANA_NOEVOLVE.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 640
+  },
+  {
+    "id": "COSTUME_GOTOUR_2023_HAT",
+    "costumeKey": "GOTOUR_2023_HAT",
+    "displayName": "Pokémon 巡迴活動 · 2023 · 帽子裝扮",
+    "eventName": "Pokémon 巡迴活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cGOTOUR_2023_HAT.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 650
+  },
+  {
+    "id": "COSTUME_GOTOUR_2023_HAT_NOEVOLVE",
+    "costumeKey": "GOTOUR_2023_HAT_NOEVOLVE",
+    "displayName": "Pokémon 巡迴活動 · 2023 · 帽子 · 不可進化裝扮",
+    "eventName": "Pokémon 巡迴活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cGOTOUR_2023_HAT_NOEVOLVE.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 660
+  },
+  {
+    "id": "COSTUME_GOTOUR_2024_A",
+    "costumeKey": "GOTOUR_2024_A",
+    "displayName": "Pokémon 巡迴活動 · 2024 · 款式 甲裝扮",
+    "eventName": "Pokémon 巡迴活動 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2024_A.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 670
+  },
+  {
+    "id": "COSTUME_GOTOUR_2024_A_02",
+    "costumeKey": "GOTOUR_2024_A_02",
+    "displayName": "Pokémon 巡迴活動 · 2024 · 款式 甲 · 02裝扮",
+    "eventName": "Pokémon 巡迴活動 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2024_A_02.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 680
+  },
+  {
+    "id": "COSTUME_GOTOUR_2024_B",
+    "costumeKey": "GOTOUR_2024_B",
+    "displayName": "Pokémon 巡迴活動 · 2024 · 款式 乙裝扮",
+    "eventName": "Pokémon 巡迴活動 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2024_B.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 690
+  },
+  {
+    "id": "COSTUME_GOTOUR_2024_B_02",
+    "costumeKey": "GOTOUR_2024_B_02",
+    "displayName": "Pokémon 巡迴活動 · 2024 · 款式 乙 · 02裝扮",
+    "eventName": "Pokémon 巡迴活動 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2024_B_02.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 700
+  },
+  {
+    "id": "COSTUME_GOTOUR_2025_A",
+    "costumeKey": "GOTOUR_2025_A",
+    "displayName": "Pokémon 巡迴活動 · 2025 · 款式 甲裝扮",
+    "eventName": "Pokémon 巡迴活動 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2025_A.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 710
+  },
+  {
+    "id": "COSTUME_GOTOUR_2025_A_02",
+    "costumeKey": "GOTOUR_2025_A_02",
+    "displayName": "Pokémon 巡迴活動 · 2025 · 款式 甲 · 02裝扮",
+    "eventName": "Pokémon 巡迴活動 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2025_A_02.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 720
+  },
+  {
+    "id": "COSTUME_GOTOUR_2025_B",
+    "costumeKey": "GOTOUR_2025_B",
+    "displayName": "Pokémon 巡迴活動 · 2025 · 款式 乙裝扮",
+    "eventName": "Pokémon 巡迴活動 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2025_B.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 730
+  },
+  {
+    "id": "COSTUME_GOTOUR_2025_B_02",
+    "costumeKey": "GOTOUR_2025_B_02",
+    "displayName": "Pokémon 巡迴活動 · 2025 · 款式 乙 · 02裝扮",
+    "eventName": "Pokémon 巡迴活動 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2025_B_02.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 740
+  },
+  {
+    "id": "COSTUME_GOTOUR_2026_A",
+    "costumeKey": "GOTOUR_2026_A",
+    "displayName": "Pokémon 巡迴活動 · 2026 · 款式 甲裝扮",
+    "eventName": "Pokémon 巡迴活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2026_A.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 750
+  },
+  {
+    "id": "COSTUME_GOTOUR_2026_A_02",
+    "costumeKey": "GOTOUR_2026_A_02",
+    "displayName": "Pokémon 巡迴活動 · 2026 · 款式 甲 · 02裝扮",
+    "eventName": "Pokémon 巡迴活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2026_A_02.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 760
+  },
+  {
+    "id": "COSTUME_GOTOUR_2026_B",
+    "costumeKey": "GOTOUR_2026_B",
+    "displayName": "Pokémon 巡迴活動 · 2026 · 款式 乙裝扮",
+    "eventName": "Pokémon 巡迴活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2026_B.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 770
+  },
+  {
+    "id": "COSTUME_GOTOUR_2026_B_02",
+    "costumeKey": "GOTOUR_2026_B_02",
+    "displayName": "Pokémon 巡迴活動 · 2026 · 款式 乙 · 02裝扮",
+    "eventName": "Pokémon 巡迴活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2026_B_02.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 780
+  },
+  {
+    "id": "COSTUME_GOTOUR_2026_C",
+    "costumeKey": "GOTOUR_2026_C",
+    "displayName": "Pokémon 巡迴活動 · 2026 · 款式 丙裝扮",
+    "eventName": "Pokémon 巡迴活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2026_C.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 790
+  },
+  {
+    "id": "COSTUME_GOTOUR_2026_C_02",
+    "costumeKey": "GOTOUR_2026_C_02",
+    "displayName": "Pokémon 巡迴活動 · 2026 · 款式 丙 · 02裝扮",
+    "eventName": "Pokémon 巡迴活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fGOTOUR_2026_C_02.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 800
+  },
+  {
+    "id": "COSTUME_HALLOWEEN_2017",
+    "costumeKey": "HALLOWEEN_2017",
+    "displayName": "萬聖節 · 2017裝扮",
+    "eventName": "萬聖節活動 2017",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cHALLOWEEN_2017.icon.png",
+    "releaseYear": 2017,
+    "sortOrder": 810
+  },
+  {
+    "id": "COSTUME_HALLOWEEN_2021_NOEVOLVE",
+    "costumeKey": "HALLOWEEN_2021_NOEVOLVE",
+    "displayName": "萬聖節 · 2021 · 不可進化裝扮",
+    "eventName": "萬聖節活動 2021",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cHALLOWEEN_2021_NOEVOLVE.icon.png",
+    "releaseYear": 2021,
+    "sortOrder": 820
+  },
+  {
+    "id": "COSTUME_HOENN_2020_NOEVOLVE",
+    "costumeKey": "HOENN_2020_NOEVOLVE",
+    "displayName": "豐緣主題帽（2020，不可進化）",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cHOENN_2020_NOEVOLVE.icon.png",
+    "releaseYear": 2020,
+    "sortOrder": 840
+  },
+  {
+    "id": "COSTUME_HOLIDAY_2016",
+    "costumeKey": "HOLIDAY_2016",
+    "displayName": "節慶 · 2016裝扮",
+    "eventName": "冬季節慶活動 2016",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cHOLIDAY_2016.icon.png",
+    "releaseYear": 2016,
+    "sortOrder": 850
+  },
+  {
+    "id": "COSTUME_HOLIDAY_2023",
+    "costumeKey": "HOLIDAY_2023",
+    "displayName": "節慶 · 2023裝扮",
+    "eventName": "冬季節慶活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cHOLIDAY_2023.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 880
+  },
+  {
+    "id": "COSTUME_HORIZONS",
+    "costumeKey": "HORIZONS",
+    "displayName": "寶可夢 地平線裝扮",
+    "eventName": "寶可夢 地平線裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fHORIZONS.icon.png",
+    "releaseYear": null,
+    "sortOrder": 890
+  },
+  {
+    "id": "COSTUME_INDONESIA_2025_NOEVOLVE",
+    "costumeKey": "INDONESIA_2025_NOEVOLVE",
+    "displayName": "2025 · 不可進化裝扮",
+    "eventName": "2025 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cINDONESIA_2025_NOEVOLVE.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 910
+  },
+  {
+    "id": "COSTUME_JAN_2023_NOEVOLVE",
+    "costumeKey": "JAN_2023_NOEVOLVE",
+    "displayName": "1月 · 2023 · 不可進化裝扮",
+    "eventName": "2023 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cJAN_2023_NOEVOLVE.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 940
+  },
+  {
+    "id": "COSTUME_JEJU",
+    "costumeKey": "JEJU",
+    "displayName": "活動裝扮｜款式 096",
+    "eventName": "活動裝扮｜款式 096",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fJEJU.icon.png",
+    "releaseYear": null,
+    "sortOrder": 960
+  },
+  {
+    "id": "COSTUME_JOHTO_2020_NOEVOLVE",
+    "costumeKey": "JOHTO_2020_NOEVOLVE",
+    "displayName": "城都主題帽（2020，不可進化）",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cJOHTO_2020_NOEVOLVE.icon.png",
+    "releaseYear": 2020,
+    "sortOrder": 970
+  },
+  {
+    "id": "COSTUME_KANTO_2020_NOEVOLVE",
+    "costumeKey": "KANTO_2020_NOEVOLVE",
+    "displayName": "關都主題帽（2020，不可進化）",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cKANTO_2020_NOEVOLVE.icon.png",
+    "releaseYear": 2020,
+    "sortOrder": 980
+  },
+  {
+    "id": "COSTUME_KARIYUSHI",
+    "costumeKey": "KARIYUSHI",
+    "displayName": "沖繩嘉利衫",
+    "eventName": "沖繩嘉利衫",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0025_00_pikachu_pgo_kariyushi.png",
+    "releaseYear": null,
+    "sortOrder": 990
+  },
+  {
+    "id": "COSTUME_KURTA",
+    "costumeKey": "KURTA",
+    "displayName": "庫爾塔服飾裝扮",
+    "eventName": "庫爾塔服飾裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fKURTA.icon.png",
+    "releaseYear": null,
+    "sortOrder": 1000
+  },
+  {
+    "id": "COSTUME_K_2026_A_01",
+    "costumeKey": "K_2026_A_01",
+    "displayName": "2026 · 款式 甲 · 01裝扮",
+    "eventName": "2026 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fK_2026_A_01.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 1010
+  },
+  {
+    "id": "COSTUME_MAY_2019_NOEVOLVE",
+    "costumeKey": "MAY_2019_NOEVOLVE",
+    "displayName": "名偵探帽（2019）",
+    "eventName": "2019 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cMAY_2019_NOEVOLVE.icon.png",
+    "releaseYear": 2019,
+    "sortOrder": 1020
+  },
+  {
+    "id": "COSTUME_NOVEMBER_2018",
+    "costumeKey": "NOVEMBER_2018",
+    "displayName": "2018裝扮",
+    "eventName": "2018 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cNOVEMBER_2018.icon.png",
+    "releaseYear": 2018,
+    "sortOrder": 1050
+  },
+  {
+    "id": "COSTUME_ONE_YEAR_ANNIVERSARY",
+    "costumeKey": "ONE_YEAR_ANNIVERSARY",
+    "displayName": "一週年紀念裝扮",
+    "eventName": "週年紀念活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cONE_YEAR_ANNIVERSARY.icon.png",
+    "releaseYear": null,
+    "sortOrder": 1060
+  },
+  {
+    "id": "COSTUME_PI",
+    "costumeKey": "PI",
+    "displayName": "派對裝扮",
+    "eventName": "派對裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cPI.icon.png",
+    "releaseYear": null,
+    "sortOrder": 1070
+  },
+  {
+    "id": "COSTUME_POP_STAR",
+    "costumeKey": "POP_STAR",
+    "displayName": "流行歌手裝扮",
+    "eventName": "流行歌手裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0025_00_pgo_popstar.png",
+    "releaseYear": null,
+    "sortOrder": 1090
+  },
+  {
+    "id": "COSTUME_PXP_2026",
+    "costumeKey": "PXP_2026",
+    "displayName": "2026裝扮",
+    "eventName": "2026 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fPXP_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 1100
+  },
+  {
+    "id": "COSTUME_ROCK_STAR",
+    "costumeKey": "ROCK_STAR",
+    "displayName": "搖滾歌手裝扮",
+    "eventName": "搖滾歌手裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0025_00_pgo_rockstar.png",
+    "releaseYear": null,
+    "sortOrder": 1110
+  },
+  {
+    "id": "COSTUME_SAFARI_2020_NOEVOLVE",
+    "costumeKey": "SAFARI_2020_NOEVOLVE",
+    "displayName": "探險帽（2020，不可進化）",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cSAFARI_2020_NOEVOLVE.icon.png",
+    "releaseYear": 2020,
+    "sortOrder": 1130
+  },
+  {
+    "id": "COSTUME_SINNOH_2020_NOEVOLVE",
+    "costumeKey": "SINNOH_2020_NOEVOLVE",
+    "displayName": "神奧主題帽（2020，不可進化）",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cSINNOH_2020_NOEVOLVE.icon.png",
+    "releaseYear": 2020,
+    "sortOrder": 1140
+  },
+  {
+    "id": "COSTUME_SPRING_2023",
+    "costumeKey": "SPRING_2023",
+    "displayName": "春季 · 2023裝扮",
+    "eventName": "春季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cSPRING_2023.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1160
+  },
+  {
+    "id": "COSTUME_SUMMER_2023_A",
+    "costumeKey": "SUMMER_2023_A",
+    "displayName": "夏季 · 2023 · 款式 甲裝扮",
+    "eventName": "夏季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fSUMMER_2023_A.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1260
+  },
+  {
+    "id": "COSTUME_SUMMER_2023_B",
+    "costumeKey": "SUMMER_2023_B",
+    "displayName": "夏季 · 2023 · 款式 乙裝扮",
+    "eventName": "夏季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fSUMMER_2023_B.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1270
+  },
+  {
+    "id": "COSTUME_SUMMER_2023_C",
+    "costumeKey": "SUMMER_2023_C",
+    "displayName": "夏季 · 2023 · 款式 丙裝扮",
+    "eventName": "夏季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fSUMMER_2023_C.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1280
+  },
+  {
+    "id": "COSTUME_SUMMER_2023_D",
+    "costumeKey": "SUMMER_2023_D",
+    "displayName": "夏季 · 2023 · 款式 丁裝扮",
+    "eventName": "夏季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fSUMMER_2023_D.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1290
+  },
+  {
+    "id": "COSTUME_SUMMER_2023_E",
+    "costumeKey": "SUMMER_2023_E",
+    "displayName": "夏季 · 2023 · 款式 戊裝扮",
+    "eventName": "夏季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fSUMMER_2023_E.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1300
+  },
+  {
+    "id": "COSTUME_TCG_2022_NOEVOLVE",
+    "costumeKey": "TCG_2022_NOEVOLVE",
+    "displayName": "集換式卡牌活動 · 2022 · 不可進化裝扮",
+    "eventName": "2022 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cTCG_2022_NOEVOLVE.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 1330
+  },
+  {
+    "id": "COSTUME_TSHIRT_01",
+    "costumeKey": "TSHIRT_01",
+    "displayName": "短袖上衣 · 01裝扮",
+    "eventName": "短袖上衣 · 01裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fTSHIRT_01.icon.png",
+    "releaseYear": null,
+    "sortOrder": 1340
+  },
+  {
+    "id": "COSTUME_TSHIRT_02",
+    "costumeKey": "TSHIRT_02",
+    "displayName": "短袖上衣 · 02裝扮",
+    "eventName": "短袖上衣 · 02裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fTSHIRT_02.icon.png",
+    "releaseYear": null,
+    "sortOrder": 1350
+  },
+  {
+    "id": "COSTUME_TSHIRT_03",
+    "costumeKey": "TSHIRT_03",
+    "displayName": "短袖上衣 · 03裝扮",
+    "eventName": "短袖上衣 · 03裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fTSHIRT_03.icon.png",
+    "releaseYear": null,
+    "sortOrder": 1360
+  },
+  {
+    "id": "COSTUME_VISOR_2026",
+    "costumeKey": "VISOR_2026",
+    "displayName": "遮陽帽 · 2026裝扮",
+    "eventName": "2026 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fVISOR_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 1370
+  },
+  {
+    "id": "COSTUME_VS_2019",
+    "costumeKey": "VS_2019",
+    "displayName": "2019裝扮",
+    "eventName": "2019 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fVS_2019.icon.png",
+    "releaseYear": 2019,
+    "sortOrder": 1380
+  },
+  {
+    "id": "COSTUME_WCS_2022",
+    "costumeKey": "WCS_2022",
+    "displayName": "世界賽 · 2022裝扮",
+    "eventName": "Pokémon 世界錦標賽 2022",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fWCS_2022.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 1390
+  },
+  {
+    "id": "COSTUME_WCS_2023",
+    "costumeKey": "WCS_2023",
+    "displayName": "世界賽 · 2023裝扮",
+    "eventName": "Pokémon 世界錦標賽 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fWCS_2023.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1400
+  },
+  {
+    "id": "COSTUME_WCS_2024",
+    "costumeKey": "WCS_2024",
+    "displayName": "世界賽 · 2024裝扮",
+    "eventName": "Pokémon 世界錦標賽 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fWCS_2024.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 1410
+  },
+  {
+    "id": "COSTUME_WCS_2025",
+    "costumeKey": "WCS_2025",
+    "displayName": "世界賽 · 2025裝扮",
+    "eventName": "Pokémon 世界錦標賽 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fWCS_2025.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 1420
+  },
+  {
+    "id": "COSTUME_WCS_2026",
+    "costumeKey": "WCS_2026",
+    "displayName": "世界賽 · 2026裝扮",
+    "eventName": "Pokémon 世界錦標賽 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.fWCS_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 1430
+  },
+  {
+    "id": "COSTUME_WINTER_2018",
+    "costumeKey": "WINTER_2018",
+    "displayName": "冬季 · 2018裝扮",
+    "eventName": "2018 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm25.cWINTER_2018.icon.png",
+    "releaseYear": 2018,
+    "sortOrder": 1460
+  },
+  {
+    "id": "COSTUME_WINTER_2020",
+    "costumeKey": "WINTER_2020",
+    "displayName": "冬季 · 2020裝扮",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0025_00_pgo_winter2020.png",
+    "releaseYear": 2020,
+    "sortOrder": 1470
+  },
+  {
+    "id": "COSTUME_ROYAL_NOEVOLVE",
+    "costumeKey": "ROYAL_NOEVOLVE",
+    "displayName": "不可進化裝扮",
+    "eventName": "不可進化裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm31.cROYAL_NOEVOLVE.icon.png",
+    "releaseYear": null,
+    "sortOrder": 1120
+  },
+  {
+    "id": "COSTUME_FALL_2022",
+    "costumeKey": "FALL_2022",
+    "displayName": "秋季 · 2022裝扮",
+    "eventName": "2022 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm37.cFALL_2022.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 270
+  },
+  {
+    "id": "COSTUME_JAN_2024",
+    "costumeKey": "JAN_2024",
+    "displayName": "1月 · 2024裝扮",
+    "eventName": "2024 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm39.cJAN_2024.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 950
+  },
+  {
+    "id": "COSTUME_SWIM_2025",
+    "costumeKey": "SWIM_2025",
+    "displayName": "泳裝 · 2025裝扮",
+    "eventName": "2025 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm54.fSWIM_2025.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 1320
+  },
+  {
+    "id": "COSTUME_SPRING_2023_VALOR",
+    "costumeKey": "SPRING_2023_VALOR",
+    "displayName": "春季 · 2023 · 勇氣隊裝扮",
+    "eventName": "春季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm77.cSPRING_2023_VALOR.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1190
+  },
+  {
+    "id": "COSTUME_2020",
+    "costumeKey": "2020",
+    "displayName": "2020裝扮",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0079_00_pgo_2020.png",
+    "releaseYear": 2020,
+    "sortOrder": 10
+  },
+  {
+    "id": "COSTUME_PI_NOEVOLVE",
+    "costumeKey": "PI_NOEVOLVE",
+    "displayName": "派對裝扮（不可進化）",
+    "eventName": "派對裝扮（不可進化）",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm79.cPI_NOEVOLVE.icon.png",
+    "releaseYear": null,
+    "sortOrder": 1080
+  },
+  {
+    "id": "COSTUME_2021",
+    "costumeKey": "2021",
+    "displayName": "2021裝扮",
+    "eventName": "2021 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0080_00_pgo_2021.png",
+    "releaseYear": 2021,
+    "sortOrder": 20
+  },
+  {
+    "id": "COSTUME_ANNIVERSARY_2024",
+    "costumeKey": "ANNIVERSARY_2024",
+    "displayName": "週年紀念 · 2024裝扮",
+    "eventName": "週年紀念活動 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm88.cANNIVERSARY_2024.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 80
+  },
+  {
+    "id": "COSTUME_FALL_2022_NOEVOLVE",
+    "costumeKey": "FALL_2022_NOEVOLVE",
+    "displayName": "秋季 · 2022 · 不可進化裝扮",
+    "eventName": "2022 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm94.cFALL_2022_NOEVOLVE.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 280
+  },
+  {
+    "id": "COSTUME_FALL_2023",
+    "costumeKey": "FALL_2023",
+    "displayName": "秋季 · 2023裝扮",
+    "eventName": "2023 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm104.cFALL_2023.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 290
+  },
+  {
+    "id": "COSTUME_SPRING_2023_INSTINCT",
+    "costumeKey": "SPRING_2023_INSTINCT",
+    "displayName": "春季 · 2023 · 直覺隊裝扮",
+    "eventName": "春季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm125.cSPRING_2023_INSTINCT.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1170
+  },
+  {
+    "id": "COSTUME_SPRING_2023_MYSTIC",
+    "costumeKey": "SPRING_2023_MYSTIC",
+    "displayName": "春季 · 2023 · 神秘隊裝扮",
+    "eventName": "春季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm131.cSPRING_2023_MYSTIC.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1180
+  },
+  {
+    "id": "COSTUME_SPRING_2026_A",
+    "costumeKey": "SPRING_2026_A",
+    "displayName": "春季 · 2026 · 款式 甲裝扮",
+    "eventName": "春季活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm132.fSPRING_2026_A.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 1220
+  },
+  {
+    "id": "COSTUME_SPRING_2026_B",
+    "costumeKey": "SPRING_2026_B",
+    "displayName": "春季 · 2026 · 款式 乙裝扮",
+    "eventName": "春季活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm132.fSPRING_2026_B.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 1230
+  },
+  {
+    "id": "COSTUME_HOLIDAY_2022",
+    "costumeKey": "HOLIDAY_2022",
+    "displayName": "節慶 · 2022裝扮",
+    "eventName": "冬季節慶活動 2022",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm133.cHOLIDAY_2022.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 870
+  },
+  {
+    "id": "COSTUME_MAY_2023",
+    "costumeKey": "MAY_2023",
+    "displayName": "5月 · 2023裝扮",
+    "eventName": "2023 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm133.cMay_2023.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1030
+  },
+  {
+    "id": "COSTUME_SUMMER_2023",
+    "costumeKey": "SUMMER_2023",
+    "displayName": "夏季 · 2023裝扮",
+    "eventName": "夏季活動 2023",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm142.fSUMMER_2023.icon.png",
+    "releaseYear": 2023,
+    "sortOrder": 1250
+  },
+  {
+    "id": "COSTUME_NIGHTCAP",
+    "costumeKey": "NIGHTCAP",
+    "displayName": "睡帽",
+    "eventName": "睡帽",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm143.cNIGHTCAP.icon.png",
+    "releaseYear": null,
+    "sortOrder": 1040
+  },
+  {
+    "id": "COSTUME_WILDAREA_2024",
+    "costumeKey": "WILDAREA_2024",
+    "displayName": "Pokémon 荒野地區活動 · 2024裝扮",
+    "eventName": "2024 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm143.fWILDAREA_2024.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 1440
+  },
+  {
+    "id": "COSTUME_A",
+    "costumeKey": "A",
+    "displayName": "款式 甲裝扮",
+    "eventName": "款式 甲裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/pokemon_icon_pm0150_00_pgo_a.png",
+    "releaseYear": null,
+    "sortOrder": 40
+  },
+  {
+    "id": "COSTUME_JAN_2022_NOEVOLVE",
+    "costumeKey": "JAN_2022_NOEVOLVE",
+    "displayName": "1月 · 2022 · 不可進化裝扮",
+    "eventName": "2022 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm163.cJAN_2022_NOEVOLVE.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 930
+  },
+  {
+    "id": "COSTUME_WINTER_2025",
+    "costumeKey": "WINTER_2025",
+    "displayName": "冬季 · 2025裝扮",
+    "eventName": "2025 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm185.fWINTER_2025.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 1490
+  },
+  {
+    "id": "COSTUME_GOFEST_2024_SSCARF",
+    "costumeKey": "GOFEST_2024_SSCARF",
+    "displayName": "Pokémon 大型慶典 · 2024 · 太陽圍巾裝扮",
+    "eventName": "Pokémon 大型慶典 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm196.fGOFEST_2024_SSCARF.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 490
+  },
+  {
+    "id": "COSTUME_GOFEST_2024_MSCARF",
+    "costumeKey": "GOFEST_2024_MSCARF",
+    "displayName": "Pokémon 大型慶典 · 2024 · 月亮圍巾裝扮",
+    "eventName": "Pokémon 大型慶典 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm197.fGOFEST_2024_MSCARF.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 470
+  },
+  {
+    "id": "COSTUME_2022",
+    "costumeKey": "2022",
+    "displayName": "2022裝扮",
+    "eventName": "2022 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm199.f2022.icon.png",
+    "releaseYear": 2022,
+    "sortOrder": 30
+  },
+  {
+    "id": "COSTUME_HALLOWEEN_2025",
+    "costumeKey": "HALLOWEEN_2025",
+    "displayName": "萬聖節 · 2025裝扮",
+    "eventName": "萬聖節活動 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm216.cHALLOWEEN_2025.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 830
+  },
+  {
+    "id": "COSTUME_SPRING_2026",
+    "costumeKey": "SPRING_2026",
+    "displayName": "春季 · 2026裝扮",
+    "eventName": "春季活動 2026",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm222.fSPRING_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 1210
+  },
+  {
+    "id": "COSTUME_FALL_2020_NOEVOLVE",
+    "costumeKey": "FALL_2020_NOEVOLVE",
+    "displayName": "秋季 · 2020 · 不可進化裝扮",
+    "eventName": "2020 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm238.cFALL_2020_NOEVOLVE.icon.png",
+    "releaseYear": 2020,
+    "sortOrder": 260
+  },
+  {
+    "id": "COSTUME_SUMMER_2024",
+    "costumeKey": "SUMMER_2024",
+    "displayName": "夏季 · 2024裝扮",
+    "eventName": "夏季活動 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm287.cSUMMER_2024.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 1310
+  },
+  {
+    "id": "COSTUME_HOLIDAY_2021_NOEVOLVE",
+    "costumeKey": "HOLIDAY_2021_NOEVOLVE",
+    "displayName": "節慶 · 2021 · 不可進化裝扮",
+    "eventName": "冬季節慶活動 2021",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm363.cHOLIDAY_2021_NOEVOLVE.icon.png",
+    "releaseYear": 2021,
+    "sortOrder": 860
+  },
+  {
+    "id": "COSTUME_GEMS_1_2021_NOEVOLVE",
+    "costumeKey": "GEMS_1_2021_NOEVOLVE",
+    "displayName": "1 · 2021 · 不可進化裝扮",
+    "eventName": "2021 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm387.cGEMS_1_2021_NOEVOLVE.icon.png",
+    "releaseYear": 2021,
+    "sortOrder": 420
+  },
+  {
+    "id": "COSTUME_GEMS_2_2021_NOEVOLVE",
+    "costumeKey": "GEMS_2_2021_NOEVOLVE",
+    "displayName": "2 · 2021 · 不可進化裝扮",
+    "eventName": "2021 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm387.cGEMS_2_2021_NOEVOLVE.icon.png",
+    "releaseYear": 2021,
+    "sortOrder": 430
+  },
+  {
+    "id": "COSTUME_SPRING_2024",
+    "costumeKey": "SPRING_2024",
+    "displayName": "春季 · 2024裝扮",
+    "eventName": "春季活動 2024",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm546.cSPRING_2024.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 1200
+  },
+  {
+    "id": "COSTUME_FASHION_2025",
+    "costumeKey": "FASHION_2025",
+    "displayName": "時尚 · 2025裝扮",
+    "eventName": "時尚週活動 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm572.cFASHION_2025.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 330
+  },
+  {
+    "id": "COSTUME_FALL_2024",
+    "costumeKey": "FALL_2024",
+    "displayName": "秋季 · 2024裝扮",
+    "eventName": "2024 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm656.cFALL_2024.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 310
+  },
+  {
+    "id": "COSTUME_WINTER_2024",
+    "costumeKey": "WINTER_2024",
+    "displayName": "冬季 · 2024裝扮",
+    "eventName": "2024 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm702.cWINTER_2024.icon.png",
+    "releaseYear": 2024,
+    "sortOrder": 1480
+  },
+  {
+    "id": "COSTUME_WILDAREA_2025",
+    "costumeKey": "WILDAREA_2025",
+    "displayName": "Pokémon 荒野地區活動 · 2025裝扮",
+    "eventName": "2025 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm760.fWILDAREA_2025.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 1450
+  },
+  {
+    "id": "COSTUME_GOFEST_2025_TRAIN_CONDUCTOR",
+    "costumeKey": "GOFEST_2025_TRAIN_CONDUCTOR",
+    "displayName": "Pokémon 大型慶典 · 2025 · 列車 · 車掌裝扮",
+    "eventName": "Pokémon 大型慶典 2025",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm870.fGOFEST_2025_TRAIN_CONDUCTOR.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 570
+  },
+  {
+    "id": "COSTUME_HORIZONS_2025_NOEVOLVE",
+    "costumeKey": "HORIZONS_2025_NOEVOLVE",
+    "displayName": "寶可夢 地平線 · 2025 · 不可進化裝扮",
+    "eventName": "2025 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm907.cHORIZONS_2025_NOEVOLVE.icon.png",
+    "releaseYear": 2025,
+    "sortOrder": 900
+  },
+  {
+    "id": "COSTUME_COIN_A1",
+    "costumeKey": "COIN_A1",
+    "displayName": "金幣款裝扮",
+    "eventName": "金幣款裝扮",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm999.fCOIN_A1.icon.png",
+    "releaseYear": null,
+    "sortOrder": 160
+  },
+  {
+    "id": "COSTUME_COIN_A2_2026",
+    "costumeKey": "COIN_A2_2026",
+    "displayName": "金幣款 · 2026裝扮",
+    "eventName": "2026 年活動",
+    "imageKey": "pogo/Images/Pokemon - 256x256/Addressable Assets/pm999.fCOIN_A2_2026.icon.png",
+    "releaseYear": 2026,
+    "sortOrder": 170
+  }
+]

@@ -1,0 +1,417 @@
+{
+  "generatedAt": "2026-09-28T21:21:03.213221+00:00",
+  "previews": [
+    {
+      "sourceImageStem": "sb_2024_decemberCdRecap",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-2024-december-cd-recap.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-2024-december-cd-recap",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-2024-december-cd-recap.png"
+    },
+    {
+      "sourceImageStem": "sb_9thAnniversary",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-9th-anniversary.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-9th-anniversary",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-9th-anniversary.png"
+    },
+    {
+      "sourceImageStem": "sb_Community_2026",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-community-days-2026.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-community-days-2026",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-community-days-2026.png"
+    },
+    {
+      "sourceImageStem": "sb_Concierge2025",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-concierge.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-concierge",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-concierge.webp"
+    },
+    {
+      "sourceImageStem": "sb_FestivalofColors_2026",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-festivalofcolors-2026.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-festivalofcolors-2026",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-festivalofcolors-2026.png"
+    },
+    {
+      "sourceImageStem": "sb_GOWA2025_Global",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-gowildarea-2025-global.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-gowildarea-2025-global",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-gowildarea-2025-global.webp"
+    },
+    {
+      "sourceImageStem": "sb_GoFest2024_radiance",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-fest-2024-radiance.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-fest-2024-radiance",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-fest-2024-radiance.png"
+    },
+    {
+      "sourceImageStem": "sb_GoFest2024_umbra",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-fest-2024-umbra.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-fest-2024-umbra",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-fest-2024-umbra.png"
+    },
+    {
+      "sourceImageStem": "sb_GoFest2024_wormhole",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-fest-2024-wormhole.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-fest-2024-wormhole",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-fest-2024-wormhole.png"
+    },
+    {
+      "sourceImageStem": "sb_GoFest2024_wormhole_moon",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-fest-2024-wormhole-moon.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-fest-2024-wormhole-moon",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-fest-2024-wormhole-moon.png"
+    },
+    {
+      "sourceImageStem": "sb_GoFest2024_wormhole_sun",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-fest-2024-wormhole-sun.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-fest-2024-wormhole-sun",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-fest-2024-wormhole-sun.png"
+    },
+    {
+      "sourceImageStem": "sb_GoFest2025",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-fest-2025.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-fest-2025",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-fest-2025.png"
+    },
+    {
+      "sourceImageStem": "sb_GoFest2025_Eternatus",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-fest-2025-dark-skies.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-fest-2025-dark-skies",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-fest-2025-dark-skies.png"
+    },
+    {
+      "sourceImageStem": "sb_GoFest2026_global",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-gofest2026-global.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-gofest2026-global",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-gofest2026-global.png"
+    },
+    {
+      "sourceImageStem": "sb_GoFest2026_mewtwo",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-gofest2026-mewtwo.jpg",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-gofest2026-mewtwo",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-gofest2026-mewtwo.jpg"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2025_black",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2025-black.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2025-black",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2025-black.png"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2025_black_white",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2025-black-white.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2025-black-white",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2025-black-white.png"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2025_enigma",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2025-enigma.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2025-enigma",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2025-enigma.png"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2025_white",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2025-white.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2025-white",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2025-white.png"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2026_diamond",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2026-diamond.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2026-diamond",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2026-diamond.webp"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2026_gold",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2026-gold.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2026-gold",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2026-gold.webp"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2026_mega",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2026-mega.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2026-mega",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2026-mega.webp"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2026_pearl",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2026-pearl.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2026-pearl",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2026-pearl.webp"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2026_ruby",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2026-ruby.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2026-ruby",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2026-ruby.webp"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2026_sapphire",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-sapphire.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-sapphire",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-sapphire.webp"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2026_silver",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2026-silver.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2026-silver",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2026-silver.webp"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2026_x",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2026-x.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2026-x",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2026-x.webp"
+    },
+    {
+      "sourceImageStem": "sb_GoTour2026_y",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-go-tour-2026-y.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2026-y",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2026-y.webp"
+    },
+    {
+      "sourceImageStem": "sb_ObservatoryExhibitionTour",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-observatory-exhibition-tour.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-observatory-exhibition-tour",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-observatory-exhibition-tour.webp"
+    },
+    {
+      "sourceImageStem": "sb_Season17_DuelDestiny",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-season-17-duel-destiny.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-season-17-duel-destiny",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-season-17-duel-destiny.png"
+    },
+    {
+      "sourceImageStem": "sb_Season18_MightAndMastery",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-season-18-might-and-mastery.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-season-18-might-and-mastery",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-season-18-might-and-mastery.png"
+    },
+    {
+      "sourceImageStem": "sb_Season19_DelightfulDays",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-season-19-delightful-days.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-season-19-delightful-days",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-season-19-delightful-days.png"
+    },
+    {
+      "sourceImageStem": "sb_Season20_TalesOfTransformation",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-season-20-tales-of-transformation.webp",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-season-20-tales-of-transformation",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-season-20-tales-of-transformation.webp"
+    },
+    {
+      "sourceImageStem": "sb_TeamLeader_blue",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-team-leader-blue.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-team-leader-blue",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-team-leader-blue.png"
+    },
+    {
+      "sourceImageStem": "sb_TeamLeader_red",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-team-leader-red.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-team-leader-red",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-team-leader-red.png"
+    },
+    {
+      "sourceImageStem": "sb_TeamLeader_yellow",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-team-leader-yellow.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-team-leader-yellow",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-team-leader-yellow.png"
+    },
+    {
+      "sourceImageStem": "sb_arraia_2026",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-arraia-2026.jpg",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-arraia-2026",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-arraia-2026.jpg"
+    },
+    {
+      "sourceImageStem": "sb_lego_2026",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-lego-2026.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-lego-2026",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-lego-2026.png"
+    },
+    {
+      "sourceImageStem": "sb_s24_sep_2026",
+      "backgroundKey": null,
+      "previewImageKey": "background_previews/sb-s24-sep-2026.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-s24-sep-2026",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-s24-sep-2026.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2025_GLOBAL_ENIGMA_001",
+      "previewImageKey": "background_previews/sb-go-tour-2025-enigma.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2025-enigma",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2025-enigma.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2025_GLOBAL_GOFEST_SHIELD_001",
+      "previewImageKey": "background_previews/sb-zamazenta-go-fest-2025.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-zamazenta-go-fest-2025",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-zamazenta-go-fest-2025.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2025_GLOBAL_GOFEST_SHIELD_CROWNED_001",
+      "previewImageKey": "background_previews/sb-zamazenta-go-fest-2025.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-zamazenta-go-fest-2025",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-zamazenta-go-fest-2025.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2025_GLOBAL_GOFEST_SWORD_001",
+      "previewImageKey": "background_previews/sb-zacian-go-fest-2025.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-zacian-go-fest-2025",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-zacian-go-fest-2025.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2025_GLOBAL_GOFEST_SWORD_CROWNED_001",
+      "previewImageKey": "background_previews/sb-zacian-go-fest-2025.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-zacian-go-fest-2025",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-zacian-go-fest-2025.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2025_GLOBAL_GOTOUR_BLACK_001",
+      "previewImageKey": "background_previews/sb-go-tour-2025-black.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2025-black",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2025-black.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2025_GLOBAL_GOTOUR_BLACK_WHITE_001",
+      "previewImageKey": "background_previews/sb-go-tour-2025-black-white.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2025-black-white",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2025-black-white.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2025_GLOBAL_GOTOUR_WHITE_001",
+      "previewImageKey": "background_previews/sb-go-tour-2025-white.png",
+      "previewSource": "Dittobase",
+      "sourcePage": "https://www.dittobase.com/pokemon-go/backgrounds/sb-go-tour-2025-white",
+      "sourceImage": "https://assets.dittobase.com/go/backgrounds/sb-go-tour-2025-white.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2026_MEWTWO_001",
+      "previewImageKey": "background_previews/go-fest-2026-mega-mewtwo.png",
+      "previewSource": "Bulbagarden Archives",
+      "sourcePage": "https://archives.bulbagarden.net/wiki/File:GO_Fest_2026_Mega_Mewtwo_background.png",
+      "sourceImage": "https://archives.bulbagarden.net/wiki/Special:Redirect/file/GO_Fest_2026_Mega_Mewtwo_background.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2026_WCS",
+      "previewImageKey": "background_previews/worlds-special-blue-2026.png",
+      "previewSource": "Bulbagarden Archives",
+      "sourcePage": "https://archives.bulbagarden.net/wiki/File:GO_2026_Worlds_background.png",
+      "sourceImage": "https://archives.bulbagarden.net/wiki/Special:Redirect/file/GO_2026_Worlds_background.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2026_10TH_ANNIVERSARY_001",
+      "previewImageKey": "background_previews/10th-anniversary-celebration-mewtwo-2026.png",
+      "previewSource": "Bulbagarden Archives",
+      "sourcePage": "https://archives.bulbagarden.net/wiki/File:GO_10th_Anniversary_Celebration_Mewtwo_background.png",
+      "sourceImage": "https://archives.bulbagarden.net/wiki/Special:Redirect/file/GO_10th_Anniversary_Celebration_Mewtwo_background.png"
+    },
+    {
+      "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_GG2026",
+      "previewImageKey": "background_previews/10th-anniversary-gimmighoul-2026.png",
+      "previewSource": "Bulbagarden Archives",
+      "sourcePage": "https://archives.bulbagarden.net/wiki/File:GO_10th_Anniversary_background.png",
+      "sourceImage": "https://archives.bulbagarden.net/wiki/Special:Redirect/file/GO_10th_Anniversary_background.png"
+    }
+  ],
+  "downloadedFiles": 45,
+  "mappedSourceImages": 39,
+  "mappedBackgroundKeys": 12,
+  "failures": []
+}

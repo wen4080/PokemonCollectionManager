@@ -1,0 +1,70 @@
+name: 更新 Pokémon 主資料
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 17 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pokemon-master-pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 取得專案
+        uses: actions/checkout@v4
+
+      - name: 設定 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 安裝圖片最佳化工具
+        run: python -m pip install Pillow==11.3.0
+
+      - name: 下載並產生主資料
+        shell: pwsh
+        run: |
+          Set-Location tools/master_data
+          python fetch_master_data.py --output-dir downloads --force
+          python parse_game_master.py --input-dir downloads --output-dir generated
+          python fetch_background_previews.py --output-dir ../../app/src/main/assets/images/background_previews --manifest generated/background_preview_manifest.json
+          if ($LASTEXITCODE -ne 0) { Write-Warning "部分完整預覽更新失敗，繼續使用已收錄預覽與遊戲靜態底圖。" }
+          $version = Get-Date -Format "yyyy.MM.dd.HHmm"
+          python build_pokemon_catalog.py --input-dir downloads --parsed-dir generated --output-dir generated --background-preview-manifest generated/background_preview_manifest.json --version $version
+
+      - name: 建立靜態更新站
+        shell: pwsh
+        run: |
+          $site = "dist/site/master-data"
+          New-Item -ItemType Directory -Force "$site/images/background_previews" | Out-Null
+          Copy-Item app/src/main/assets/images/background_previews/* "$site/images/background_previews/" -Force
+          python tools/master_data/build_asset_manifest.py --manifest tools/master_data/generated/master_manifest.json --output tools/master_data/generated/background_asset_manifest.json --asset-dir $site --download --groups backgrounds
+          python tools/master_data/optimize_background_assets.py --manifest tools/master_data/generated/master_manifest.json --asset-root $site --output-manifest tools/master_data/generated/master_manifest_optimized.json --quality 84 --max-size 512 --prune-sources
+          python tools/master_data/validate_master_data.py --manifest tools/master_data/generated/master_manifest_optimized.json --asset-root $site --require-background-assets
+          $repositoryName = "${{ github.event.repository.name }}"
+          $assetBase = "https://${{ github.repository_owner }}.github.io/$repositoryName/master-data"
+          python tools/master_data/build_remote_update_manifest.py --manifest tools/master_data/generated/master_manifest_optimized.json --output "$site/master_manifest.json" --asset-base-url $assetBase
+          Copy-Item tools/master_data/generated/pokemon_*.json $site -Force
+
+      - name: 設定 GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 上傳靜態網站
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/site
+
+      - name: 發佈 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
