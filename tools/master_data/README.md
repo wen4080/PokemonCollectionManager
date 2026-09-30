@@ -7,9 +7,9 @@
 ```powershell
 python fetch_master_data.py --output-dir downloads
 python parse_game_master.py --input-dir downloads --output-dir generated
-python fetch_background_previews.py --output-dir ../../app/src/main/assets/images/background_previews --manifest generated/background_preview_manifest.json
+python fetch_background_previews.py --output-dir ../../app/src/main/assets/images/background_previews --manifest generated/background_preview_manifest.json --catalog generated/game_master_catalog.json
 python build_pokemon_catalog.py --input-dir downloads --parsed-dir generated --output-dir generated --background-preview-manifest generated/background_preview_manifest.json --version 2026.09.29.1
-python build_asset_manifest.py --manifest generated/master_manifest.json --output generated/background_asset_manifest.json --asset-dir ../../app/src/main/assets --download --groups backgrounds
+python build_asset_manifest.py --manifest generated/master_manifest.json --output generated/background_asset_manifest.json --asset-dir ../../app/src/main/assets --download --skip-cached-backgrounds --groups backgrounds
 python -m pip install --target ../../.tooling/python-packages Pillow==11.3.0
 $env:PYTHONPATH = (Resolve-Path '../../.tooling/python-packages').Path
 python optimize_background_assets.py --manifest generated/master_manifest.json --asset-root ../../app/src/main/assets --output-manifest generated/master_manifest_optimized.json --quality 84 --max-size 512 --prune-sources
@@ -36,6 +36,8 @@ python validate_master_data.py --manifest generated/master_manifest_optimized.js
 
 `optimize_background_assets.py` 會把背景轉成最長邊 512 像素、保留透明度的 WebP，並在成功後移除 APK 不再使用的原始大圖。原始 PokeMiners 圖片鍵會保留在 `sourceImageKey`／`sourcePreviewImageKey`，不會失去來源追蹤。這能大幅降低 APK 大小與手機 Grid 解碼負擔。
 
+更新時會優先讀取 `master/background_image_index.json` 與既有的 `images/background_optimized/` 快取；舊城市／地區背卡不會因上游暫時 403 或逾時而被清空，只有新出現且沒有快取的背景才需要下載原始圖。新的完整合成預覽仍會優先取代舊底圖，若預覽遺失則退回底圖並保留稽核狀態。
+
 解析器會同時處理兩種 Pokémon GO 圖片資產格式：舊版 `Addressable Assets/pm*.c*.icon.png`，以及活動型態使用的 `pokemon_icon_pm*_pgo_*.png`／`pm*.f*.icon.png`。活動型態會轉成裝扮相容資料，不會只停留在「特殊型態」清單。
 
 背卡會同時掃描 `Images/LocationCards/lc_*.png` 與 `sb_*.png`。能由 Game Master 高信心配對的圖片會綁定既有背卡；無法安全判讀的圖片會建立穩定的 `ASSET_` 背卡鍵，並保留縮圖與可讀名稱，避免因代號格式不同而漏資料或錯配。
@@ -61,6 +63,8 @@ Game Master 內同一張收藏背卡可能依 Pokémon 或型態列出多個 VFX
 背景來源屬於遊戲主資料與圖片資產，不等同已正式公開或已在遊戲中發放。只有活動日期明確晚於手機當日的項目才會標示為「尚未推出／拆包資訊」；已過年份不再使用拆包標籤，只有圖片但日期不明者則標示為「活動日期待確認」。
 
 ## 手機端自主更新
+
+背景完整預覽會在 Windows／GitHub Actions 建置階段自動從 PoGoMate 背卡索引以活動名稱、事件代號與來源檔名做保守配對。上游只有靜態底圖、但公開索引能取得月亮、樹木、圖騰等可見圖層時，會自動下載完整靜態合成預覽；無法唯一判定的項目會寫入背景預覽稽核，不會把錯誤圖片配到其他活動。這不包含遊戲內逐幀動畫，App 會如實標示仍可能存在動態差異。
 
 應用程式的「設定 → 主資料與圖片 → 自主更新」可讀取一個 HTTPS 靜態網址。該網址必須直接回傳本工具產生的 `master_manifest.json`，可放在 GitHub Release、GitHub Pages 或其他不需要自架伺服器的靜態檔案空間。
 
