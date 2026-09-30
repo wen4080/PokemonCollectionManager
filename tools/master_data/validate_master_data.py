@@ -67,6 +67,11 @@ def main() -> int:
     for background in backgrounds:
         if not background.get("categoryKey") or not background.get("categoryName"):
             errors.append(f"背景缺少分類：{background.get('id')}")
+        preview_status = background.get("previewStatus")
+        if preview_status not in {"NOT_APPLICABLE", "COMPLETE_STATIC_PREVIEW", "STATIC_IMAGE", "STATIC_BASE_ONLY", "NO_IMAGE"}:
+            errors.append(f"背景預覽狀態無效：{background.get('id')} -> {preview_status}")
+        if preview_status == "COMPLETE_STATIC_PREVIEW" and not background.get("previewImageKey"):
+            errors.append(f"背景標示完整預覽但缺少圖片：{background.get('id')}")
     species_ids = {item.get("id") for item in species}
     species_keys = {item.get("id"): item.get("speciesKey") for item in species}
     form_ids = {item.get("id") for item in forms}
@@ -194,6 +199,14 @@ def main() -> int:
     print(f"Numeric costume images audited: {source_stats.get('numericCostumeImages', 'unknown')}")
     print(f"Location card images represented: {len(background_image_keys)}")
     print(f"Complete background previews: {sum(bool(item.get('previewImageKey')) for item in backgrounds)}")
+    preview_status_counts = {}
+    for item in backgrounds:
+        status = item.get("previewStatus", "未標記")
+        preview_status_counts[status] = preview_status_counts.get(status, 0) + 1
+    print(f"Background preview statuses: {preview_status_counts}")
+    preview_audit = root.get("backgroundPreviewAudit", {})
+    if preview_audit:
+        print(f"Background preview audit unmatched: {len(preview_audit.get('unmatchedBackgroundKeys', []))}")
     print(f"Merged internal effect aliases: {sum(len(item.get('aliasBackgroundKeys', [])) for item in backgrounds)}")
     print(f"Images: {len(image_keys)}")
     print(f"Missing images: {missing_image_count}")
