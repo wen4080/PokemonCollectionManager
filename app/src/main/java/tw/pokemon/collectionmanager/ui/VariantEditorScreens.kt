@@ -149,6 +149,9 @@ fun QuickAddSheet(
 
     val pickerFlow = remember(searchText, generation) { viewModel.searchSpecies(searchText, generation) }
     val pickerSpecies by pickerFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    val availableGenerations = remember(allSpecies) {
+        allSpecies.mapNotNull { it.generation }.distinct().sorted()
+    }
     val selectedSpecies = allSpecies.firstOrNull { it.id == speciesId }
     val formsFlow = remember(speciesId) { if (speciesId.isBlank()) flowOf(emptyList()) else viewModel.forms(speciesId) }
     val forms by formsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
@@ -211,6 +214,7 @@ fun QuickAddSheet(
                 PokemonPicker(
                     imageRepository = viewModel.imageRepository,
                     species = pickerSpecies,
+                    availableGenerations = availableGenerations,
                     searchText = searchText,
                     generation = generation,
                     onSearchTextChanged = { searchText = it },
@@ -348,6 +352,7 @@ fun QuickAddSheet(
 private fun PokemonPicker(
     imageRepository: tw.pokemon.collectionmanager.data.repository.PokemonImageRepository,
     species: List<PokemonSpeciesEntity>,
+    availableGenerations: List<Int>,
     searchText: String,
     generation: Int?,
     onSearchTextChanged: (String) -> Unit,
@@ -371,7 +376,7 @@ private fun PokemonPicker(
             item {
                 FilterChip(selected = generation == null, onClick = { onGenerationChanged(null) }, label = { Text("全部世代") })
             }
-            items((1..9).toList()) { item ->
+            items(availableGenerations, key = { it }) { item ->
                 FilterChip(selected = generation == item, onClick = { onGenerationChanged(item) }, label = { Text("第${item}世代") })
             }
         }
