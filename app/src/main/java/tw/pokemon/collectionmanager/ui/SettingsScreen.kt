@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import tw.pokemon.collectionmanager.data.local.ThemeMode
+import tw.pokemon.collectionmanager.data.repository.DEFAULT_MASTER_DATA_UPDATE_URL
 
 @Composable
 fun SettingsScreen(
@@ -124,6 +125,16 @@ fun SettingsScreen(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
+                if (savedUpdateUrl != DEFAULT_MASTER_DATA_UPDATE_URL) {
+                    Text(
+                        "目前儲存的網址不是共用更新網址：$savedUpdateUrl",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                    OutlinedButton(onClick = { viewModel.restoreDefaultMasterDataUpdateUrl() }) {
+                        Text("恢復共用更新網址")
+                    }
+                }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Column(Modifier.weight(1f)) {
                         Text("每天自動檢查")
