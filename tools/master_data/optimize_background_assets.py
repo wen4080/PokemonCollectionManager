@@ -44,6 +44,19 @@ def main() -> None:
     backgrounds = backgrounds_from(root)
     output_dir = args.asset_root / "images" / "background_optimized"
     output_dir.mkdir(parents=True, exist_ok=True)
+    existing_index: dict[str, str] = {}
+    existing_index_path = args.asset_root / "master" / "background_image_index.json"
+    if existing_index_path.is_file():
+        try:
+            loaded_index = json.loads(existing_index_path.read_text(encoding="utf-8"))
+            if isinstance(loaded_index, dict):
+                existing_index = {
+                    str(key): str(value)
+                    for key, value in loaded_index.items()
+                    if key and value
+                }
+        except (OSError, json.JSONDecodeError):
+            existing_index = {}
     converted: dict[pathlib.Path, str] = {}
     used_output_paths: set[pathlib.Path] = set()
     source_paths: set[pathlib.Path] = set()
@@ -55,6 +68,27 @@ def main() -> None:
             continue
         source = asset_path(args.asset_root, image_key)
         if not source.is_file():
+            # 既有版本已將舊背景最佳化並保留索引；新版本不應因上游
+            # 暫時 403/逾時而把原本可顯示的城市背卡變成空白。
+            # 只有完整預覽檔缺失時才退回原始底圖，不能把舊底圖冒充完整合成預覽。
+            if field == "previewImageKey":
+                background["previewImageKey"] = None
+                background["previewSource"] = None
+                field = "imageKey"
+                image_key = background.get(field)
+                if not image_key or image_key.startswith("https://"):
+                    continue
+                source = asset_path(args.asset_root, image_key)
+            cached_key = existing_index.get(str(background.get("id") or ""))
+            cached_source = asset_path(args.asset_root, cached_key) if cached_key else None
+            if cached_key and cached_source and cached_source.is_file():
+                background.setdefault(
+                    "sourceImageKey" if field == "imageKey" else "sourcePreviewImageKey",
+                    image_key,
+                )
+                background[field] = cached_key
+                used_output_paths.add(cached_source.resolve())
+                continue
             raise FileNotFoundError(f"找不到背景圖片：{background.get('backgroundKey')} -> {source}")
         source_paths.add(source.resolve())
         if image_key.startswith("background_optimized/"):
@@ -117,3 +151,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
