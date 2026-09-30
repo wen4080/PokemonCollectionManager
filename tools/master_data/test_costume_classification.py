@@ -32,7 +32,7 @@ class CostumeClassificationTest(unittest.TestCase):
 
     def test_space_costume_labels_are_specific(self):
         self.assertIn("太空人", costume_display("ASTRONAUT", 1))
-        self.assertIn("ESA", costume_event_name("ASTRONAUT", "太空人裝扮"))
+        self.assertIn("歐洲太空總署", costume_event_name("ASTRONAUT", "太空人裝扮"))
 
 
 if __name__ == "__main__":
