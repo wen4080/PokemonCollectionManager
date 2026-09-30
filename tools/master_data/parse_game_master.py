@@ -318,6 +318,24 @@ COSTUME_LABELS = {
     "MYSTIC": "神秘隊",
     "TCG": "集換式卡牌活動",
     "COIN": "金幣款",
+    "ASTRONAUT": "太空人",
+    "SPACE": "太空合作",
+    "ESA": "ESA 合作",
+    "SPACESTATION": "太空站合作",
+    "SPACE_CENTER": "太空中心合作",
+    "SPACE_EXPO": "太空展館合作",
+    "OUTFIT": "服裝",
+    "DRESS": "服裝",
+    "SUIT": "套裝",
+    "UNIFORM": "制服",
+    "HELMET": "頭盔",
+    "MASK": "面具",
+    "CROWN": "皇冠",
+    "BOWTIE": "領結",
+    "SCARF": "圍巾",
+    "BACKPACK": "背包",
+    "JACKET": "外套",
+    "COAT": "外套",
 }
 
 COSTUME_SPECIAL_LABELS = {
@@ -627,10 +645,24 @@ COSTUME_FORM_MARKERS = {
     "JEJU", "KARIYUSHI", "KURTA", "MAY", "MONOCLE", "MOVIE", "NIGHTCAP", "PI",
     "POP", "PXP", "ROCK", "SAFARI", "SPRING", "SUMMER", "SWIM", "TCG", "TSHIRT", "VALOR",
     "VISOR", "VS", "WCS", "WILDAREA", "WINTER", "CHRISTMAS", "PARTY", "ROYAL",
+    "ASTRONAUT", "SPACE", "ESA", "SPACESTATION", "SPACE_CENTER", "SPACE_EXPO",
+    "OUTFIT", "DRESS", "SUIT", "UNIFORM", "HELMET", "MASK", "CROWN", "BOWTIE",
+    "SCARF", "BACKPACK", "JACKET", "COAT",
 }
 
 
-def is_costume_form_key(form_key: str) -> bool:
+def load_costume_classification(path: pathlib.Path) -> set[str]:
+    """載入可由資料更新的裝扮語意標記，避免新裝扮落入型態清單。"""
+    if not path.exists():
+        return set()
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    values = raw.get("semanticTokens", []) if isinstance(raw, dict) else []
+    if not isinstance(values, list):
+        raise ValueError(f"裝扮分類檔格式錯誤：{path}")
+    return {normalize(str(value)) for value in values if normalize(str(value))}
+
+
+def is_costume_form_key(form_key: str, extra_markers: set[str] | None = None) -> bool:
     """辨識 Game Master 的活動裝扮型態，並把它放回裝扮選擇器。"""
     tokens = set(form_key.split("_"))
     if not tokens or tokens == {"NORMAL"}:
@@ -644,7 +676,8 @@ def is_costume_form_key(form_key: str) -> bool:
     # 地區、戰鬥、融合與永久型態仍然留在 Form，不應被誤當成裝扮。
     if is_form_like_costume(form_key) or tokens.intersection({"MALE", "FEMALE", "GENDERLESS"}):
         return False
-    return bool(tokens.intersection(COSTUME_FORM_MARKERS))
+    markers = COSTUME_FORM_MARKERS | (extra_markers or set())
+    return bool(tokens.intersection(markers))
 
 
 def identifier_tokens(value: str) -> set[str]:
@@ -1371,6 +1404,10 @@ def costume_event_name(costume_key: str, display_name: str) -> str:
         ("NEWYEAR", "新年活動"), ("SPRING", "春季活動"),
         ("SUMMER", "夏季活動"), ("FASHION", "時尚週活動"),
         ("ANNIVERSARY", "週年紀念活動"), ("ADVENTURE", "冒險活動"),
+        ("ASTRONAUT", "Pokémon GO × ESA 太空合作"),
+        ("ESA", "Pokémon GO × ESA 太空合作"),
+        ("SPACESTATION", "太空站合作活動"),
+        ("SPACE", "太空合作活動"),
     ]
     event = next((label for marker, label in event_markers if marker in costume_key), None)
     if event:
@@ -1388,11 +1425,18 @@ def main() -> None:
         default=pathlib.Path(__file__).with_name("form_name_overrides.json"),
         help="物種／型態專用的正式名稱覆寫檔",
     )
+    parser.add_argument(
+        "--costume-classification",
+        type=pathlib.Path,
+        default=pathlib.Path(__file__).with_name("costume_classification.json"),
+        help="補充未明確標示 isCostume 的裝扮語意標記",
+    )
     args = parser.parse_args()
     game_master = json.loads((args.input_dir / "game_master_latest.json").read_text(encoding="utf-8"))
     asset_tree = json.loads((args.input_dir / "pogo_assets_tree.json").read_text(encoding="utf-8"))
     asset_paths = [item["path"] for item in asset_tree.get("tree", []) if item.get("type") == "blob"]
     form_name_overrides = load_form_name_overrides(args.form_name_overrides)
+    costume_classification_markers = load_costume_classification(args.costume_classification)
     localized_form_labels = load_localized_form_labels(args.input_dir / "texts_apk_zh_hant.txt")
 
     settings: dict[str, list[dict]] = defaultdict(list)
@@ -1434,7 +1478,7 @@ def main() -> None:
             form_key = full_form_key[len(prefix):] if full_form_key.startswith(prefix) else full_form_key
             if full_form_key.endswith("_NORMAL"):
                 form_key = "NORMAL"
-            is_costume = bool(form.get("isCostume")) or is_costume_form_key(form_key)
+            is_costume = bool(form.get("isCostume")) or is_costume_form_key(form_key, costume_classification_markers)
             if form_key and form.get("isCostume"):
                 authoritative_costume_forms.add((dex_number, form_key))
             if form_key and not is_costume:
@@ -1510,7 +1554,7 @@ def main() -> None:
     # 使用者只會在型態清單看到「特殊型態」，裝扮選擇器就會漏掉它們。
     costume_form_pairs: list[tuple[int, str]] = []
     for (dex_number, form_key), record in list(normal_form_assets.items()):
-        if (dex_number, form_key) not in authoritative_costume_forms and not is_costume_form_key(form_key):
+        if (dex_number, form_key) not in authoritative_costume_forms and not is_costume_form_key(form_key, costume_classification_markers):
             continue
         costume_form_pairs.append((dex_number, form_key))
         costume_record = dict(record)
@@ -1750,6 +1794,11 @@ def main() -> None:
             "sourceCounts": dict(sorted(form_name_source_counts.items())),
             "reviewRequired": form_name_source_counts.get("SAFE_FALLBACK", 0),
             "overrideFile": args.form_name_overrides.name,
+        },
+        "costumeClassificationAudit": {
+            "classificationFile": args.costume_classification.name,
+            "semanticTokenCount": len(costume_classification_markers),
+            "semanticTokens": sorted(costume_classification_markers),
         },
         "source": "PokeMiners game_masters and pogo_assets",
     }
