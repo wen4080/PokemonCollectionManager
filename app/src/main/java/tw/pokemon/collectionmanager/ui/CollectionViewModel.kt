@@ -29,6 +29,7 @@ import tw.pokemon.collectionmanager.data.local.VariantCardRow
 import tw.pokemon.collectionmanager.data.local.VariantInfoRow
 import tw.pokemon.collectionmanager.data.local.SourceAccountRow
 import tw.pokemon.collectionmanager.data.repository.CollectionRepository
+import tw.pokemon.collectionmanager.data.repository.DEFAULT_MASTER_DATA_UPDATE_URL
 import tw.pokemon.collectionmanager.data.repository.DEFAULT_OVERVIEW_SUMMARY_CODES
 import tw.pokemon.collectionmanager.data.repository.MasterDataRepository
 import tw.pokemon.collectionmanager.data.repository.MasterDataUpdateResult
@@ -194,6 +195,10 @@ class CollectionViewModel(
     }
 
     fun setMasterDataUpdateUrl(url: String) = viewModelScope.launch { preferencesRepository.setMasterDataUpdateUrl(url) }
+
+    fun restoreDefaultMasterDataUpdateUrl() = viewModelScope.launch {
+        preferencesRepository.setMasterDataUpdateUrl(DEFAULT_MASTER_DATA_UPDATE_URL)
+    }
 
     fun setAutomaticMasterDataUpdateEnabled(enabled: Boolean) = viewModelScope.launch {
         preferencesRepository.setAutomaticMasterDataUpdateEnabled(enabled)
