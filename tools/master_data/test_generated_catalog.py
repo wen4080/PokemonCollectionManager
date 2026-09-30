@@ -144,6 +144,27 @@ class GeneratedCatalogTest(unittest.TestCase):
             self.assertTrue((ROOT.parent.parent / "app" / "src" / "main" / "assets" / "images" / relative).exists(), relative)
             self.assertTrue(by_key[key].get("previewSource"), key)
 
+    def test_moonlight_background_uses_composite_preview(self) -> None:
+        background = next(
+            item
+            for item in self.app_manifest["backgrounds"]
+            if item["backgroundKey"] == "ASSET_SB_MIDAUTUMN"
+        )
+        self.assertEqual("COMPLETE_STATIC_PREVIEW", background.get("previewStatus"))
+        self.assertEqual("PoGoMate", background.get("previewSource"))
+        preview_key = background.get("previewImageKey")
+        self.assertTrue(preview_key)
+        self.assertTrue(
+            (ROOT.parent.parent / "app" / "src" / "main" / "assets" / "images" / preview_key).is_file(),
+            preview_key,
+        )
+
+    def test_background_preview_audit_is_present_for_future_updates(self) -> None:
+        audit = self.manifest.get("backgroundPreviewAudit", {})
+        self.assertGreaterEqual(audit.get("providerPreviewCount", 0), 1)
+        self.assertEqual(262, audit.get("catalogBackgroundCount"))
+        self.assertIn("unmatchedBackgroundKeys", audit)
+
     def test_every_background_image_is_resolvable_by_stable_id(self) -> None:
         backgrounds = [item for item in self.app_manifest["backgrounds"] if item.get("imageKey") or item.get("previewImageKey")]
         self.assertEqual({item["id"] for item in backgrounds}, set(self.background_image_index))
