@@ -168,6 +168,45 @@ interface MasterDataDao {
 }
 
 @Dao
+interface CollectionTagDao {
+    @Query("SELECT * FROM collection_tags ORDER BY sortOrder ASC, name ASC")
+    fun observeAll(): Flow<List<CollectionTagEntity>>
+
+    @Query("SELECT * FROM collection_tags ORDER BY sortOrder ASC, name ASC")
+    suspend fun getAll(): List<CollectionTagEntity>
+
+    @Query("SELECT * FROM collection_tags WHERE id = :id LIMIT 1")
+    suspend fun getById(id: String): CollectionTagEntity?
+
+    @Upsert
+    suspend fun upsert(tag: CollectionTagEntity)
+
+    @Query("DELETE FROM collection_tags WHERE id = :id")
+    suspend fun deleteById(id: String)
+
+    @Query("SELECT * FROM collection_variant_tags WHERE variantId = :variantId ORDER BY createdAt ASC")
+    fun observeForVariant(variantId: String): Flow<List<CollectionVariantTagEntity>>
+
+    @Query("SELECT * FROM collection_variant_tags WHERE variantId = :variantId ORDER BY createdAt ASC")
+    suspend fun getAssignmentsForVariant(variantId: String): List<CollectionVariantTagEntity>
+
+    @Query("SELECT * FROM collection_variant_tags ORDER BY createdAt ASC")
+    fun observeAssignments(): Flow<List<CollectionVariantTagEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAssignments(items: List<CollectionVariantTagEntity>)
+
+    @Query("DELETE FROM collection_variant_tags WHERE variantId = :variantId")
+    suspend fun deleteAssignmentsForVariant(variantId: String)
+
+    @Query("DELETE FROM collection_variant_tags WHERE tagId = :tagId")
+    suspend fun deleteAssignmentsForTag(tagId: String)
+
+    @Query("SELECT * FROM collection_variant_tags ORDER BY createdAt ASC")
+    suspend fun getAllAssignments(): List<CollectionVariantTagEntity>
+}
+
+@Dao
 interface VariantDao {
     @Query(
         """
@@ -178,6 +217,8 @@ interface VariantDao {
                COALESCE(s.nameZhTw, cv.speciesId) AS speciesName,
                COALESCE(s.dexNumber, 0) AS dexNumber,
                COALESCE(f.displayName, cv.formId) AS formName,
+               COALESCE(f.formKey, 'NORMAL') AS formKey,
+               COALESCE(f.isDefault, 0) AS isDefaultForm,
                COALESCE(c.displayName, cv.costumeId) AS costumeName,
                COALESCE(b.displayName, cv.backgroundId) AS backgroundName,
                COALESCE(b.categoryName, cv.backgroundId) AS backgroundCategoryName,
@@ -214,6 +255,8 @@ interface VariantDao {
                COALESCE(s.nameZhTw, cv.speciesId) AS speciesName,
                COALESCE(s.dexNumber, 0) AS dexNumber,
                COALESCE(f.displayName, cv.formId) AS formName,
+               COALESCE(f.formKey, 'NORMAL') AS formKey,
+               COALESCE(f.isDefault, 0) AS isDefaultForm,
                COALESCE(c.displayName, cv.costumeId) AS costumeName,
                COALESCE(b.displayName, cv.backgroundId) AS backgroundName,
                COALESCE(b.categoryName, cv.backgroundId) AS backgroundCategoryName,
@@ -251,6 +294,8 @@ interface VariantDao {
                COALESCE(s.nameZhTw, cv.speciesId) AS speciesName,
                COALESCE(s.dexNumber, 0) AS dexNumber,
                COALESCE(f.displayName, cv.formId) AS formName,
+               COALESCE(f.formKey, 'NORMAL') AS formKey,
+               COALESCE(f.isDefault, 0) AS isDefaultForm,
                COALESCE(c.displayName, cv.costumeId) AS costumeName,
                COALESCE(b.displayName, cv.backgroundId) AS backgroundName,
                COALESCE(b.categoryName, cv.backgroundId) AS backgroundCategoryName,

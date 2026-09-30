@@ -17,8 +17,10 @@ import androidx.room.TypeConverters
         MasterDataMetaEntity::class,
         CollectionVariantEntity::class,
         OwnershipBucketEntity::class,
+        CollectionTagEntity::class,
+        CollectionVariantTagEntity::class,
     ],
-    version = 6,
+    version = 7,
     exportSchema = false,
 )
 @TypeConverters(RoomConverters::class)
@@ -28,4 +30,6 @@ abstract class CollectionDatabase : RoomDatabase() {
     abstract fun masterDataDao(): MasterDataDao
     abstract fun variantDao(): VariantDao
     abstract fun ownershipBucketDao(): OwnershipBucketDao
+    abstract fun collectionTagDao(): CollectionTagDao
 }
+

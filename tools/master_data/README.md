@@ -16,6 +16,12 @@ python optimize_background_assets.py --manifest generated/master_manifest.json -
 python validate_master_data.py --manifest generated/master_manifest_optimized.json --asset-root ../../app/src/main/assets --require-background-assets
 ```
 
+型態名稱會依序使用 `form_name_overrides.json` 的物種專用校正、Pokémon GO 繁體中文資源，以及產生器內已確認的共用名稱。這能避免共用上游代號造成錯誤翻譯，例如土龍節節必須是「二節形態／三節形態」，而一家鼠才使用官方的「三隻家庭／四隻家庭」。蒼響與藏瑪然特的 `HERO` 也會顯示為「百戰勇者」，不會套用波普海豚的「全能形態」。
+
+型態產生也會先檢查物種是否真的有獨立的 `NORMAL`。若 Game Master 只有實際存在的替代型態，就不會為該物種硬補「一般型態」；例如土龍節節只顯示二節形態／三節形態，一家鼠只顯示三隻家庭／四隻家庭。若上游完全沒有該物種的型態資料，才保留一般型態作為安全預設，避免暫時缺資料時無法建立收藏。`master_manifest.json` 的 `formPolicyAudit` 會記錄這次判定，驗證器會檢查清單與實際型態是否一致。
+
+每次產生都會輸出 `formNameAudit`。若新上游型態只有技術代號、沒有可靠繁中名稱，產生器會標記需要確認，正式驗證會阻止這筆未整理的暫名進入可發布資料，避免自主更新把錯誤名稱直接送到手機。
+
 將 `generated` 內的 `pokemon_species.json`、`pokemon_forms.json`、`pokemon_costumes.json`、`pokemon_backgrounds.json`、`master_manifest.json` 複製到：
 
 `app/src/main/assets/master/`
@@ -75,3 +81,4 @@ python build_remote_update_manifest.py --manifest generated/master_manifest.json
 `https://你的帳號.github.io/儲存庫名稱/master-data/master_manifest.json`
 
 這種方式不需要自架伺服器。不過上游拆包代號不一定能自動推導正式活動名稱；新資料可以先以可讀代號與靜態底圖出現，活動名稱、日期及完整動態預覽仍須由資料產生規則或可靠公開資料補充，App 不會猜測不存在的關係。
+

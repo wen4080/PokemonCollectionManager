@@ -203,6 +203,34 @@ data class CollectionVariantEntity(
 )
 
 @Entity(
+    tableName = "collection_tags",
+    indices = [Index(value = ["name"], unique = true), Index("sortOrder")],
+)
+data class CollectionTagEntity(
+    @PrimaryKey val id: String,
+    val name: String,
+    val description: String? = null,
+    val sortOrder: Int = 0,
+    val createdAt: Long,
+    val updatedAt: Long,
+)
+
+@Entity(
+    tableName = "collection_variant_tags",
+    primaryKeys = ["tagId", "variantId"],
+    foreignKeys = [
+        ForeignKey(entity = CollectionTagEntity::class, parentColumns = ["id"], childColumns = ["tagId"], onDelete = ForeignKey.CASCADE),
+        ForeignKey(entity = CollectionVariantEntity::class, parentColumns = ["id"], childColumns = ["variantId"], onDelete = ForeignKey.CASCADE),
+    ],
+    indices = [Index("tagId"), Index("variantId")],
+)
+data class CollectionVariantTagEntity(
+    val tagId: String,
+    val variantId: String,
+    val createdAt: Long,
+)
+
+@Entity(
     tableName = "ownership_buckets",
     foreignKeys = [
         ForeignKey(entity = AccountEntity::class, parentColumns = ["id"], childColumns = ["accountId"], onDelete = ForeignKey.CASCADE),
@@ -245,6 +273,8 @@ data class VariantCardRow(
     val speciesName: String,
     val dexNumber: Int,
     val formName: String,
+    val formKey: String = "NORMAL",
+    val isDefaultForm: Boolean = false,
     val costumeName: String,
     val backgroundName: String,
     val backgroundCategoryName: String,
@@ -285,3 +315,4 @@ data class SourceAccountRow(
     val accountName: String,
     val quantity: Long,
 )
+

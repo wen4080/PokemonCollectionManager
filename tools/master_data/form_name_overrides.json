@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "description": "以台灣官方寶可夢圖鑑與 Pokémon GO 繁體中文資源校正容易被共用代號誤翻的型態名稱。",
+  "overrides": {
+    "DUDUNSPARCE|TWO": "二節形態",
+    "DUDUNSPARCE|THREE": "三節形態",
+    "MAUSHOLD|FAMILY_OF_THREE": "三隻家庭",
+    "MAUSHOLD|FAMILY_OF_FOUR": "四隻家庭",
+    "PALAFIN|HERO": "全能形態",
+    "PALAFIN|ZERO": "平凡形態",
+    "ZACIAN|HERO": "百戰勇者",
+    "ZAMAZENTA|HERO": "百戰勇者",
+    "ENTEI|S": "暗影",
+    "HO_OH|S": "暗影",
+    "LATIAS|S": "暗影",
+    "LATIOS|S": "暗影",
+    "LUGIA|S": "暗影",
+    "RAIKOU|S": "暗影",
+    "SUICUNE|S": "暗影"
+  }
+}
+

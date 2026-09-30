@@ -19,6 +19,19 @@ def unique(items, field, label, errors):
         errors.append(f"{label} 的 {field} 重複：{duplicates[:5]}")
 
 
+def load_form_name_overrides() -> dict[str, str]:
+    path = pathlib.Path(__file__).with_name("form_name_overrides.json")
+    if not path.exists():
+        return {}
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    values = raw.get("overrides", raw) if isinstance(raw, dict) else {}
+    return {
+        str(key).upper(): str(value).strip()
+        for key, value in values.items()
+        if str(key).strip() and str(value).strip()
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="驗證主資料")
     parser.add_argument("--manifest", type=pathlib.Path, required=True)
@@ -55,15 +68,39 @@ def main() -> int:
         if not background.get("categoryKey") or not background.get("categoryName"):
             errors.append(f"背景缺少分類：{background.get('id')}")
     species_ids = {item.get("id") for item in species}
+    species_keys = {item.get("id"): item.get("speciesKey") for item in species}
     form_ids = {item.get("id") for item in forms}
     costume_ids = {item.get("id") for item in costumes}
     background_ids = {item.get("id") for item in backgrounds}
+    form_name_overrides = load_form_name_overrides()
     for form in forms:
         if form.get("speciesId") not in species_ids:
             errors.append(f"型態找不到物種：{form.get('id')}")
+        species_key = species_keys.get(form.get("speciesId"))
+        form_key = form.get("formKey")
+        expected_name = form_name_overrides.get(f"{species_key}|{form_key}".upper())
+        if expected_name and form.get("displayName") != expected_name:
+            errors.append(
+                f"型態名稱未套用標準覆寫：{species_key}|{form_key} "
+                f"應為「{expected_name}」，目前為「{form.get('displayName')}」"
+            )
+        if any(token in str(form.get("displayName", "")) for token in ("特殊型態", "未命名型態")):
+            errors.append(f"型態名稱仍是未整理的暫名：{form.get('id')}")
+        if form.get("nameNeedsReview"):
+            errors.append(f"型態名稱需要人工確認：{form.get('id')}")
     for item in compatibility:
         if item.get("speciesId") not in species_ids or item.get("formId") not in form_ids or item.get("costumeId") not in costume_ids:
             errors.append(f"裝扮相容關係外鍵錯誤：{item.get('compatibilityKey', item.get('id'))}")
+    form_policy = root.get("formPolicyAudit", {})
+    policy_species_without_normal = set(form_policy.get("speciesWithoutStandaloneNormalForm", []))
+    for species_item in species:
+        species_id = species_item.get("id")
+        species_key = species_item.get("speciesKey")
+        has_normal = any(item.get("speciesId") == species_id and item.get("formKey") == "NORMAL" for item in forms)
+        if species_key in policy_species_without_normal and has_normal:
+            errors.append(f"型態政策與資料不一致：{species_key} 被標示為沒有一般型態，但仍有 NORMAL")
+        if species_key not in policy_species_without_normal and not has_normal:
+            errors.append(f"型態政策缺少沒有一般型態的物種：{species_key}")
     referenced_costume_ids = {item.get("costumeId") for item in compatibility}
     unreferenced_costumes = sorted(costume_ids - {"COSTUME_NONE"} - referenced_costume_ids)
     if unreferenced_costumes:
@@ -150,6 +187,9 @@ def main() -> int:
     print(f"Backgrounds: {len(backgrounds)}")
     print(f"Background categories: {len({item.get('categoryKey') for item in backgrounds})}")
     print(f"Costume compatibility: {len(compatibility)}")
+    form_name_audit = root.get("formNameAudit", {})
+    print(f"Form name sources: {form_name_audit.get('sourceCounts', {})}")
+    print(f"Form names requiring review: {form_name_audit.get('reviewRequired', 0)}")
     print(f"Authoritative costume forms missing: {source_stats.get('missingAuthoritativeCostumeForms', 'unknown')}")
     print(f"Numeric costume images audited: {source_stats.get('numericCostumeImages', 'unknown')}")
     print(f"Location card images represented: {len(background_image_keys)}")
@@ -168,3 +208,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+

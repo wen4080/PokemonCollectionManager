@@ -9,12 +9,12 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tw.pokemon.collectionmanager.BuildConfig
 import tw.pokemon.collectionmanager.data.local.ThemeMode
@@ -39,15 +40,22 @@ private data class BottomDestination(val route: String, val label: String, val g
 
 @Composable
 fun CollectionApp(viewModel: CollectionViewModel) {
-    val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
-    CollectionTheme(themeMode) {
-        val navController = rememberNavController()
-        val snackbarHostState = remember { SnackbarHostState() }
-        val scope = rememberCoroutineScope()
+        val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
+        CollectionTheme(themeMode) {
+            val navController = rememberNavController()
+            val snackbarHostState = remember { SnackbarHostState() }
         val messages = viewModel.messages
 
         LaunchedEffect(messages) {
-            messages.collect { snackbarHostState.showSnackbar(it) }
+            messages.collect { message ->
+                snackbarHostState.currentSnackbarData?.dismiss()
+                val snackbarJob = launch {
+                    snackbarHostState.showSnackbar(message, duration = SnackbarDuration.Indefinite)
+                }
+                delay(1_000)
+                snackbarHostState.currentSnackbarData?.dismiss()
+                snackbarJob.join()
+            }
         }
 
         val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->

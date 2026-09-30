@@ -159,7 +159,46 @@ class GeneratedCatalogTest(unittest.TestCase):
         labels = {item["formKey"]: item["displayName"] for item in forms}
         self.assertEqual("超級進化", labels["MEGA"])
         self.assertEqual("超極巨化", labels["GIGANTAMAX"])
-        self.assertEqual("原始回歸", labels["PRIMAL"])
+        self.assertEqual("原始回歸的樣子", labels["PRIMAL"])
+
+    def test_species_specific_form_names_are_standardized(self) -> None:
+        forms = {
+            (item["speciesId"], item["formKey"]): item["displayName"]
+            for item in self.manifest["forms"]
+        }
+        self.assertEqual("二節形態", forms[("SPECIES_DUDUNSPARCE", "TWO")])
+        self.assertEqual("三節形態", forms[("SPECIES_DUDUNSPARCE", "THREE")])
+        self.assertEqual("三隻家庭", forms[("SPECIES_MAUSHOLD", "FAMILY_OF_THREE")])
+        self.assertEqual("四隻家庭", forms[("SPECIES_MAUSHOLD", "FAMILY_OF_FOUR")])
+        self.assertEqual("百戰勇者", forms[("SPECIES_ZACIAN", "HERO")])
+        self.assertEqual("百戰勇者", forms[("SPECIES_ZAMAZENTA", "HERO")])
+        self.assertEqual("全能形態", forms[("SPECIES_PALAFIN", "HERO")])
+        self.assertEqual("平凡形態", forms[("SPECIES_PALAFIN", "ZERO")])
+        shadow_forms = {
+            item["displayName"]
+            for item in self.manifest["forms"]
+            if item["formKey"] == "S" and item["speciesId"] != "SPECIES_UNOWN"
+        }
+        self.assertEqual({"暗影"}, shadow_forms)
+        self.assertEqual(0, self.manifest["formNameAudit"]["reviewRequired"])
+
+    def test_species_without_standalone_normal_form_do_not_get_fake_normal(self) -> None:
+        forms_by_species = {}
+        for item in self.manifest["forms"]:
+            forms_by_species.setdefault(item["speciesId"], set()).add(item["formKey"])
+        expected = {
+            "SPECIES_DUDUNSPARCE": {"TWO", "THREE"},
+            "SPECIES_MAUSHOLD": {"FAMILY_OF_THREE", "FAMILY_OF_FOUR"},
+            "SPECIES_PALAFIN": {"ZERO", "HERO"},
+            "SPECIES_ZACIAN": {"HERO", "CROWNED_SWORD"},
+            "SPECIES_ZAMAZENTA": {"HERO", "CROWNED_SHIELD"},
+        }
+        for species_id, expected_keys in expected.items():
+            self.assertEqual(expected_keys, forms_by_species[species_id])
+            self.assertNotIn("NORMAL", forms_by_species[species_id])
+
+        policy = set(self.manifest["formPolicyAudit"]["speciesWithoutStandaloneNormalForm"])
+        self.assertTrue({"DUDUNSPARCE", "MAUSHOLD", "PALAFIN", "ZACIAN", "ZAMAZENTA"}.issubset(policy))
 
     def test_costumes_have_stable_chronological_metadata(self) -> None:
         costumes = [item for item in self.manifest["costumes"] if item["costumeKey"] != "NONE"]
@@ -176,3 +215,4 @@ class GeneratedCatalogTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

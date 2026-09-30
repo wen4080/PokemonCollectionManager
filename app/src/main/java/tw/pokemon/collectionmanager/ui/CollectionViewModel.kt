@@ -19,6 +19,7 @@ import tw.pokemon.collectionmanager.data.local.AccountGroupEntity
 import tw.pokemon.collectionmanager.data.local.AccountSummaryRow
 import tw.pokemon.collectionmanager.data.local.BackgroundEntity
 import tw.pokemon.collectionmanager.data.local.CollectionVariantEntity
+import tw.pokemon.collectionmanager.data.local.CollectionTagEntity
 import tw.pokemon.collectionmanager.data.local.CostumeEntity
 import tw.pokemon.collectionmanager.data.local.OwnershipBucketEntity
 import tw.pokemon.collectionmanager.data.local.PokemonFormEntity
@@ -50,6 +51,8 @@ class CollectionViewModel(
     val species = repository.species.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList<PokemonSpeciesEntity>())
     val costumes = repository.costumes.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList<CostumeEntity>())
     val backgrounds = repository.backgrounds.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList<BackgroundEntity>())
+    val customTags = repository.tags.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList<CollectionTagEntity>())
+    val tagAssignments = repository.tagAssignments.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val themeMode = preferencesRepository.themeMode.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ThemeMode.SYSTEM)
     val selectedAccountId = preferencesRepository.selectedAccountId.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
     val masterDataMeta = masterDataRepository.meta.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
@@ -85,6 +88,7 @@ class CollectionViewModel(
     fun variantInfo(variantId: String) = repository.variantInfo(variantId)
     fun variantSources(variantId: String) = repository.variantSources(variantId)
     fun buckets(accountId: String, variantId: String) = repository.bucketsForVariant(accountId, variantId)
+    fun variantTagIds(variantId: String) = repository.tagIdsForVariant(variantId)
 
     fun setSelectedAccount(accountId: String?) = viewModelScope.launch { preferencesRepository.setSelectedAccount(accountId) }
 
@@ -120,14 +124,22 @@ class CollectionViewModel(
 
     suspend fun deleteAccountSummary(accountId: String) = repository.accountDeleteSummary(accountId)
 
-    fun addCollection(accountId: String, variant: VariantDraft, bucket: BucketDraft, quantity: Int, continueAdding: Boolean = false) = launchAction {
-        repository.addOwnership(accountId, variant, bucket, quantity)
+    fun addCollection(
+        accountId: String,
+        variant: VariantDraft,
+        bucket: BucketDraft,
+        quantity: Int,
+        continueAdding: Boolean = false,
+        tagIds: Set<String> = emptySet(),
+    ) = launchAction {
+        repository.addOwnership(accountId, variant, bucket, quantity, tagIds)
         if (continueAdding) "已加入，準備下一筆" else "收藏已加入"
     }
 
-    fun updateVariant(variantId: String, accountId: String?, draft: VariantDraft) = launchAction {
-        if (accountId == null) repository.updateVariant(variantId, draft)
+    fun updateVariant(variantId: String, accountId: String?, draft: VariantDraft, tagIds: Set<String>? = null) = launchAction {
+        val updatedVariantId = if (accountId == null) repository.updateVariant(variantId, draft)
         else repository.updateVariantForAccount(accountId, variantId, draft)
+        tagIds?.let { repository.replaceVariantTags(updatedVariantId, it) }
         "收藏組合已更新"
     }
 
@@ -137,6 +149,32 @@ class CollectionViewModel(
     }
 
     fun deleteVariant(variantId: String) = launchAction { repository.deleteVariant(variantId); "收藏組合已刪除" }
+
+    fun createCustomTag(name: String, description: String?, onCreated: (CollectionTagEntity) -> Unit = {}) {
+        viewModelScope.launch {
+            runCatching { repository.createTag(name, description) }
+                .onSuccess {
+                    onCreated(it)
+                    _messages.emit("自訂標籤已建立")
+                }
+                .onFailure { _messages.emit("操作失敗：${it.message?.takeIf(String::isNotBlank) ?: "未提供詳細錯誤，請稍後再試"}") }
+        }
+    }
+
+    fun updateCustomTag(tag: CollectionTagEntity) = launchAction {
+        repository.updateTag(tag)
+        "自訂標籤已更新"
+    }
+
+    fun deleteCustomTag(tagId: String) = launchAction {
+        repository.deleteTag(tagId)
+        "自訂標籤已刪除"
+    }
+
+    fun setVariantTags(variantId: String, tagIds: Set<String>) = launchAction {
+        repository.replaceVariantTags(variantId, tagIds)
+        "收藏標籤已更新"
+    }
 
     fun exportBackup(uri: Uri) = launchAction {
         backupManager.exportToUri(uri, repository)

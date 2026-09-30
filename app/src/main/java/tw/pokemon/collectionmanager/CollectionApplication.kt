@@ -116,10 +116,43 @@ class CollectionApplication : Application() {
         }
     }
 
+    private val migration6To7 = object : Migration(6, 7) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS collection_tags (
+                    id TEXT NOT NULL PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    description TEXT,
+                    sortOrder INTEGER NOT NULL,
+                    createdAt INTEGER NOT NULL,
+                    updatedAt INTEGER NOT NULL
+                )
+                """.trimIndent(),
+            )
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_collection_tags_name ON collection_tags(name)")
+            database.execSQL("CREATE INDEX IF NOT EXISTS index_collection_tags_sortOrder ON collection_tags(sortOrder)")
+            database.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS collection_variant_tags (
+                    tagId TEXT NOT NULL,
+                    variantId TEXT NOT NULL,
+                    createdAt INTEGER NOT NULL,
+                    PRIMARY KEY(tagId, variantId),
+                    FOREIGN KEY(tagId) REFERENCES collection_tags(id) ON DELETE CASCADE,
+                    FOREIGN KEY(variantId) REFERENCES collection_variants(id) ON DELETE CASCADE
+                )
+                """.trimIndent(),
+            )
+            database.execSQL("CREATE INDEX IF NOT EXISTS index_collection_variant_tags_tagId ON collection_variant_tags(tagId)")
+            database.execSQL("CREATE INDEX IF NOT EXISTS index_collection_variant_tags_variantId ON collection_variant_tags(variantId)")
+        }
+    }
+
     val database: CollectionDatabase by lazy {
         Room.databaseBuilder(this, CollectionDatabase::class.java, "pokemon_collection.db")
             .enableMultiInstanceInvalidation()
-            .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6)
+            .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7)
             .build()
     }
 

@@ -9,6 +9,8 @@ import org.json.JSONObject
 import tw.pokemon.collectionmanager.data.local.AccountEntity
 import tw.pokemon.collectionmanager.data.local.AccountGroupEntity
 import tw.pokemon.collectionmanager.data.local.CollectionVariantEntity
+import tw.pokemon.collectionmanager.data.local.CollectionTagEntity
+import tw.pokemon.collectionmanager.data.local.CollectionVariantTagEntity
 import tw.pokemon.collectionmanager.data.local.DynamaxState
 import tw.pokemon.collectionmanager.data.local.Gender
 import tw.pokemon.collectionmanager.data.local.OwnershipBucketEntity
@@ -36,8 +38,8 @@ class BackupManager(private val context: Context) {
 
     suspend fun exportJson(repository: CollectionRepository): String {
         val root = JSONObject()
-            .put("backupVersion", 1)
-            .put("databaseVersion", 1)
+            .put("backupVersion", 2)
+            .put("databaseVersion", 2)
             .put("createdAt", System.currentTimeMillis())
             .put("app", "PokemonCollectionManager")
 
@@ -66,21 +68,42 @@ class BackupManager(private val context: Context) {
                     .put("quantity", it.quantity).put("createdAt", it.createdAt).put("updatedAt", it.updatedAt))
             }
         })
+        root.put("collectionTags", JSONArray().apply {
+            repository.allTags().forEach {
+                put(
+                    JSONObject()
+                        .put("id", it.id)
+                        .put("name", it.name)
+                        .putNullable("description", it.description)
+                        .put("sortOrder", it.sortOrder)
+                        .put("createdAt", it.createdAt)
+                        .put("updatedAt", it.updatedAt),
+                )
+            }
+        })
+        root.put("collectionVariantTags", JSONArray().apply {
+            repository.allTagAssignments().forEach {
+                put(JSONObject().put("tagId", it.tagId).put("variantId", it.variantId).put("createdAt", it.createdAt))
+            }
+        })
         return root.toString(2)
     }
 
     suspend fun importJson(json: String, repository: CollectionRepository) {
         val root = JSONObject(json)
-        require(root.optInt("backupVersion", -1) == 1) { "不支援的備份版本" }
+        val backupVersion = root.optInt("backupVersion", 1)
+        require(backupVersion in 1..2) { "不支援的備份版本" }
         val groups = root.requiredArray("accountGroups").toGroups()
         val accounts = root.requiredArray("accounts").toAccounts()
         val variants = root.requiredArray("collectionVariants").toVariants()
         val buckets = root.requiredArray("ownershipBuckets").toBuckets()
+        val tags = root.optJSONArray("collectionTags")?.toTags().orEmpty()
+        val tagAssignments = root.optJSONArray("collectionVariantTags")?.toTagAssignments().orEmpty()
         require(accounts.all { account -> groups.any { it.id == account.groupId } || account.groupId == null }) { "備份包含不存在的帳號群組" }
         require(buckets.all { bucket -> accounts.any { it.id == bucket.accountId } && variants.any { it.id == bucket.variantId } }) {
             "備份包含找不到來源的收藏數量"
         }
-        repository.restore(groups, accounts, variants, buckets)
+        repository.restore(groups, accounts, variants, buckets, tags, tagAssignments)
     }
 
     private fun JSONObject.putNullable(key: String, value: String?): JSONObject = put(key, value ?: JSONObject.NULL)
@@ -156,5 +179,35 @@ class BackupManager(private val context: Context) {
         }
     }
 
+    private fun JSONArray.toTags(): List<CollectionTagEntity> = buildList {
+        for (index in 0 until length()) {
+            val item = getJSONObject(index)
+            add(
+                CollectionTagEntity(
+                    id = item.getString("id"),
+                    name = item.getString("name"),
+                    description = item.stringOrNull("description"),
+                    sortOrder = item.optInt("sortOrder", 0),
+                    createdAt = item.optLong("createdAt", System.currentTimeMillis()),
+                    updatedAt = item.optLong("updatedAt", System.currentTimeMillis()),
+                ),
+            )
+        }
+    }
+
+    private fun JSONArray.toTagAssignments(): List<CollectionVariantTagEntity> = buildList {
+        for (index in 0 until length()) {
+            val item = getJSONObject(index)
+            add(
+                CollectionVariantTagEntity(
+                    tagId = item.getString("tagId"),
+                    variantId = item.getString("variantId"),
+                    createdAt = item.optLong("createdAt", System.currentTimeMillis()),
+                ),
+            )
+        }
+    }
+
     private fun JSONObject.stringOrNull(key: String): String? = if (isNull(key)) null else optString(key).ifBlank { null }
 }
+

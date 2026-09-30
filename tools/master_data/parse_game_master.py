@@ -436,25 +436,95 @@ def normalize(value: str) -> str:
     return re.sub(r"[^A-Z0-9]+", "_", value.upper()).strip("_")
 
 
-def form_display(form_key: str, seen: dict[str, int], species_key: str | None = None) -> str:
+HAN_RE = re.compile(r"[\u3400-\u9fff]")
+
+
+def load_form_name_overrides(path: pathlib.Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    overrides = raw.get("overrides", raw) if isinstance(raw, dict) else {}
+    if not isinstance(overrides, dict):
+        raise ValueError(f"型態名稱覆寫檔格式錯誤：{path}")
+    return {
+        str(key).upper(): str(value).strip()
+        for key, value in overrides.items()
+        if str(key).strip() and str(value).strip()
+    }
+
+
+def load_localized_form_labels(path: pathlib.Path) -> dict[str, str]:
+    """讀取 Pokémon GO 繁中資源，讓新增型態優先使用遊戲內正式名稱。"""
+    if not path.exists():
+        return {}
+    labels: dict[str, str] = {}
+    resource_id: str | None = None
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if line.startswith("RESOURCE ID: form_"):
+            resource_id = line.removeprefix("RESOURCE ID: ").strip().lower()
+            continue
+        if resource_id is None or not line.startswith("TEXT:"):
+            continue
+        text = line.removeprefix("TEXT:").strip()
+        # 遊戲資源仍有未翻譯的英文、空白及技術用文字；這些不能覆蓋
+        # 產生器內已確認的繁體中文名稱。
+        if text and HAN_RE.search(text):
+            labels[resource_id] = text
+        resource_id = None
+    return labels
+
+
+def resolve_form_display(
+    form_key: str,
+    seen: dict[str, int],
+    species_key: str | None = None,
+    localized_labels: dict[str, str] | None = None,
+    overrides: dict[str, str] | None = None,
+) -> tuple[str, str]:
+    normalized_form_key = normalize(form_key)
+    normalized_species_key = normalize(species_key or "")
+    override_key = f"{normalized_species_key}|{normalized_form_key}" if normalized_species_key else ""
+    if overrides and override_key in overrides:
+        return overrides[override_key], "OVERRIDE"
+
+    if localized_labels:
+        candidates = []
+        if normalized_species_key:
+            candidates.append(f"form_{normalized_species_key.lower()}_{normalized_form_key.lower()}")
+        candidates.append(f"form_{normalized_form_key.lower()}")
+        for candidate in candidates:
+            localized = localized_labels.get(candidate)
+            if localized:
+                return localized, "LOCALIZED_TEXT"
+
     if species_key == "UNOWN" and (re.fullmatch(r"[A-Z]", form_key) or form_key in {"EXCLAMATION_POINT", "QUESTION_MARK"}):
         symbol = form_key.replace("EXCLAMATION_POINT", "驚嘆號").replace("QUESTION_MARK", "問號")
-        return f"未知圖騰「{symbol}」"
+        return f"未知圖騰「{symbol}」", "CODE_MAPPING"
     if form_key in FORM_LABELS:
-        return FORM_LABELS[form_key]
+        return FORM_LABELS[form_key], "CODE_MAPPING"
     if form_key in TYPE_FORM_LABELS:
-        return TYPE_FORM_LABELS[form_key]
+        return TYPE_FORM_LABELS[form_key], "CODE_MAPPING"
     if form_key in COLOR_FORM_LABELS:
-        return COLOR_FORM_LABELS[form_key]
+        return COLOR_FORM_LABELS[form_key], "CODE_MAPPING"
     if form_key.startswith("UNOWN_"):
         symbol = form_key.removeprefix("UNOWN_").replace("EXCLAMATION_POINT", "驚嘆號").replace("QUESTION_MARK", "問號")
-        return f"未知圖騰「{symbol}」"
+        return f"未知圖騰「{symbol}」", "CODE_MAPPING"
     if re.fullmatch(r"\d{2}", form_key):
-        return f"花紋型態 {int(form_key) + 1}"
+        return f"花紋型態 {int(form_key) + 1}", "CODE_MAPPING"
     # 上游只給縮寫而沒有正式名稱時，不再把多個不同外觀都顯示成
     # 「特殊型態」。保留穩定、全中文且可區分的款式序號。
     seen[form_key] += 1
-    return f"未命名型態（款式 {sorted(seen).index(form_key) + 1}）"
+    return f"未命名型態（款式 {sorted(seen).index(form_key) + 1}）", "SAFE_FALLBACK"
+
+
+def form_display(
+    form_key: str,
+    seen: dict[str, int],
+    species_key: str | None = None,
+    localized_labels: dict[str, str] | None = None,
+    overrides: dict[str, str] | None = None,
+) -> str:
+    return resolve_form_display(form_key, seen, species_key, localized_labels, overrides)[0]
 
 
 def asset_image_key(path: str) -> str:
@@ -1312,10 +1382,18 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="解析 Game Master 與 Pokémon GO 2D 資產")
     parser.add_argument("--input-dir", type=pathlib.Path, default=pathlib.Path("downloads"))
     parser.add_argument("--output-dir", type=pathlib.Path, default=pathlib.Path("generated"))
+    parser.add_argument(
+        "--form-name-overrides",
+        type=pathlib.Path,
+        default=pathlib.Path(__file__).with_name("form_name_overrides.json"),
+        help="物種／型態專用的正式名稱覆寫檔",
+    )
     args = parser.parse_args()
     game_master = json.loads((args.input_dir / "game_master_latest.json").read_text(encoding="utf-8"))
     asset_tree = json.loads((args.input_dir / "pogo_assets_tree.json").read_text(encoding="utf-8"))
     asset_paths = [item["path"] for item in asset_tree.get("tree", []) if item.get("type") == "blob"]
+    form_name_overrides = load_form_name_overrides(args.form_name_overrides)
+    localized_form_labels = load_localized_form_labels(args.input_dir / "texts_apk_zh_hant.txt")
 
     settings: dict[str, list[dict]] = defaultdict(list)
     for item in walk(game_master):
@@ -1368,17 +1446,28 @@ def main() -> None:
                     costume_aliases_by_dex[(dex_number, alias_key)] = form_key
 
     form_seen: dict[str, int] = defaultdict(int)
+    form_name_source_counts: dict[str, int] = defaultdict(int)
     # Pokémon 名稱本身可能包含底線（例如 PORYGON_Z、MR_MIME）。舊作法直接
     # 用第一個底線切割，會把物種名稱誤當成型態，甚至掛到另一隻 Pokémon。
     # 改以 formSettings 的 pokemon 與 form 欄位建立權威關係。
     parsed_forms: list[dict] = []
     for dex_number, species_key, form_key in sorted(authoritative_regular_forms):
+        display_name, name_source = resolve_form_display(
+            form_key,
+            form_seen,
+            species_key,
+            localized_form_labels,
+            form_name_overrides,
+        )
+        form_name_source_counts[name_source] += 1
         parsed_forms.append(
             {
                 "dexNumber": dex_number,
                 "speciesKey": species_key,
                 "formKey": form_key,
-                "displayName": form_display(form_key, form_seen, species_key),
+                "displayName": display_name,
+                "displayNameSource": name_source,
+                "nameNeedsReview": name_source == "SAFE_FALLBACK",
                 "isDefault": form_key == "NORMAL",
             }
         )
@@ -1608,18 +1697,31 @@ def main() -> None:
     apply_known_background_metadata(backgrounds)
     disambiguate_background_names(backgrounds)
 
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-    output = {
-        "forms": parsed_forms + [
+    asset_forms: list[dict] = []
+    for (dex_number, form_key), record in sorted(normal_form_assets.items()):
+        display_name, name_source = resolve_form_display(
+            form_key,
+            form_seen,
+            species_key_by_dex.get(dex_number),
+            localized_form_labels,
+            form_name_overrides,
+        )
+        form_name_source_counts[name_source] += 1
+        asset_forms.append(
             {
                 "dexNumber": dex_number,
                 "formKey": form_key,
-                "displayName": form_display(form_key, form_seen, species_key_by_dex.get(dex_number)),
+                "displayName": display_name,
+                "displayNameSource": name_source,
+                "nameNeedsReview": name_source == "SAFE_FALLBACK",
                 "isDefault": False,
                 "imageKey": record["imageKey"],
             }
-            for (dex_number, form_key), record in sorted(normal_form_assets.items())
-        ],
+        )
+
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    output = {
+        "forms": parsed_forms + asset_forms,
         "costumes": list(costumes_by_key.values()),
         "costumeCompatibility": list(compatibility.values()),
         "backgrounds": backgrounds,
@@ -1644,6 +1746,11 @@ def main() -> None:
             "assetOnlyLocationCards": len(asset_only_backgrounds),
             "knownLocationCards": len(backgrounds),
         },
+        "formNameAudit": {
+            "sourceCounts": dict(sorted(form_name_source_counts.items())),
+            "reviewRequired": form_name_source_counts.get("SAFE_FALLBACK", 0),
+            "overrideFile": args.form_name_overrides.name,
+        },
         "source": "PokeMiners game_masters and pogo_assets",
     }
     (args.output_dir / "game_master_catalog.json").write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -1659,3 +1766,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

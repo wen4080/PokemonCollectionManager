@@ -13,15 +13,21 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items as gridItems
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import tw.pokemon.collectionmanager.data.local.CollectionTagEntity
 import tw.pokemon.collectionmanager.data.local.Gender
 import tw.pokemon.collectionmanager.data.local.VariantCardRow
 import tw.pokemon.collectionmanager.data.repository.SavedCollectionFilters
@@ -53,23 +60,48 @@ enum class OverviewSummaryMetric(
     SHINY("SHINY", "異色寶可夢", "異色收藏的實際隻數"),
     BACKGROUND("BACKGROUND", "有背卡", "有背景背卡的實際隻數"),
     COSTUME("COSTUME", "有裝扮", "有裝扮的實際隻數"),
-    FORM("FORM", "特殊型態", "非一般型態的實際隻數"),
+    FORM("FORM", "非一般型態", "排除極巨化與暗影狀態後，非一般型態的實際隻數"),
     XXL("XXL", "特大", "特大尺寸的實際隻數"),
     XXS("XXS", "特小", "特小尺寸的實際隻數"),
     SPECIAL_MOVE("SPECIAL_MOVE", "有特招", "有特招的實際隻數"),
     UNTRADED("UNTRADED", "未交換", "尚未交換的實際隻數"),
     TRADED("TRADED", "已交換", "已經交換過的實際隻數"),
-    MALE("MALE", "雄性", "雄性的實際隻數"),
-    FEMALE("FEMALE", "雌性", "雌性的實際隻數"),
+    MALE("MALE", "公", "公的實際隻數"),
+    FEMALE("FEMALE", "母", "母的實際隻數"),
     SHADOW("SHADOW", "暗影", "暗影狀態的實際隻數"),
     PURIFIED("PURIFIED", "淨化", "淨化狀態的實際隻數"),
     DYNAMAX("DYNAMAX", "極巨化", "極巨化狀態的實際隻數"),
     GIGANTAMAX("GIGANTAMAX", "超極巨化", "超極巨化狀態的實際隻數"),
 }
 
+private const val CUSTOM_SUMMARY_TAG_PREFIX = "TAG:"
+
+private data class OverviewSummaryItem(
+    val code: String,
+    val label: String,
+    val description: String,
+    val metric: OverviewSummaryMetric? = null,
+    val tagId: String? = null,
+)
+
+private fun OverviewSummaryMetric.asSummaryItem() = OverviewSummaryItem(
+    code = code,
+    label = label,
+    description = description,
+    metric = this,
+)
+
+private fun CollectionTagEntity.asSummaryItem() = OverviewSummaryItem(
+    code = "$CUSTOM_SUMMARY_TAG_PREFIX$id",
+    label = name,
+    description = description ?: "自訂標籤收藏的實際隻數",
+    tagId = id,
+)
+
 private class CollectionFilterUiState {
     var filters by mutableStateOf(emptySet<VariantFilterMode>())
     var backgroundIds by mutableStateOf(emptySet<String>())
+    var tagIds by mutableStateOf(emptySet<String>())
     var matchMode by mutableStateOf(FilterMatchMode.ALL)
     var minimumMatches by mutableStateOf(2)
     var rememberFilters by mutableStateOf(false)
@@ -80,6 +112,7 @@ private class CollectionFilterUiState {
                 remember = rememberFilters,
                 filterCodes = filters.map { it.name }.toSet(),
                 backgroundIds = backgroundIds,
+                tagIds = tagIds,
                 matchMode = matchMode.code,
                 minimumMatches = minimumMatches,
             ),
@@ -96,6 +129,7 @@ private fun rememberCollectionFilterUiState(viewModel: CollectionViewModel): Col
             state.rememberFilters = true
             state.filters = saved.filterCodes.mapNotNull { code -> VariantFilterMode.entries.firstOrNull { it.name == code } }.toSet()
             state.backgroundIds = saved.backgroundIds
+            state.tagIds = saved.tagIds
             state.matchMode = FilterMatchMode.fromCode(saved.matchMode)
             state.minimumMatches = saved.minimumMatches.coerceAtLeast(1)
         }
@@ -108,19 +142,29 @@ private fun CollectionFilterControls(
     state: CollectionFilterUiState,
     viewModel: CollectionViewModel,
     backgrounds: List<tw.pokemon.collectionmanager.data.local.BackgroundEntity>,
+    customTags: List<CollectionTagEntity>,
     countSource: List<VariantCardRow>,
+    tagIdsByVariant: Map<String, Set<String>>,
+    allowInnerScroll: Boolean = true,
 ) {
+    val availableTagIds = customTags.map { it.id }.toSet()
+    val selectedTagIds = state.tagIds.intersect(availableTagIds)
     CollectionFilterPanel(
         filters = state.filters,
         backgroundIds = state.backgroundIds,
+        customTags = customTags,
+        selectedTagIds = selectedTagIds,
+        tagIdsByVariant = tagIdsByVariant,
         matchMode = state.matchMode,
         minimumMatches = state.minimumMatches,
         rememberFilters = state.rememberFilters,
         backgrounds = backgrounds,
         imageRepository = viewModel.imageRepository,
         countSource = countSource,
+        allowInnerScroll = allowInnerScroll,
         onFiltersChanged = { state.filters = it; state.save(viewModel) },
         onBackgroundsChanged = { state.backgroundIds = it; state.save(viewModel) },
+        onTagsChanged = { state.tagIds = it; state.save(viewModel) },
         onMatchModeChanged = { state.matchMode = it; state.save(viewModel) },
         onMinimumChanged = { state.minimumMatches = it; state.save(viewModel) },
         onRememberChanged = { state.rememberFilters = it; state.save(viewModel) },
@@ -138,11 +182,24 @@ fun AccountCollectionScreen(
     val variantsFlow = remember(accountId) { viewModel.accountVariants(accountId) }
     val variants by variantsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val backgrounds by viewModel.backgrounds.collectAsStateWithLifecycle()
+    val customTags by viewModel.customTags.collectAsStateWithLifecycle()
+    val tagAssignments by viewModel.tagAssignments.collectAsStateWithLifecycle()
     var query by remember { mutableStateOf("") }
     val filterState = rememberCollectionFilterUiState(viewModel)
     var showAdd by remember { mutableStateOf(false) }
     val countSource = variants.filter { it.matchesQuery(query) }
-    val filtered = countSource.filter { it.matches("", filterState.filters, filterState.backgroundIds, filterState.matchMode, filterState.minimumMatches) }
+    val tagIdsByVariant = tagAssignments.groupBy { it.variantId }.mapValues { (_, assignments) -> assignments.map { it.tagId }.toSet() }
+    val filtered = countSource.filter {
+        it.matches(
+            query = "",
+            filters = filterState.filters,
+            backgroundIds = filterState.backgroundIds,
+            matchMode = filterState.matchMode,
+            minimumMatches = filterState.minimumMatches,
+            customTagIds = filterState.tagIds,
+            assignedTagIds = tagIdsByVariant[it.variantId].orEmpty(),
+        )
+    }
 
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 18.dp)) {
@@ -163,7 +220,7 @@ fun AccountCollectionScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.padding(4.dp))
-            CollectionFilterControls(filterState, viewModel, backgrounds, countSource)
+            CollectionFilterControls(filterState, viewModel, backgrounds, customTags, countSource, tagIdsByVariant)
             Spacer(Modifier.padding(8.dp))
             if (filtered.isEmpty()) {
                 EmptyState("沒有符合的收藏", "這只表示目前沒有登記符合條件的收藏組合，不代表帳號沒有這隻 Pokémon。", "新增收藏") { showAdd = true }
@@ -194,7 +251,7 @@ private fun List<VariantCardRow>.summaryValue(metric: OverviewSummaryMetric): Lo
     OverviewSummaryMetric.SHINY -> filter { it.isShiny }.sumOf { it.totalQuantity }
     OverviewSummaryMetric.BACKGROUND -> filter { it.backgroundId != "BACKGROUND_NONE" }.sumOf { it.totalQuantity }
     OverviewSummaryMetric.COSTUME -> filter { it.costumeName != "無裝扮" }.sumOf { it.totalQuantity }
-    OverviewSummaryMetric.FORM -> filter { it.formName != "一般型態" }.sumOf { it.totalQuantity }
+    OverviewSummaryMetric.FORM -> filter { it.isNonDefaultCollectionForm() }.sumOf { it.totalQuantity }
     OverviewSummaryMetric.XXL -> sumOf { it.xxlQuantity }
     OverviewSummaryMetric.XXS -> sumOf { it.xxsQuantity }
     OverviewSummaryMetric.SPECIAL_MOVE -> sumOf { it.specialMoveQuantity }
@@ -208,10 +265,21 @@ private fun List<VariantCardRow>.summaryValue(metric: OverviewSummaryMetric): Lo
     OverviewSummaryMetric.GIGANTAMAX -> filter { it.dynamaxState.code == "GIGANTAMAX" }.sumOf { it.totalQuantity }
 }
 
+private fun List<VariantCardRow>.summaryValue(
+    item: OverviewSummaryItem,
+    taggedVariantIdsByTag: Map<String, Set<String>>,
+): Long = item.metric?.let { summaryValue(it) }
+    ?: item.tagId?.let { tagId ->
+        val taggedIds = taggedVariantIdsByTag[tagId].orEmpty()
+        filter { it.variantId in taggedIds }.sumOf { it.totalQuantity }
+    }
+    ?: 0L
+
 @Composable
 private fun OverviewSummaryPanel(
     variants: List<VariantCardRow>,
-    selectedMetrics: List<OverviewSummaryMetric>,
+    selectedMetrics: List<OverviewSummaryItem>,
+    taggedVariantIdsByTag: Map<String, Set<String>>,
     expanded: Boolean,
     onToggleExpanded: () -> Unit,
     onCustomize: () -> Unit,
@@ -243,9 +311,7 @@ private fun OverviewSummaryPanel(
                 } else {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 260.dp)
-                            .verticalScroll(rememberScrollState(), overscrollEffect = null),
+                            .fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         selectedMetrics.chunked(2).forEach { rowMetrics ->
@@ -253,7 +319,7 @@ private fun OverviewSummaryPanel(
                                 rowMetrics.forEach { metric ->
                                     StatCard(
                                         label = metric.label,
-                                        value = variants.summaryValue(metric).toString(),
+                                        value = variants.summaryValue(metric, taggedVariantIdsByTag).toString(),
                                         modifier = Modifier.weight(1f),
                                     )
                                 }
@@ -268,12 +334,56 @@ private fun OverviewSummaryPanel(
 }
 
 @Composable
+private fun CustomSummaryTagEditorDialog(
+    existing: CollectionTagEntity?,
+    onDismiss: () -> Unit,
+    onSave: (name: String, description: String?) -> Unit,
+) {
+    var name by remember(existing?.id) { mutableStateOf(existing?.name.orEmpty()) }
+    var description by remember(existing?.id) { mutableStateOf(existing?.description.orEmpty()) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(if (existing == null) "新增自訂摘要標籤" else "編輯自訂摘要標籤") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("標籤名稱") },
+                    singleLine = true,
+                )
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text("說明註解（可留白）") },
+                    minLines = 2,
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = { onSave(name.trim(), description.trim().ifBlank { null }) },
+                enabled = name.trim().isNotEmpty(),
+            ) { Text("儲存") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },
+    )
+}
+
+@Composable
 private fun OverviewSummaryPickerDialog(
     selectedCodes: Set<String>,
+    customTags: List<CollectionTagEntity>,
     onDismiss: () -> Unit,
     onSave: (Set<String>) -> Unit,
+    onCreateTag: (String, String?, (CollectionTagEntity) -> Unit) -> Unit,
+    onUpdateTag: (CollectionTagEntity) -> Unit,
+    onDeleteTag: (CollectionTagEntity) -> Unit,
 ) {
     var workingCodes by remember(selectedCodes) { mutableStateOf(selectedCodes) }
+    var editingTag by remember { mutableStateOf<CollectionTagEntity?>(null) }
+    var showTagEditor by remember { mutableStateOf(false) }
+    var pendingDeleteTag by remember { mutableStateOf<CollectionTagEntity?>(null) }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -324,6 +434,38 @@ private fun OverviewSummaryPickerDialog(
                             }
                         }
                     }
+                    Text("自訂摘要標籤", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    if (customTags.isEmpty()) {
+                        Text("尚未建立自訂標籤。建立後可在收藏組合詳細頁套用。", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    } else {
+                        customTags.forEach { tag ->
+                            val code = "$CUSTOM_SUMMARY_TAG_PREFIX${tag.id}"
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Checkbox(
+                                    checked = code in workingCodes,
+                                    onCheckedChange = { checked ->
+                                        workingCodes = if (checked) workingCodes + code else workingCodes - code
+                                    },
+                                )
+                                Column(Modifier.weight(1f).padding(start = 8.dp)) {
+                                    Text(tag.name, fontWeight = FontWeight.Medium)
+                                    Text(
+                                        tag.description ?: "未提供說明",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                                TextButton(onClick = { editingTag = tag; showTagEditor = true }) { Text("編輯") }
+                                TextButton(onClick = { pendingDeleteTag = tag }) { Text("刪除") }
+                            }
+                        }
+                    }
+                    OutlinedButton(onClick = { editingTag = null; showTagEditor = true }) {
+                        Text("新增自訂標籤")
+                    }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     TextButton(onClick = { workingCodes = emptySet() }) { Text("全部清除") }
@@ -337,6 +479,40 @@ private fun OverviewSummaryPickerDialog(
             }
         }
     }
+
+    if (showTagEditor) {
+        CustomSummaryTagEditorDialog(
+            existing = editingTag,
+            onDismiss = { showTagEditor = false },
+            onSave = { name, description ->
+                val existing = editingTag
+                if (existing == null) {
+                    onCreateTag(name, description) { created ->
+                        workingCodes = workingCodes + "$CUSTOM_SUMMARY_TAG_PREFIX${created.id}"
+                        showTagEditor = false
+                    }
+                } else {
+                    onUpdateTag(existing.copy(name = name, description = description))
+                    showTagEditor = false
+                }
+            },
+        )
+    }
+    pendingDeleteTag?.let { tag ->
+        AlertDialog(
+            onDismissRequest = { pendingDeleteTag = null },
+            title = { Text("刪除自訂標籤？") },
+            text = { Text("刪除「${tag.name}」後，套用在收藏組合上的標籤也會一併移除。") },
+            confirmButton = {
+                Button(onClick = {
+                    onDeleteTag(tag)
+                    workingCodes = workingCodes - "$CUSTOM_SUMMARY_TAG_PREFIX${tag.id}"
+                    pendingDeleteTag = null
+                }) { Text("刪除") }
+            },
+            dismissButton = { TextButton(onClick = { pendingDeleteTag = null }) { Text("取消") } },
+        )
+    }
 }
 
 @Composable
@@ -347,75 +523,127 @@ fun OverviewScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Un
     val variantsFlow = remember(selectedIds) { viewModel.selectedVariants(selectedIds) }
     val variants by variantsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val backgrounds by viewModel.backgrounds.collectAsStateWithLifecycle()
+    val customTags by viewModel.customTags.collectAsStateWithLifecycle()
+    val tagAssignments by viewModel.tagAssignments.collectAsStateWithLifecycle()
     val summaryCodes by viewModel.overviewSummaryStatCodes.collectAsStateWithLifecycle()
     var query by remember { mutableStateOf("") }
     var summaryExpanded by remember { mutableStateOf(true) }
     var showSummaryPicker by remember { mutableStateOf(false) }
     val filterState = rememberCollectionFilterUiState(viewModel)
     val countSource = variants.filter { it.matchesQuery(query) }
-    val visible = countSource.filter { it.matches("", filterState.filters, filterState.backgroundIds, filterState.matchMode, filterState.minimumMatches) }
-    val selectedSummaryMetrics = OverviewSummaryMetric.entries.filter { it.code in summaryCodes }
+    val tagIdsByVariant = tagAssignments.groupBy { it.variantId }.mapValues { (_, assignments) -> assignments.map { it.tagId }.toSet() }
+    val visible = countSource.filter {
+        it.matches(
+            query = "",
+            filters = filterState.filters,
+            backgroundIds = filterState.backgroundIds,
+            matchMode = filterState.matchMode,
+            minimumMatches = filterState.minimumMatches,
+            customTagIds = filterState.tagIds,
+            assignedTagIds = tagIdsByVariant[it.variantId].orEmpty(),
+        )
+    }
+    val selectedSummaryMetrics = buildList {
+        OverviewSummaryMetric.entries.filter { it.code in summaryCodes }.forEach { add(it.asSummaryItem()) }
+        customTags.filter { "$CUSTOM_SUMMARY_TAG_PREFIX${it.id}" in summaryCodes }.forEach { add(it.asSummaryItem()) }
+    }
+    val taggedVariantIdsByTag = tagAssignments.groupBy { it.tagId }.mapValues { (_, assignments) -> assignments.map { it.variantId }.toSet() }
 
-    Column(Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 18.dp)) {
-        PageTitle("總覽", subtitle = "跨帳號聚合收藏組合；每張卡代表一種完整組合，×數量是實際隻數。")
-        Spacer(Modifier.padding(6.dp))
-        Text("帳號篩選", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.padding(2.dp))
-        LazyRow(overscrollEffect = null, horizontalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(vertical = 4.dp)) {
-            item {
-                FilterChip(
-                    selected = selectedIds.isEmpty(),
-                    onClick = { viewModel.setOverviewAccounts(emptyList()) },
-                    label = { Text("全部帳號") },
-                )
-            }
-            items(activeAccounts, key = { it.id }) { account ->
-                FilterChip(
-                    selected = selectedIds.contains(account.id),
-                    onClick = {
-                        val next = if (selectedIds.isEmpty()) {
-                            listOf(account.id)
-                        } else if (account.id in selectedIds) {
-                            selectedIds.filterNot { it == account.id }
-                        } else {
-                            selectedIds + account.id
-                        }
-                        viewModel.setOverviewAccounts(next)
-                    },
-                    label = { Text(account.name) },
-                )
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(150.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 20.dp, top = 18.dp, end = 20.dp, bottom = 100.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        overscrollEffect = null,
+    ) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            PageTitle("總覽", subtitle = "跨帳號聚合收藏組合；每張卡代表一種完整組合，×數量是實際隻數。")
+        }
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Column {
+                Text("帳號篩選", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                LazyRow(
+                    overscrollEffect = null,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(vertical = 4.dp),
+                ) {
+                    item {
+                        FilterChip(
+                            selected = selectedIds.isEmpty(),
+                            onClick = { viewModel.setOverviewAccounts(emptyList()) },
+                            label = { Text("全部帳號") },
+                        )
+                    }
+                    items(activeAccounts, key = { it.id }) { account ->
+                        FilterChip(
+                            selected = selectedIds.contains(account.id),
+                            onClick = {
+                                val next = if (selectedIds.isEmpty()) {
+                                    listOf(account.id)
+                                } else if (account.id in selectedIds) {
+                                    selectedIds.filterNot { it == account.id }
+                                } else {
+                                    selectedIds + account.id
+                                }
+                                viewModel.setOverviewAccounts(next)
+                            },
+                            label = { Text(account.name) },
+                        )
+                    }
+                }
             }
         }
-        OutlinedTextField(
-            value = query,
-            onValueChange = { query = it },
-            label = { Text("搜尋 Pokémon、型態或背景") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(Modifier.padding(4.dp))
-        CollectionFilterControls(filterState, viewModel, backgrounds, countSource)
-        Spacer(Modifier.padding(8.dp))
-        OverviewSummaryPanel(
-            variants = visible,
-            selectedMetrics = selectedSummaryMetrics,
-            expanded = summaryExpanded,
-            onToggleExpanded = { summaryExpanded = !summaryExpanded },
-            onCustomize = { showSummaryPicker = true },
-        )
-        Spacer(Modifier.padding(8.dp))
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            OutlinedTextField(
+                value = query,
+                onValueChange = { query = it },
+                label = { Text("搜尋 Pokémon、型態或背景") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            CollectionFilterControls(
+                state = filterState,
+                viewModel = viewModel,
+                backgrounds = backgrounds,
+                customTags = customTags,
+                countSource = countSource,
+                tagIdsByVariant = tagIdsByVariant,
+                allowInnerScroll = false,
+            )
+        }
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            OverviewSummaryPanel(
+                variants = visible,
+                selectedMetrics = selectedSummaryMetrics,
+                taggedVariantIdsByTag = taggedVariantIdsByTag,
+                expanded = summaryExpanded,
+                onToggleExpanded = { summaryExpanded = !summaryExpanded },
+                onCustomize = { showSummaryPicker = true },
+            )
+        }
         if (visible.isEmpty()) {
-            EmptyState("沒有符合的收藏組合", "請調整帳號或篩選條件。未登記項目不會被自動當成未擁有。")
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                EmptyState("沒有符合的收藏組合", "請調整帳號或篩選條件。未登記項目不會被自動當成未擁有。")
+            }
         } else {
-            VariantGrid(visible, imageRepository = viewModel.imageRepository, onClick = { onOpenVariant(it.variantId) }, modifier = Modifier.weight(1f))
+            gridItems(visible, key = { it.variantId }) { variant ->
+                VariantCardItem(variant = variant, imageRepository = viewModel.imageRepository, onClick = { onOpenVariant(variant.variantId) })
+            }
         }
     }
 
     if (showSummaryPicker) {
         OverviewSummaryPickerDialog(
             selectedCodes = summaryCodes,
+            customTags = customTags,
             onDismiss = { showSummaryPicker = false },
             onSave = viewModel::saveOverviewSummaryStatCodes,
+            onCreateTag = viewModel::createCustomTag,
+            onUpdateTag = viewModel::updateCustomTag,
+            onDeleteTag = { viewModel.deleteCustomTag(it.id) },
         )
     }
 }

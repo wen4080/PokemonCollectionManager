@@ -31,6 +31,10 @@ def pogo_image_key(dex_number: int, shiny: bool = False) -> str:
 def form_sort_order(form_key: str) -> int:
     priorities = {
         "NORMAL": 0, "ALOLA": 100, "GALARIAN": 110, "HISUIAN": 120, "PALDEA": 130,
+        "TWO": 140, "THREE": 150,
+        "FAMILY_OF_THREE": 140, "FAMILY_OF_FOUR": 150,
+        "ZERO": 140, "HERO": 150,
+        "CROWNED_SWORD": 160, "CROWNED_SHIELD": 160,
         "MEGA": 200, "MEGA_X": 201, "MEGA_Y": 202, "PRIMAL": 210,
         "DYNAMAX": 300, "GIGANTAMAX": 310, "ETERNAMAX": 320,
     }
@@ -101,12 +105,39 @@ def main() -> None:
         }
         species.append(species_item)
         species_by_key[species_key] = species_item
+    # 不能無條件替每個物種補「一般型態」。部分 Pokémon GO 物種的 Game
+    # Master 只有實際存在的特殊型態，例如土龍節節只有二節／三節形態，
+    # 一家鼠只有三隻／四隻家庭；若仍補 NORMAL，選擇器就會顯示不存在的選項。
+    # 沒有任何型態資料的物種仍保留一般型態，確保主資料不會因上游暫時缺漏
+    # 而讓使用者無法建立收藏。
+    parsed_form_keys_by_species: dict[str, set[str]] = {}
+    for item in parsed.get("forms", []):
+        base_key = key(item.get("speciesKey", ""))
+        species_item = species_by_key.get(base_key)
+        if species_item is None and item.get("dexNumber"):
+            species_item = next((candidate for candidate in species if candidate["dexNumber"] == item["dexNumber"]), None)
+        if species_item is None:
+            continue
+        form_key = key(item.get("formKey", "NORMAL")) or "NORMAL"
+        parsed_form_keys_by_species.setdefault(species_item["id"], set()).add(form_key)
+
+    species_without_standalone_normal: list[str] = []
+    synthetic_default_species: list[str] = []
+    for species_item in species:
+        known_form_keys = parsed_form_keys_by_species.get(species_item["id"], set())
+        if known_form_keys and "NORMAL" not in known_form_keys:
+            species_without_standalone_normal.append(species_item["speciesKey"])
+            continue
+        if not known_form_keys:
+            synthetic_default_species.append(species_item["speciesKey"])
         forms.append(
             {
-                "id": f"FORM_{species_key}_NORMAL",
+                "id": f"FORM_{species_item['speciesKey']}_NORMAL",
                 "speciesId": species_item["id"],
                 "formKey": "NORMAL",
                 "displayName": "一般型態",
+                "displayNameSource": "DEFAULT",
+                "nameNeedsReview": False,
                 "imageKey": species_item["defaultImageKey"],
                 "isDefault": True,
                 "sortOrder": 0,
@@ -128,6 +159,8 @@ def main() -> None:
             "speciesId": species_item["id"],
             "formKey": form_key,
             "displayName": item.get("displayName") or "特殊型態",
+            "displayNameSource": item.get("displayNameSource", "LEGACY_FALLBACK"),
+            "nameNeedsReview": bool(item.get("nameNeedsReview", not item.get("displayName"))),
             "imageKey": item.get("imageKey") or species_item["defaultImageKey"],
             "isDefault": False,
             "sortOrder": form_sort_order(form_key),
@@ -163,7 +196,12 @@ def main() -> None:
         if species_item is None or costume_id is None:
             continue
         form_key = key(item.get("formKey", "NORMAL")) or "NORMAL"
-        form_item = form_pairs.get((species_item["id"], form_key)) or form_pairs[(species_item["id"], "NORMAL")]
+        form_item = form_pairs.get((species_item["id"], form_key))
+        # 某些上游裝扮資料只標示物種，沒有可對應的獨立 NORMAL 型態。
+        # 這時使用 NULL formId 表示「此物種皆適用」，避免建立不存在的
+        # FORM_<species>_NORMAL 外鍵，也讓未來新增的非一般型態仍可選到裝扮。
+        if form_item is None and form_key != "NORMAL":
+            continue
         costume_compatibility.append(
             {
                 # dexNumber-only records do not carry speciesKey, so base_key can be empty.
@@ -171,10 +209,10 @@ def main() -> None:
                 # four FALL_2019 costume rows all had the same primary key) and Room's
                 # REPLACE import silently kept only the final row.  Build the primary key
                 # from the resolved stable species/form/costume IDs instead.
-                "id": f"COMPAT_{species_item['id']}_{form_item['id']}_{costume_id}",
-                "compatibilityKey": f"{species_item['id']}|{form_item['id']}|{costume_id}",
+                "id": f"COMPAT_{species_item['id']}_{form_item['id'] if form_item else 'ANY'}_{costume_id}",
+                "compatibilityKey": f"{species_item['id']}|{form_item['id'] if form_item else 'ANY'}|{costume_id}",
                 "speciesId": species_item["id"],
-                "formId": form_item["id"],
+                "formId": form_item["id"] if form_item else None,
                 "costumeId": costume_id,
                 "imageKey": item.get("imageKey"),
                 "isVerified": bool(item.get("isVerified", True)),
@@ -247,6 +285,12 @@ def main() -> None:
         "backgrounds": backgrounds,
         "costumeCompatibility": costume_compatibility,
         "backgroundCompatibility": background_compatibility,
+        "formNameAudit": parsed.get("formNameAudit", {}),
+        "formPolicyAudit": {
+            "speciesWithoutStandaloneNormalForm": sorted(species_without_standalone_normal),
+            "speciesWithoutParsedFormData": sorted(synthetic_default_species),
+            "normalFormRule": "只有上游有 NORMAL 或完全沒有型態資料時才建立一般型態",
+        },
         "imageCount": len(image_keys),
         "missingImageCount": missing_image_count,
         "sourceStats": parsed.get("assetStats", {}),
@@ -269,3 +313,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

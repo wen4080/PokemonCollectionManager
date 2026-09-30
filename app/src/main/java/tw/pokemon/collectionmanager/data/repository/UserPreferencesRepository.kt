@@ -22,6 +22,7 @@ data class SavedCollectionFilters(
     val remember: Boolean = false,
     val filterCodes: Set<String> = emptySet(),
     val backgroundIds: Set<String> = emptySet(),
+    val tagIds: Set<String> = emptySet(),
     val matchMode: String = "ALL",
     val minimumMatches: Int = 2,
 )
@@ -38,6 +39,7 @@ class UserPreferencesRepository(private val context: Context) {
         val rememberCollectionFilters = booleanPreferencesKey("remember_collection_filters")
         val collectionFilterCodes = stringPreferencesKey("collection_filter_codes")
         val collectionBackgroundIds = stringPreferencesKey("collection_background_ids")
+        val collectionTagIds = stringPreferencesKey("collection_tag_ids")
         val collectionFilterMatchMode = stringPreferencesKey("collection_filter_match_mode")
         val collectionFilterMinimum = intPreferencesKey("collection_filter_minimum")
         val overviewSummaryStatCodes = stringPreferencesKey("overview_summary_stat_codes")
@@ -70,6 +72,7 @@ class UserPreferencesRepository(private val context: Context) {
                 remember = preferences[Keys.rememberCollectionFilters] ?: false,
                 filterCodes = preferences[Keys.collectionFilterCodes].toCodeSet(),
                 backgroundIds = preferences[Keys.collectionBackgroundIds].toCodeSet(),
+                tagIds = preferences[Keys.collectionTagIds].toCodeSet(),
                 matchMode = preferences[Keys.collectionFilterMatchMode] ?: "ALL",
                 minimumMatches = preferences[Keys.collectionFilterMinimum] ?: 2,
             )
@@ -110,6 +113,7 @@ class UserPreferencesRepository(private val context: Context) {
             preferences[Keys.rememberCollectionFilters] = filters.remember
             preferences[Keys.collectionFilterCodes] = filters.filterCodes.sorted().joinToString("|")
             preferences[Keys.collectionBackgroundIds] = filters.backgroundIds.sorted().joinToString("|")
+            preferences[Keys.collectionTagIds] = filters.tagIds.sorted().joinToString("|")
             preferences[Keys.collectionFilterMatchMode] = filters.matchMode
             preferences[Keys.collectionFilterMinimum] = filters.minimumMatches.coerceAtLeast(1)
         }

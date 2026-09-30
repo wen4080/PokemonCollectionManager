@@ -5,13 +5,16 @@ import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import tw.pokemon.collectionmanager.data.local.AccountDao
 import tw.pokemon.collectionmanager.data.local.AccountEntity
 import tw.pokemon.collectionmanager.data.local.AccountGroupDao
 import tw.pokemon.collectionmanager.data.local.AccountGroupEntity
 import tw.pokemon.collectionmanager.data.local.AccountSummaryRow
 import tw.pokemon.collectionmanager.data.local.CollectionDatabase
+import tw.pokemon.collectionmanager.data.local.CollectionTagEntity
 import tw.pokemon.collectionmanager.data.local.CollectionVariantEntity
+import tw.pokemon.collectionmanager.data.local.CollectionVariantTagEntity
 import tw.pokemon.collectionmanager.data.local.MasterDataDao
 import tw.pokemon.collectionmanager.data.local.OwnershipBucketDao
 import tw.pokemon.collectionmanager.data.local.OwnershipBucketEntity
@@ -32,12 +35,15 @@ class CollectionRepository(private val database: CollectionDatabase) {
     private val master: MasterDataDao = database.masterDataDao()
     private val variants: VariantDao = database.variantDao()
     private val buckets: OwnershipBucketDao = database.ownershipBucketDao()
+    private val collectionTags = database.collectionTagDao()
 
     val accountSummaries: Flow<List<AccountSummaryRow>> = accounts.observeSummaries().recoverToEmpty("帳號摘要")
     val accountGroups = groups.observeAll().recoverToEmpty("帳號群組")
     val species = master.observeSpecies().recoverToEmpty("寶可夢主資料")
     val costumes = master.observeCostumes().recoverToEmpty("裝扮主資料")
     val backgrounds = master.observeBackgrounds().recoverToEmpty("背景主資料")
+    val tags = collectionTags.observeAll().recoverToEmpty("自訂標籤")
+    val tagAssignments = collectionTags.observeAssignments().recoverToEmpty("自訂標籤套用資料")
 
     fun forms(speciesId: String) = master.observeForms(speciesId).recoverToEmpty("型態主資料")
     fun account(id: String) = accounts.observeById(id).recoverToNull("帳號")
@@ -47,6 +53,81 @@ class CollectionRepository(private val database: CollectionDatabase) {
     fun variantInfo(variantId: String): Flow<VariantInfoRow?> = variants.observeInfo(variantId).recoverToNull("收藏組合")
     fun variantSources(variantId: String): Flow<List<SourceAccountRow>> = variants.observeSources(variantId).recoverToEmpty("收藏來源帳號")
     fun bucketsForVariant(accountId: String, variantId: String) = buckets.observeForVariant(accountId, variantId).recoverToEmpty("收藏數量")
+    fun tagIdsForVariant(variantId: String): Flow<List<String>> = collectionTags.observeForVariant(variantId)
+        .map { assignments -> assignments.map { it.tagId } }
+        .recoverToEmpty("收藏標籤")
+
+    suspend fun createTag(name: String, description: String?): CollectionTagEntity {
+        val cleanName = name.trim()
+        require(cleanName.isNotEmpty()) { "標籤名稱不可為空白" }
+        val now = System.currentTimeMillis()
+        val tag = CollectionTagEntity(
+            id = UUID.randomUUID().toString(),
+            name = cleanName,
+            description = description?.trim()?.ifBlank { null },
+            sortOrder = collectionTags.getAll().size,
+            createdAt = now,
+            updatedAt = now,
+        )
+        collectionTags.upsert(tag)
+        return tag
+    }
+
+    suspend fun updateTag(tag: CollectionTagEntity) {
+        val cleanName = tag.name.trim()
+        require(cleanName.isNotEmpty()) { "標籤名稱不可為空白" }
+        collectionTags.upsert(
+            tag.copy(
+                name = cleanName,
+                description = tag.description?.trim()?.ifBlank { null },
+                updatedAt = System.currentTimeMillis(),
+            ),
+        )
+    }
+
+    suspend fun deleteTag(tagId: String) {
+        database.withTransaction {
+            collectionTags.deleteAssignmentsForTag(tagId)
+            collectionTags.deleteById(tagId)
+        }
+    }
+
+    suspend fun replaceVariantTags(variantId: String, tagIds: Set<String>) {
+        database.withTransaction {
+            require(variants.getById(variantId) != null) { "找不到收藏組合" }
+            replaceTagsInTransaction(variantId, tagIds)
+        }
+    }
+
+    private suspend fun addTagsInTransaction(variantId: String, tagIds: Set<String>) {
+        val validTagIds = collectionTags.getAll().map { it.id }.toSet()
+        require(tagIds.all { it in validTagIds }) { "包含不存在的自訂標籤" }
+        val existingTagIds = collectionTags.getAssignmentsForVariant(variantId).map { it.tagId }.toSet()
+        collectionTags.insertAssignments(
+            (existingTagIds + tagIds).map {
+                CollectionVariantTagEntity(
+                    tagId = it,
+                    variantId = variantId,
+                    createdAt = System.currentTimeMillis(),
+                )
+            },
+        )
+    }
+
+    private suspend fun replaceTagsInTransaction(variantId: String, tagIds: Set<String>) {
+        val validTagIds = collectionTags.getAll().map { it.id }.toSet()
+        require(tagIds.all { it in validTagIds }) { "包含不存在的自訂標籤" }
+        collectionTags.deleteAssignmentsForVariant(variantId)
+        collectionTags.insertAssignments(
+            tagIds.map {
+                CollectionVariantTagEntity(
+                    tagId = it,
+                    variantId = variantId,
+                    createdAt = System.currentTimeMillis(),
+                )
+            },
+        )
+    }
 
     suspend fun createGroup(name: String) {
         val clean = name.trim()
@@ -96,7 +177,13 @@ class CollectionRepository(private val database: CollectionDatabase) {
         accounts.observeSummaries().first()
     }
 
-    suspend fun addOwnership(accountId: String, variantDraft: VariantDraft, bucketDraft: BucketDraft, quantity: Int) {
+    suspend fun addOwnership(
+        accountId: String,
+        variantDraft: VariantDraft,
+        bucketDraft: BucketDraft,
+        quantity: Int,
+        tagIds: Set<String> = emptySet(),
+    ) {
         require(quantity > 0) { "數量必須大於 0" }
         database.withTransaction {
             validateAccountAndVariantDraft(accountId, variantDraft)
@@ -133,18 +220,19 @@ class CollectionRepository(private val database: CollectionDatabase) {
                         updatedAt = now,
                     ),
             )
+            if (tagIds.isNotEmpty()) addTagsInTransaction(variant.id, tagIds)
         }
     }
 
-    suspend fun updateVariant(variantId: String, draft: VariantDraft) {
-        database.withTransaction {
-            val current = variants.getById(variantId) ?: return@withTransaction
+    suspend fun updateVariant(variantId: String, draft: VariantDraft): String = database.withTransaction {
+            val current = variants.getById(variantId) ?: error("找不到收藏組合")
             validateVariantDraft(draft)
             val newKey = VariantKeyFactory.build(draft)
             val collision = variants.findByKey(newKey)
             if (collision != null && collision.id != current.id) {
                 mergeVariantBuckets(current.id, collision.id)
                 variants.deleteById(current.id)
+                collision.id
             } else {
                 variants.upsert(
                     current.copy(
@@ -160,19 +248,18 @@ class CollectionRepository(private val database: CollectionDatabase) {
                         updatedAt = System.currentTimeMillis(),
                     ),
                 )
+                current.id
             }
         }
-    }
 
     /**
      * 編輯單一帳號中的收藏組合時，不能直接改寫共用的 CollectionVariant。
      * 若同一版本同時被其他帳號使用，先把目前帳號的數量搬到新版本，
      * 讓其他帳號仍保留原本的版本。
      */
-    suspend fun updateVariantForAccount(accountId: String, variantId: String, draft: VariantDraft) {
-        database.withTransaction {
+    suspend fun updateVariantForAccount(accountId: String, variantId: String, draft: VariantDraft): String = database.withTransaction {
             require(accounts.getById(accountId) != null) { "找不到要編輯的帳號" }
-            val current = variants.getById(variantId) ?: return@withTransaction
+            val current = variants.getById(variantId) ?: error("找不到收藏組合")
             validateVariantDraft(draft)
             val sourceBuckets = buckets.getForVariant(accountId, variantId).filter { it.quantity > 0 }
             require(sourceBuckets.isNotEmpty()) { "此帳號沒有這個收藏組合的數量" }
@@ -183,7 +270,7 @@ class CollectionRepository(private val database: CollectionDatabase) {
 
             if (collision == null && currentBuckets.all { it.accountId == accountId }) {
                 variants.upsert(current.withDraft(draft, newKey, System.currentTimeMillis()))
-                return@withTransaction
+                return@withTransaction current.id
             }
 
             val destination = collision ?: CollectionVariantEntity(
@@ -231,8 +318,8 @@ class CollectionRepository(private val database: CollectionDatabase) {
             if (buckets.getAll().none { it.variantId == current.id && it.quantity > 0 }) {
                 variants.deleteById(current.id)
             }
+            destination.id
         }
-    }
 
     private suspend fun mergeVariantBuckets(fromVariantId: String, toVariantId: String) {
         val now = System.currentTimeMillis()
@@ -264,18 +351,28 @@ class CollectionRepository(private val database: CollectionDatabase) {
     suspend fun allForms() = master.getAllForms()
     suspend fun allCostumes() = master.getAllCostumes()
     suspend fun allBackgrounds() = master.getAllBackgrounds()
+    suspend fun allTags() = collectionTags.getAll()
+    suspend fun allTagAssignments() = collectionTags.getAllAssignments()
 
     suspend fun restore(
         groupsToRestore: List<AccountGroupEntity>,
         accountsToRestore: List<AccountEntity>,
         variantsToRestore: List<CollectionVariantEntity>,
         bucketsToRestore: List<OwnershipBucketEntity>,
+        tagsToRestore: List<CollectionTagEntity> = emptyList(),
+        tagAssignmentsToRestore: List<CollectionVariantTagEntity> = emptyList(),
     ) {
         database.withTransaction {
             groups.upsertAll(groupsToRestore)
             accounts.upsertAll(accountsToRestore)
             variants.upsertAll(variantsToRestore)
             buckets.upsertAll(bucketsToRestore.filter { it.quantity > 0 })
+            tagsToRestore.forEach { collectionTags.upsert(it) }
+            collectionTags.insertAssignments(
+                tagAssignmentsToRestore.filter { assignment ->
+                    tagsToRestore.any { it.id == assignment.tagId } && variantsToRestore.any { it.id == assignment.variantId }
+                },
+            )
         }
     }
 

@@ -16,6 +16,9 @@ class CollectionFilterTest {
         gender: Gender = Gender.MALE,
         shadow: ShadowState = ShadowState.NORMAL,
         dynamax: DynamaxState = DynamaxState.NONE,
+        formKey: String = "NORMAL",
+        isDefaultForm: Boolean = true,
+        formName: String = "一般型態",
         quantity: Long = 1,
         xxl: Long = 1,
         xxs: Long = 0,
@@ -28,7 +31,9 @@ class CollectionFilterTest {
         costumeId = "COSTUME_NONE",
         speciesName = "烈空坐",
         dexNumber = 384,
-        formName = "一般型態",
+        formName = formName,
+        formKey = formKey,
+        isDefaultForm = isDefaultForm,
         costumeName = "無裝扮",
         backgroundName = "大阪背卡",
         backgroundCategoryName = "GO Fest 地區背卡",
@@ -74,6 +79,28 @@ class CollectionFilterTest {
     }
 
     @Test
+    fun customTagsActAsOneOrGroupAndCombineWithOtherConditions() {
+        val selectedTags = setOf("TAG_MAIN", "TAG_TRADE")
+        assertTrue(
+            row().matches(
+                query = "",
+                filters = setOf(VariantFilterMode.SHINY),
+                customTagIds = selectedTags,
+                assignedTagIds = setOf("TAG_TRADE"),
+            ),
+        )
+        assertFalse(
+            row().matches(
+                query = "",
+                filters = setOf(VariantFilterMode.SHINY),
+                customTagIds = selectedTags,
+                assignedTagIds = emptySet(),
+            ),
+        )
+        assertEquals(2, filterCriterionCount(setOf(VariantFilterMode.SHINY), emptySet(), selectedTags))
+    }
+
+    @Test
     fun filterCountsUseActualPokemonQuantity() {
         val rows = listOf(
             row(quantity = 3, shiny = true, xxl = 2, untraded = 3),
@@ -85,6 +112,29 @@ class CollectionFilterTest {
         assertEquals(2, rows.quantityForFilter(VariantFilterMode.XXL))
         assertEquals(3, rows.quantityForFilter(VariantFilterMode.AVAILABLE))
         assertEquals(2, rows.quantityForFilter(VariantFilterMode.TRADED))
+    }
+
+    @Test
+    fun nonDefaultFormUsesMasterDataAndExcludesTechnicalStates() {
+        val regional = row(formKey = "ALOLA", isDefaultForm = false, formName = "阿羅拉型態", quantity = 2)
+        val gigantamax = row(
+            formKey = "GIGANTAMAX",
+            isDefaultForm = false,
+            formName = "超極巨化",
+            dynamax = DynamaxState.GIGANTAMAX,
+            quantity = 3,
+        )
+        val shadowTechnicalForm = row(
+            formKey = "S",
+            isDefaultForm = false,
+            formName = "暗影專用型態",
+            shadow = ShadowState.SHADOW,
+            quantity = 4,
+        )
+
+        assertEquals(2, listOf(regional, gigantamax, shadowTechnicalForm).quantityForFilter(VariantFilterMode.FORM))
+        assertEquals(3, listOf(gigantamax).quantityForFilter(VariantFilterMode.GIGANTAMAX))
+        assertEquals(listOf("阿羅拉型態"), listOf(regional, gigantamax, shadowTechnicalForm).nonDefaultCollectionFormNames())
     }
 }
 

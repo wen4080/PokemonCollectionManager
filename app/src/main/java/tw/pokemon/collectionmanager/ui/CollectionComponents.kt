@@ -46,6 +46,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,6 +60,7 @@ import android.util.Log
 import kotlinx.coroutines.CancellationException
 import tw.pokemon.collectionmanager.data.local.Gender
 import tw.pokemon.collectionmanager.data.local.BackgroundEntity
+import tw.pokemon.collectionmanager.data.local.CollectionTagEntity
 import tw.pokemon.collectionmanager.data.local.VariantCardRow
 import tw.pokemon.collectionmanager.data.repository.PokemonImageRepository
 
@@ -67,14 +69,14 @@ enum class VariantFilterMode(val label: String) {
     SHINY("異色"),
     BACKGROUND("背景"),
     COSTUME("裝扮"),
-    FORM("型態"),
+    FORM("非一般型態"),
     XXL("特大"),
     XXS("特小"),
     SPECIAL_MOVE("特招"),
     AVAILABLE("可交換"),
     TRADED("已交換"),
-    MALE("雄性"),
-    FEMALE("雌性"),
+    MALE("公"),
+    FEMALE("母"),
     SHADOW("暗影"),
     PURIFIED("淨化"),
     DYNAMAX("極巨化"),
@@ -103,6 +105,8 @@ fun VariantCardRow.matches(
     backgroundIds: Set<String> = emptySet(),
     matchMode: FilterMatchMode = FilterMatchMode.ALL,
     minimumMatches: Int = 2,
+    customTagIds: Set<String> = emptySet(),
+    assignedTagIds: Set<String> = emptySet(),
 ): Boolean {
     val textMatches = matchesQuery(query)
     val activeFilters = filters - VariantFilterMode.ALL
@@ -120,6 +124,7 @@ fun VariantCardRow.matches(
         if (selected.isNotEmpty()) criterionResults += selected.any(::matchesFilter)
     }
     if (backgroundIds.isNotEmpty()) criterionResults += backgroundId in backgroundIds
+    if (customTagIds.isNotEmpty()) criterionResults += assignedTagIds.any { it in customTagIds }
     val filterMatches = when {
         criterionResults.isEmpty() -> true
         matchMode == FilterMatchMode.ALL -> criterionResults.all { it }
@@ -129,7 +134,11 @@ fun VariantCardRow.matches(
     return textMatches && filterMatches
 }
 
-fun filterCriterionCount(filters: Set<VariantFilterMode>, backgroundIds: Set<String>): Int {
+fun filterCriterionCount(
+    filters: Set<VariantFilterMode>,
+    backgroundIds: Set<String>,
+    customTagIds: Set<String> = emptySet(),
+): Int {
     val activeFilters = filters - VariantFilterMode.ALL
     val grouped = listOf(
         setOf(VariantFilterMode.XXL, VariantFilterMode.XXS),
@@ -140,15 +149,38 @@ fun filterCriterionCount(filters: Set<VariantFilterMode>, backgroundIds: Set<Str
     )
     val groupedSelections = grouped.count { activeFilters.intersect(it).isNotEmpty() }
     val groupedModes = grouped.flatten().toSet()
-    return (activeFilters - groupedModes).size + groupedSelections + if (backgroundIds.isEmpty()) 0 else 1
+    return (activeFilters - groupedModes).size + groupedSelections +
+        (if (backgroundIds.isEmpty()) 0 else 1) +
+        (if (customTagIds.isEmpty()) 0 else 1)
 }
+
+private val technicalStateFormKeys = setOf("DYNAMAX", "GIGANTAMAX", "S", "SHADOW", "PURIFIED")
+
+/**
+ * 型態主資料與收藏狀態分工：
+ * 一般型態以 isDefault 表示；極巨化與暗影狀態由獨立狀態欄位表示，
+ * 不再被重複算入「非一般型態」。
+ */
+fun VariantCardRow.isNonDefaultCollectionForm(): Boolean =
+    !isDefaultForm &&
+        formKey.uppercase() != "NORMAL" &&
+        formKey.uppercase() !in technicalStateFormKeys
+
+fun List<VariantCardRow>.nonDefaultCollectionFormNames(): List<String> =
+    asSequence()
+        .filter { it.isNonDefaultCollectionForm() }
+        .map { it.formName.trim() }
+        .filter(String::isNotBlank)
+        .distinct()
+        .sorted()
+        .toList()
 
 fun VariantCardRow.quantityForFilter(filter: VariantFilterMode): Long = when (filter) {
     VariantFilterMode.ALL -> totalQuantity
     VariantFilterMode.SHINY -> if (isShiny) totalQuantity else 0
     VariantFilterMode.BACKGROUND -> if (backgroundId != "BACKGROUND_NONE") totalQuantity else 0
     VariantFilterMode.COSTUME -> if (costumeName != "無裝扮") totalQuantity else 0
-    VariantFilterMode.FORM -> if (formName != "一般型態") totalQuantity else 0
+    VariantFilterMode.FORM -> if (isNonDefaultCollectionForm()) totalQuantity else 0
     VariantFilterMode.XXL -> xxlQuantity
     VariantFilterMode.XXS -> xxsQuantity
     VariantFilterMode.SPECIAL_MOVE -> specialMoveQuantity
@@ -210,15 +242,24 @@ fun CollectionFilterPanel(
     backgrounds: List<BackgroundEntity>,
     imageRepository: PokemonImageRepository,
     countSource: List<VariantCardRow>,
+    customTags: List<CollectionTagEntity>,
+    selectedTagIds: Set<String>,
+    tagIdsByVariant: Map<String, Set<String>>,
+    allowInnerScroll: Boolean = true,
     onFiltersChanged: (Set<VariantFilterMode>) -> Unit,
     onBackgroundsChanged: (Set<String>) -> Unit,
+    onTagsChanged: (Set<String>) -> Unit,
     onMatchModeChanged: (FilterMatchMode) -> Unit,
     onMinimumChanged: (Int) -> Unit,
     onRememberChanged: (Boolean) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val criterionCount = filterCriterionCount(filters, backgroundIds)
+    val criterionCount = filterCriterionCount(filters, backgroundIds, selectedTagIds)
     val effectiveMinimum = minimumMatches.coerceIn(1, criterionCount.coerceAtLeast(1))
+    var minimumText by remember { mutableStateOf("") }
+    LaunchedEffect(effectiveMinimum, matchMode, criterionCount) {
+        minimumText = effectiveMinimum.toString()
+    }
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
         Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -231,13 +272,76 @@ fun CollectionFilterPanel(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = 420.dp)
-                        .verticalScroll(rememberScrollState(), overscrollEffect = null)
+                        .then(
+                            if (allowInnerScroll) {
+                                Modifier
+                                    .heightIn(max = 420.dp)
+                                    .verticalScroll(rememberScrollState(), overscrollEffect = null)
+                            } else {
+                                Modifier
+                            },
+                        )
                         .padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     FilterBar(filters, countSource, onFiltersChanged)
+                    val formNames = countSource.nonDefaultCollectionFormNames()
+                    Text(
+                        if (VariantFilterMode.FORM in filters) {
+                            "目前符合的實際型態：${formNames.takeIf { it.isNotEmpty() }?.joinToString("、") ?: "無"}"
+                        } else {
+                            "已登記的非一般型態：${formNames.takeIf { it.isNotEmpty() }?.joinToString("、") ?: "無"}"
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = if (VariantFilterMode.FORM in filters) FontWeight.Bold else FontWeight.Normal,
+                        color = if (VariantFilterMode.FORM in filters) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        },
+                    )
+                    Text(
+                        "極巨化、超極巨化與暗影會在各自的條件中獨立統計。",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                     BackgroundFilterRow(backgroundIds, backgrounds, imageRepository, countSource, onBackgroundsChanged)
+                    Text("自訂摘要標籤", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    if (customTags.isEmpty()) {
+                        Text(
+                            "尚未建立自訂摘要標籤。",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    } else {
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp),
+                        ) {
+                            customTags.forEach { tag ->
+                                val quantity = countSource
+                                    .filter { tag.id in tagIdsByVariant[it.variantId].orEmpty() }
+                                    .sumOf { it.totalQuantity }
+                                FilterChip(
+                                    selected = tag.id in selectedTagIds,
+                                    onClick = {
+                                        onTagsChanged(
+                                            if (tag.id in selectedTagIds) selectedTagIds - tag.id
+                                            else selectedTagIds + tag.id,
+                                        )
+                                    },
+                                    label = { Text("${tag.name}（$quantity）") },
+                                )
+                            }
+                        }
+                        if (selectedTagIds.isNotEmpty()) {
+                            Text(
+                                "多個自訂摘要標籤採任一標籤符合，再依條件配對方式與其他條件計算。",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
                     Text("條件配對方式", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         FilterMatchMode.entries.forEach { mode ->
@@ -247,11 +351,34 @@ fun CollectionFilterPanel(
                     if (matchMode == FilterMatchMode.AT_LEAST) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text("至少符合")
-                            TextButton(onClick = { onMinimumChanged((effectiveMinimum - 1).coerceAtLeast(1)) }) { Text("－") }
-                            Text(effectiveMinimum.toString(), fontWeight = FontWeight.Bold)
-                            TextButton(onClick = { onMinimumChanged((effectiveMinimum + 1).coerceAtMost(criterionCount.coerceAtLeast(1))) }) { Text("＋") }
+                            TextButton(
+                                enabled = effectiveMinimum > 1,
+                                onClick = { onMinimumChanged((effectiveMinimum - 1).coerceAtLeast(1)) },
+                            ) { Text("－") }
+                            OutlinedTextField(
+                                value = minimumText,
+                                onValueChange = { input ->
+                                    val digits = input.filter(Char::isDigit).take(3)
+                                    minimumText = digits
+                                    digits.toIntOrNull()?.let { value ->
+                                        onMinimumChanged(value.coerceIn(1, criterionCount.coerceAtLeast(1)))
+                                    }
+                                },
+                                singleLine = true,
+                                label = { Text("N") },
+                                modifier = Modifier.width(78.dp),
+                            )
+                            TextButton(
+                                enabled = effectiveMinimum < criterionCount.coerceAtLeast(1),
+                                onClick = { onMinimumChanged((effectiveMinimum + 1).coerceAtMost(criterionCount.coerceAtLeast(1))) },
+                            ) { Text("＋") }
                             Text("個條件")
                         }
+                        Text(
+                            "目前有 $criterionCount 個可配對條件，N 的範圍為 1～${criterionCount.coerceAtLeast(1)}。",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {

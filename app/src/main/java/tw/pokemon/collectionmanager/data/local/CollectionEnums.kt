@@ -1,8 +1,8 @@
 package tw.pokemon.collectionmanager.data.local
 
 enum class Gender(val code: String, val label: String) {
-    MALE("MALE", "♂ 雄性"),
-    FEMALE("FEMALE", "♀ 雌性"),
+    MALE("MALE", "公"),
+    FEMALE("FEMALE", "母"),
     GENDERLESS("GENDERLESS", "無性別"),
     UNKNOWN("UNKNOWN", "性別未確認");
 
@@ -69,3 +69,4 @@ enum class ThemeMode(val code: String, val label: String) {
         fun fromCode(code: String?): ThemeMode = entries.firstOrNull { it.code == code } ?: SYSTEM
     }
 }
+

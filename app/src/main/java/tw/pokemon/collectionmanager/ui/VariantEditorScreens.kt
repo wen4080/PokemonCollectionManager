@@ -23,6 +23,8 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items as gridItems
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -57,6 +59,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.flowOf
 import tw.pokemon.collectionmanager.data.local.BackgroundEntity
 import tw.pokemon.collectionmanager.data.local.CollectionVariantEntity
+import tw.pokemon.collectionmanager.data.local.CollectionTagEntity
 import tw.pokemon.collectionmanager.data.local.CostumeEntity
 import tw.pokemon.collectionmanager.data.local.DynamaxState
 import tw.pokemon.collectionmanager.data.local.Gender
@@ -114,6 +117,7 @@ fun QuickAddSheet(
     val allSpecies by viewModel.species.collectAsStateWithLifecycle()
     val costumes by viewModel.costumes.collectAsStateWithLifecycle()
     val backgrounds by viewModel.backgrounds.collectAsStateWithLifecycle()
+    val customTags by viewModel.customTags.collectAsStateWithLifecycle()
     var step by remember(initialInfo?.variantId) {
         mutableStateOf(if (initialInfo == null) AddStep.PICK_POKEMON else AddStep.CONFIGURE_VARIANT)
     }
@@ -131,8 +135,17 @@ fun QuickAddSheet(
     var specialMove by remember { mutableStateOf(false) }
     var tradeState by remember { mutableStateOf(TradeState.UNTRADED) }
     var quantityText by remember { mutableStateOf("1") }
+    val existingTagIdsFlow = remember(initialInfo?.variantId) {
+        initialInfo?.variantId?.let(viewModel::variantTagIds) ?: flowOf(emptyList<String>())
+    }
+    val existingTagIds by existingTagIdsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
+    var selectedTagIds by remember(initialInfo?.variantId) { mutableStateOf(emptySet<String>()) }
     var showCostumePicker by remember { mutableStateOf(false) }
     var showBackgroundPicker by remember { mutableStateOf(false) }
+
+    LaunchedEffect(initialInfo?.variantId, existingTagIds) {
+        if (initialInfo != null) selectedTagIds = existingTagIds.toSet()
+    }
 
     val pickerFlow = remember(searchText, generation) { viewModel.searchSpecies(searchText, generation) }
     val pickerSpecies by pickerFlow.collectAsStateWithLifecycle(initialValue = emptyList())
@@ -207,6 +220,7 @@ fun QuickAddSheet(
                         formId = ""
                         costumeId = NO_COSTUME_ID
                         backgroundId = NO_BACKGROUND_ID
+                        if (initialInfo == null) selectedTagIds = emptySet()
                         step = AddStep.CONFIGURE_VARIANT
                     },
                 )
@@ -224,6 +238,13 @@ fun QuickAddSheet(
                     backgroundCompatibilityCount = backgroundCompatibility.size,
                     selectedBackgroundId = backgroundId,
                     onBackgroundPicker = { showBackgroundPicker = true },
+                    customTags = customTags,
+                    selectedTagIds = selectedTagIds,
+                    onTagToggle = { tagId ->
+                        selectedTagIds = selectedTagIds.toMutableSet().apply {
+                            if (!add(tagId)) remove(tagId)
+                        }
+                    },
                     shiny = shiny,
                     onShinyChanged = { shiny = it },
                     gender = gender,
@@ -253,10 +274,16 @@ fun QuickAddSheet(
                                     VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax),
                                     BucketDraft(size, specialMove, tradeState),
                                     quantity,
+                                    tagIds = selectedTagIds,
                                 )
                                 onDismiss()
                             } else {
-                                viewModel.updateVariant(initialInfo.variantId, accountId, VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax))
+                                viewModel.updateVariant(
+                                    initialInfo.variantId,
+                                    accountId,
+                                    VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax),
+                                    tagIds = selectedTagIds,
+                                )
                                 onSaved()
                                 onDismiss()
                             }
@@ -272,6 +299,7 @@ fun QuickAddSheet(
                                     BucketDraft(size, specialMove, tradeState),
                                     quantity,
                                     continueAdding = true,
+                                    tagIds = selectedTagIds,
                                 )
                                 searchText = ""
                                 generation = null
@@ -280,6 +308,7 @@ fun QuickAddSheet(
                                 costumeId = NO_COSTUME_ID
                                 backgroundId = NO_BACKGROUND_ID
                                 quantityText = "1"
+                                selectedTagIds = emptySet()
                                 step = AddStep.PICK_POKEMON
                             }
                         }
@@ -403,6 +432,9 @@ private fun VariantConfiguration(
     backgroundCompatibilityCount: Int,
     selectedBackgroundId: String,
     onBackgroundPicker: () -> Unit,
+    customTags: List<CollectionTagEntity>,
+    selectedTagIds: Set<String>,
+    onTagToggle: (String) -> Unit,
     shiny: Boolean,
     onShinyChanged: (Boolean) -> Unit,
     gender: Gender,
@@ -518,7 +550,12 @@ private fun VariantConfiguration(
                 Text("尚無可靠的適用關係資料，選擇器會列出目前已知背景。", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
-            Text("版本狀態", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            CustomVariantTagSection(
+                tags = customTags,
+                selectedTagIds = selectedTagIds,
+                onTagToggle = onTagToggle,
+            )
+
             Text("是否異色", style = MaterialTheme.typography.labelLarge)
             HorizontalChoices {
                 ChoiceChip("一般", !shiny) { onShinyChanged(false) }
@@ -542,14 +579,16 @@ private fun VariantConfiguration(
             }
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
-            Text("收藏數量", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Text("尺寸、特招與交換狀態只會合併數量，不會建立新的收藏組合。", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("尺寸、特招與交換狀態", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text("這三項只會合併同一收藏組合的數量，不會建立新的收藏組合。", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             HorizontalChoices { SizeType.entries.forEach { value -> ChoiceChip(value.label, size == value) { onSizeChanged(value) } } }
             HorizontalChoices {
                 ChoiceChip("無特招", !specialMove) { onSpecialMoveChanged(false) }
                 ChoiceChip("⚡ 有特招", specialMove) { onSpecialMoveChanged(true) }
             }
             HorizontalChoices { TradeState.entries.forEach { value -> ChoiceChip(value.label, tradeState == value) { onTradeStateChanged(value) } } }
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+            Text("收藏數量", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             OutlinedTextField(
                 value = quantityText,
                 onValueChange = onQuantityChanged,
@@ -916,6 +955,9 @@ fun VariantDetailScreen(
     val sources by viewModel.variantSources(variantId).collectAsStateWithLifecycle(initialValue = emptyList())
     val selectedIds by viewModel.overviewAccountIds.collectAsStateWithLifecycle()
     val selectedSourceRows = if (selectedIds.isEmpty()) sources else sources.filter { it.accountId in selectedIds }
+    val customTags by viewModel.customTags.collectAsStateWithLifecycle()
+    val variantTagIdsFlow = remember(variantId) { viewModel.variantTagIds(variantId) }
+    val selectedTagIds by variantTagIdsFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val aggregateFlow = remember(selectedIds) { viewModel.selectedVariants(selectedIds) }
     val aggregateVariants by aggregateFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val aggregate = aggregateVariants.firstOrNull { it.variantId == variantId }
@@ -964,6 +1006,18 @@ fun VariantDetailScreen(
         InfoLine("性別", currentInfo.gender.label)
         InfoLine("暗影／淨化", currentInfo.shadowState.label)
         InfoLine("極巨狀態", currentInfo.dynamaxState.label)
+        if (customTags.isNotEmpty()) {
+            CustomVariantTagSection(
+                tags = customTags,
+                selectedTagIds = selectedTagIds.toSet(),
+                onTagToggle = { tagId ->
+                    val next = selectedTagIds.toSet().let { current ->
+                        if (tagId in current) current - tagId else current + tagId
+                    }
+                    viewModel.setVariantTags(variantId, next)
+                },
+            )
+        }
         HorizontalDivider()
         if (accountId != null) {
             val total = buckets.sumOf { it.quantity }
@@ -999,6 +1053,49 @@ fun VariantDetailScreen(
             confirmButton = { Button(onClick = { viewModel.deleteVariant(variantId); showDelete = false; onBack() }) { Text("確定刪除") } },
             dismissButton = { TextButton(onClick = { showDelete = false }) { Text("取消") } },
         )
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun CustomVariantTagSection(
+    tags: List<CollectionTagEntity>,
+    selectedTagIds: Set<String>,
+    onTagToggle: (String) -> Unit,
+) {
+    SectionTitle("自訂摘要標籤")
+    Text(
+        "可在總覽摘要中統計與篩選套用這些標籤的收藏組合。",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    if (tags.isEmpty()) {
+        Text(
+            "尚未建立自訂摘要標籤，請先到總覽的摘要設定新增。",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    } else {
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            tags.forEach { tag ->
+                FilterChip(
+                    selected = tag.id in selectedTagIds,
+                    onClick = { onTagToggle(tag.id) },
+                    label = { Text(tag.name) },
+                )
+            }
+        }
+        tags.filter { it.id in selectedTagIds && !it.description.isNullOrBlank() }.forEach { tag ->
+            Text(
+                "${tag.name}：${tag.description}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 
