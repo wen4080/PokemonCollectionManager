@@ -1404,8 +1404,8 @@ def costume_event_name(costume_key: str, display_name: str) -> str:
         ("NEWYEAR", "新年活動"), ("SPRING", "春季活動"),
         ("SUMMER", "夏季活動"), ("FASHION", "時尚週活動"),
         ("ANNIVERSARY", "週年紀念活動"), ("ADVENTURE", "冒險活動"),
-        ("ASTRONAUT", "Pokémon GO × ESA 太空合作"),
-        ("ESA", "Pokémon GO × ESA 太空合作"),
+        ("ASTRONAUT", "Pokémon GO × 歐洲太空總署太空合作"),
+        ("ESA", "Pokémon GO × 歐洲太空總署太空合作"),
         ("SPACESTATION", "太空站合作活動"),
         ("SPACE", "太空合作活動"),
     ]
