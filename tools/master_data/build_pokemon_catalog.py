@@ -240,6 +240,7 @@ def main() -> None:
             "effectNote": None,
             "previewImageKey": None,
             "previewSource": None,
+            "previewStatus": "NOT_APPLICABLE",
             "sortOrder": 0,
         }
     ]
@@ -264,9 +265,21 @@ def main() -> None:
         if preview:
             background["previewImageKey"] = preview["previewImageKey"]
             background["previewSource"] = preview["previewSource"]
+            background["previewStatus"] = "COMPLETE_STATIC_PREVIEW"
         else:
             background.setdefault("previewImageKey", None)
             background.setdefault("previewSource", None)
+            if not background.get("imageKey"):
+                background["previewStatus"] = "NO_IMAGE"
+            elif (
+                background.get("vfxKey")
+                or background.get("vfxKeys")
+                or background.get("effectNote")
+                or str(background.get("backgroundKey", "")).startswith("ASSET_SB_")
+            ):
+                background["previewStatus"] = "STATIC_BASE_ONLY"
+            else:
+                background["previewStatus"] = "STATIC_IMAGE"
     background_compatibility = []
 
     image_keys = set()
@@ -285,6 +298,7 @@ def main() -> None:
         "backgrounds": backgrounds,
         "costumeCompatibility": costume_compatibility,
         "backgroundCompatibility": background_compatibility,
+        "backgroundPreviewAudit": preview_manifest.get("audit", {}),
         "formNameAudit": parsed.get("formNameAudit", {}),
         "formPolicyAudit": {
             "speciesWithoutStandaloneNormalForm": sorted(species_without_standalone_normal),
