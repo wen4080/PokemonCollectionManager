@@ -34,6 +34,35 @@ def collect_image_keys(manifest: dict, groups: tuple[str, ...] = GROUPS) -> set[
     return keys
 
 
+def cached_background_source_keys(manifest: dict, asset_dir: pathlib.Path | None) -> set[str]:
+    """找出已有最佳化背景可覆蓋的原始鍵，避免每次更新重抓全部舊圖。"""
+    if asset_dir is None:
+        return set()
+    index_path = asset_dir / "master" / "background_image_index.json"
+    if not index_path.is_file():
+        return set()
+    try:
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    if not isinstance(index, dict):
+        return set()
+    cached: set[str] = set()
+    for background in manifest.get("backgrounds", []):
+        background_id = str(background.get("id") or "")
+        optimized_key = index.get(background_id)
+        if not background_id or not optimized_key:
+            continue
+        optimized_path = asset_dir / "images" / pathlib.Path(*pathlib.PurePosixPath(str(optimized_key)).parts)
+        if not optimized_path.is_file():
+            continue
+        for field in ("imageKey", "previewImageKey"):
+            image_key = background.get(field)
+            if image_key and not str(image_key).startswith(("http://", "https://")):
+                cached.add(str(image_key))
+    return cached
+
+
 def relative_asset_path(image_key: str) -> pathlib.PurePosixPath:
     value = image_key.removeprefix("pogo/")
     return pathlib.PurePosixPath(value if pathlib.PurePosixPath(value).suffix else f"{value}.png")
@@ -65,6 +94,11 @@ def main() -> None:
     parser.add_argument("--asset-dir", type=pathlib.Path)
     parser.add_argument("--download", action="store_true")
     parser.add_argument(
+        "--skip-cached-backgrounds",
+        action="store_true",
+        help="背景群組若已有 background_image_index.json 可解析，跳過舊原始圖下載",
+    )
+    parser.add_argument(
         "--groups",
         nargs="+",
         choices=GROUPS,
@@ -78,6 +112,7 @@ def main() -> None:
     missing = 0
     downloaded = 0
     existing = 0
+    cached_background_keys = cached_background_source_keys(manifest, args.asset_dir) if args.skip_cached_backgrounds else set()
     for image_key in sorted(collect_image_keys(manifest, tuple(args.groups))):
         url = remote_url(image_key)
         relative_path = relative_asset_path(image_key)
@@ -88,6 +123,9 @@ def main() -> None:
         }
         records.append(record)
         if args.download and args.asset_dir is not None and url is not None:
+            if image_key in cached_background_keys:
+                existing += 1
+                continue
             target = args.asset_dir / "images" / pathlib.Path(*relative_path.parts)
             if target.is_file() and not args.overwrite:
                 existing += 1
@@ -113,3 +151,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
