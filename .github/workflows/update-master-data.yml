@@ -2,6 +2,10 @@ name: 更新 Pokémon 主資料
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "tools/master_data/**"
+      - ".github/workflows/update-master-data.yml"
   schedule:
     - cron: "17 17 * * *"
 
@@ -70,3 +74,4 @@ jobs:
       - name: 發佈 GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
