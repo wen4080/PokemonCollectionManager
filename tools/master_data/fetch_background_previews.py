@@ -8,11 +8,13 @@ PokeMiners 的 LocationCards 仍是主資料身分來源，這裡的預覽只補
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import mimetypes
 import pathlib
 import re
 import sys
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
@@ -27,6 +29,12 @@ DITTOBASE_ASSET_PATTERN = re.compile(
 )
 DITTOBASE_CURRENT_BACKGROUND_PATTERN = re.compile(
     r'alt=["\']Background["\'][^>]*src=["\'](https://assets\.dittobase\.com/go/backgrounds/[A-Za-z0-9._-]+)["\']',
+    re.IGNORECASE,
+)
+POGOMATE_INDEX_URL = "https://pogomate.com/en/backgrounds"
+POGOMATE_BACKGROUND_IMAGE_PATTERN = re.compile(
+    r"<img\b(?=[^>]*\bsrc=[\"'](https://cdn\.pogomate\.com/backgrounds/[^\"']+)[\"'])"
+    r"(?=[^>]*\balt=[\"']([^\"']+)[\"'])[^>]*>",
     re.IGNORECASE,
 )
 
@@ -126,6 +134,212 @@ def request_bytes(url: str) -> tuple[bytes, str | None]:
         return response.read(), response.headers.get_content_type()
 
 
+def normalized_search_text(value: str | None) -> str:
+    """把活動名稱轉成可跨中英文、底線與空白比對的穩定字串。"""
+    if not value:
+        return ""
+    return re.sub(r"[\W_]+", "", html.unescape(value).casefold())
+
+
+def search_tokens(value: str | None) -> set[str]:
+    if not value:
+        return set()
+    ignored = {"and", "background", "go", "in", "of", "pokemon", "the"}
+    return {
+        token.casefold()
+        for token in re.findall(r"[A-Za-z0-9]+|[\u4e00-\u9fff]+", html.unescape(value))
+        if token.casefold() not in ignored and not re.fullmatch(r"20\d{2}", token)
+    }
+
+
+def image_stem(image_key: str | None) -> str | None:
+    if not image_key:
+        return None
+    return pathlib.PurePosixPath(image_key.split("?", 1)[0]).stem
+
+
+def fetch_pogomate_previews() -> list[dict[str, str]]:
+    """讀取公開背卡索引，取得每個活動卡面的完整靜態合成預覽。
+
+    PoGoMiners 的 sb/lc 圖片常是遊戲底圖；PoGoMate 的 card image 則是
+    經過網站整理的卡面預覽，通常已包含月亮、圖騰、前景等可見圖層。
+    這裡只在 Windows/GitHub Actions 建置階段下載，不在手機上爬網站。
+    """
+    document_bytes, _ = request_bytes(POGOMATE_INDEX_URL)
+    document = document_bytes.decode("utf-8", errors="replace")
+    rows: list[dict[str, str]] = []
+    seen_urls: set[str] = set()
+    seen_titles: set[str] = set()
+
+    def add_row(
+        *,
+        title: str,
+        image: str,
+        event: str | None = None,
+        source_image_stem: str | None = None,
+    ) -> None:
+        title = html.unescape(re.sub(r"\s+", " ", title).strip())
+        if not title:
+            return
+        image = html.unescape(image).strip()
+        if not image.startswith(("http://", "https://")):
+            image = "https://assets.dittobase.com/go/backgrounds/" + image.lstrip("/")
+        title_key = normalized_search_text(title)
+        if image in seen_urls or title_key in seen_titles:
+            return
+        seen_urls.add(image)
+        seen_titles.add(title_key)
+        rows.append(
+            {
+                "title": title,
+                "event": event or "",
+                "image": image,
+                "page": POGOMATE_INDEX_URL,
+                "slug": f"pogomate-{pathlib.PurePosixPath(image.split('?', 1)[0]).stem}",
+                "sourceImageStem": source_image_stem or image_stem(image),
+            }
+        )
+
+    for match in POGOMATE_BACKGROUND_IMAGE_PATTERN.finditer(document):
+        add_row(title=match.group(2), image=match.group(1))
+
+    # 背卡頁面首屏只輸出 12 組卡面；其餘資料由 Next.js 延遲載入。
+    # 從頁面路由的延遲 chunk 找到完整背景目錄，避免新活動永遠只在
+    # 使用者按「載入更多」後才看得到，卻沒有被自動更新流程取得。
+    script_sources = re.findall(r"<script[^>]+src=[\"']([^\"']+)[\"']", document, re.IGNORECASE)
+    route_scripts: list[str] = []
+    for source in script_sources:
+        try:
+            script_url = urllib.parse.urljoin(POGOMATE_INDEX_URL, html.unescape(source))
+            script_bytes, _ = request_bytes(script_url)
+            script = script_bytes.decode("utf-8", errors="replace")
+            if "BackgroundBrowser" in script or "onClick:Y" in script:
+                route_scripts.append(script)
+        except Exception:
+            continue
+
+    lazy_chunk_paths: set[str] = set()
+    for script in route_scripts:
+        lazy_chunk_paths.update(
+            re.findall(r"static/chunks/([A-Za-z0-9_.~-]+[.]js)", script)
+        )
+    record_pattern = re.compile(
+        r'\{id:"([^"]+)",name:"([^"]*)",nameKo:"([^"]*)",type:"([^"]+)",'
+        r'event:"([^"]*)",eventKo:"([^"]*)",image:(?:"([^"]*)"|null),date:"([^"]*)"'
+    )
+    for chunk_path in sorted(lazy_chunk_paths):
+        try:
+            chunk_url = f"https://pogomate.com/_next/static/chunks/{chunk_path}"
+            chunk_bytes, _ = request_bytes(chunk_url)
+            chunk = chunk_bytes.decode("utf-8", errors="replace")
+        except Exception:
+            continue
+        for _id, name, _name_ko, _type, event, _event_ko, image, _date in record_pattern.findall(chunk):
+            if image:
+                add_row(title=name, event=event, image=image)
+    if not rows:
+        raise RuntimeError(f"PoGoMate 背卡索引沒有找到圖片：{POGOMATE_INDEX_URL}")
+    return rows
+
+
+def match_pogomate_previews(
+    provider_rows: list[dict[str, str]],
+    backgrounds: list[dict],
+) -> tuple[dict[str, dict[str, str]], dict[str, object]]:
+    """以背景主資料的活動名稱／來源檔名保守配對完整預覽。
+
+    不用「第一筆看起來像的圖片」硬配。只有唯一高信心配對才會寫入，
+    無法判斷的項目會留在 audit，讓未來主資料更新時可見而不會錯配。
+    """
+    candidates: dict[str, list[tuple[int, dict[str, str]]]] = {}
+    event_counts: dict[str, int] = {}
+    title_counts: dict[str, int] = {}
+    for provider in provider_rows:
+        event = normalized_search_text(provider.get("event"))
+        if event:
+            event_counts[event] = event_counts.get(event, 0) + 1
+        title = normalized_search_text(provider.get("title"))
+        if title:
+            title_counts[title] = title_counts.get(title, 0) + 1
+    for background in backgrounds:
+        key = str(background.get("backgroundKey") or "")
+        if not key or key == "NONE":
+            continue
+        background_stem = image_stem(str(background.get("imageKey") or ""))
+        background_texts = [
+            background.get("displayName"),
+            background.get("eventName"),
+            background.get("eventKey"),
+            key,
+            background_stem,
+        ]
+        normalized_display_name = normalized_search_text(background.get("displayName"))
+        normalized_event_name = normalized_search_text(background.get("eventName"))
+        background_tokens = set().union(*(search_tokens(value) for value in background_texts if value))
+        for provider in provider_rows:
+            provider_texts = [provider.get("title"), provider.get("event"), provider.get("sourceImageStem")]
+            provider_tokens = set().union(*(search_tokens(value) for value in provider_texts if value))
+            score = 0
+            if background_stem and normalized_search_text(background_stem) == normalized_search_text(provider.get("sourceImageStem")):
+                score = 120
+            elif normalized_display_name and normalized_display_name == normalized_search_text(provider.get("title")):
+                score = 110
+            elif (
+                normalized_event_name
+                and normalized_event_name == normalized_search_text(provider.get("event"))
+                and event_counts.get(normalized_event_name, 0) == 1
+            ):
+                score = 96
+            elif (
+                normalized_event_name
+                and normalized_event_name == normalized_search_text(provider.get("title"))
+                and title_counts.get(normalized_event_name, 0) == 1
+            ):
+                score = 96
+            else:
+                overlap = background_tokens & provider_tokens
+                if len(overlap) >= 2:
+                    score = 45 + min(35, len(overlap) * 8)
+            if score:
+                candidates.setdefault(key, []).append((score, provider))
+
+    matched: dict[str, dict[str, str]] = {}
+    ambiguous: list[dict[str, object]] = []
+    for key, rows in candidates.items():
+        ordered = sorted(rows, key=lambda item: (-item[0], item[1].get("image", "")))
+        best_score, best = ordered[0]
+        second_score = ordered[1][0] if len(ordered) > 1 else -1
+        # 模糊 token 只用來列入 audit，不足以自動下載；否則「GO」「2026」
+        # 這類共同字詞會把不同活動的背卡錯誤套用到彼此。
+        if best_score >= 96:
+            matched[key] = best
+        else:
+            ambiguous.append(
+                {
+                    "backgroundKey": key,
+                    "candidates": [
+                        {"title": item[1].get("title"), "score": item[0]}
+                        for item in ordered[:5]
+                    ],
+                }
+            )
+    matched_provider_images = {row.get("image") for row in matched.values()}
+    audit = {
+        "provider": "PoGoMate",
+        "providerIndex": POGOMATE_INDEX_URL,
+        "providerPreviewCount": len(provider_rows),
+        "matchedBackgroundCount": len(matched),
+        "matchedProviderImageCount": len(matched_provider_images),
+        "ambiguousMatches": ambiguous,
+        "unmatchedBackgroundKeys": sorted(
+            str(background.get("backgroundKey"))
+            for background in backgrounds
+            if background.get("backgroundKey") not in matched and background.get("backgroundKey") != "NONE"
+        ),
+    }
+    return matched, audit
+
+
 def dittobase_preview(slug: str) -> dict[str, str]:
     page = DITTOBASE_ROOT + slug
     html, _ = request_bytes(page)
@@ -150,13 +364,24 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="下載特殊背卡完整靜態預覽")
     parser.add_argument("--output-dir", type=pathlib.Path, required=True)
     parser.add_argument("--manifest", type=pathlib.Path, required=True)
+    parser.add_argument(
+        "--catalog",
+        type=pathlib.Path,
+        help="解析後的 game_master_catalog.json；用於自動配對新的活動完整預覽",
+    )
     args = parser.parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     slug_cache: dict[str, dict[str, str]] = {}
     rows: list[dict[str, str]] = []
+    row_keys: set[tuple[str | None, str | None, str]] = set()
+    mapped_source_stems: set[str] = set()
+    mapped_background_keys: set[str] = set()
 
     def materialize(source_stem: str | None, background_key: str | None, spec: dict[str, str]) -> None:
+        row_key = (source_stem, background_key, spec["image"])
+        if row_key in row_keys:
+            return
         image, content_type = request_bytes(spec["image"])
         if not content_type or not content_type.startswith("image/"):
             raise RuntimeError(f"回應不是圖片：{spec['image']}（{content_type}）")
@@ -166,6 +391,11 @@ def main() -> int:
         filename = re.sub(r"[^a-z0-9-]+", "-", spec["slug"].lower()).strip("-") + suffix
         destination = args.output_dir / filename
         destination.write_bytes(image)
+        row_keys.add(row_key)
+        if source_stem:
+            mapped_source_stems.add(source_stem)
+        if background_key:
+            mapped_background_keys.add(background_key)
         rows.append(
             {
                 "sourceImageStem": source_stem,
@@ -196,6 +426,80 @@ def main() -> int:
         except Exception as exc:
             failures.append(f"{background_key}: {exc}")
 
+    catalog_backgrounds: list[dict] = []
+    if args.catalog and args.catalog.exists():
+        catalog_root = json.loads(args.catalog.read_text(encoding="utf-8"))
+        catalog_backgrounds = list(catalog_root.get("backgrounds", []))
+
+    provider_audit: dict[str, object] = {
+        "provider": "PoGoMate",
+        "providerIndex": POGOMATE_INDEX_URL,
+        "providerPreviewCount": 0,
+        "matchedBackgroundCount": 0,
+        "matchedProviderImageCount": 0,
+        "ambiguousMatches": [],
+        "unmatchedBackgroundKeys": [],
+        "catalogBackgroundCount": len(catalog_backgrounds),
+    }
+    try:
+        provider_rows = fetch_pogomate_previews()
+        provider_matches, provider_audit = match_pogomate_previews(provider_rows, catalog_backgrounds)
+        provider_audit["catalogBackgroundCount"] = len(catalog_backgrounds)
+        catalog_by_key = {
+            str(item.get("backgroundKey")): item
+            for item in catalog_backgrounds
+            if item.get("backgroundKey")
+        }
+        provider_failures: list[str] = []
+        provider_skips: list[str] = []
+        for background_key, provider in provider_matches.items():
+            background = catalog_by_key.get(background_key, {})
+            stem = image_stem(str(background.get("imageKey") or ""))
+            if background_key in mapped_background_keys or (stem and stem in mapped_source_stems):
+                continue
+            spec = dict(provider)
+            spec["source"] = "PoGoMate"
+            provider_host = urllib.parse.urlparse(str(spec.get("image") or "")).netloc.casefold()
+            if provider_host in {"assets.dittobase.com", "static.wikia.nocookie.net"}:
+                # 這些是第三方的底圖索引，部分時間會拒絕自動下載；而且它們
+                # 不一定是含動態圖層的合成預覽。保留在稽核，不把它冒充完整卡面。
+                provider_skips.append(
+                    f"{background_key}／{provider.get('title')}／{provider_host}"
+                )
+                continue
+            try:
+                materialize(stem, background_key, spec)
+            except Exception as exc:
+                provider_failures.append(
+                    f"{background_key}／{provider.get('title')}: {exc}"
+                )
+        if provider_failures:
+            provider_audit["downloadFailures"] = provider_failures
+        if provider_skips:
+            provider_audit["skippedBaseOnlySources"] = provider_skips
+    except Exception as exc:
+        failures.append(f"PoGoMate 自動完整預覽：{exc}")
+        provider_audit["error"] = str(exc)
+
+    if catalog_backgrounds:
+        represented_keys = set(mapped_background_keys)
+        represented_stems = set(mapped_source_stems)
+        provider_audit["unmatchedBackgroundKeys"] = sorted(
+            str(item.get("backgroundKey"))
+            for item in catalog_backgrounds
+            if item.get("backgroundKey") != "NONE"
+            and item.get("backgroundKey") not in represented_keys
+            and image_stem(str(item.get("imageKey") or "")) not in represented_stems
+        )
+        provider_audit["completePreviewMappedCount"] = len(
+            set(mapped_background_keys)
+            | {
+                str(item.get("backgroundKey"))
+                for item in catalog_backgrounds
+                if image_stem(str(item.get("imageKey") or "")) in represented_stems
+            }
+        )
+
     # 相同檔案可能同時被底圖與主鍵規則使用；實體檔只保留一份。
     manifest = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
@@ -204,6 +508,7 @@ def main() -> int:
         "mappedSourceImages": sum(bool(row.get("sourceImageStem")) for row in rows),
         "mappedBackgroundKeys": sum(bool(row.get("backgroundKey")) for row in rows),
         "failures": failures,
+        "audit": provider_audit,
     }
     referenced_files = {pathlib.PurePosixPath(row["previewImageKey"]).name for row in rows}
     for candidate in args.output_dir.iterdir():
@@ -214,6 +519,8 @@ def main() -> int:
     print(f"完整預覽檔案：{manifest['downloadedFiles']}")
     print(f"底圖對照：{manifest['mappedSourceImages']}")
     print(f"背景主鍵覆寫：{manifest['mappedBackgroundKeys']}")
+    print(f"PoGoMate 自動配對：{provider_audit.get('matchedBackgroundCount', 0)}")
+    print(f"尚待完整預覽稽核：{len(provider_audit.get('unmatchedBackgroundKeys', []))}")
     if failures:
         print("下載失敗：")
         for failure in failures:
@@ -225,3 +532,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
