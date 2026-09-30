@@ -15,6 +15,23 @@ import tw.pokemon.collectionmanager.data.local.ThemeMode
 const val DEFAULT_MASTER_DATA_UPDATE_URL =
     "https://wen4080.github.io/PokemonCollectionManager/master-data/master_manifest.json"
 
+private val LEGACY_SHARED_MASTER_DATA_UPDATE_URLS = setOf(
+    "https://wen4080.github.io/PokemonCollectionManager/master-data/manifest.json",
+    "https://wen4080.github.io/PokemonCollectionManager/master-data/master_manifest_optimized.json",
+    "https://raw.githubusercontent.com/wen4080/PokemonCollectionManager/main/tools/master_data/generated/master_manifest.json",
+    "https://raw.githubusercontent.com/wen4080/PokemonCollectionManager/main/app/src/main/assets/master/master_manifest.json",
+)
+
+fun normalizeMasterDataUpdateUrl(value: String?): String {
+    val trimmed = value.orEmpty().trim()
+    if (trimmed.isBlank()) return DEFAULT_MASTER_DATA_UPDATE_URL
+    return if (trimmed.removeSuffix("/") in LEGACY_SHARED_MASTER_DATA_UPDATE_URLS) {
+        DEFAULT_MASTER_DATA_UPDATE_URL
+    } else {
+        trimmed
+    }
+}
+
 const val DEFAULT_OVERVIEW_SUMMARY_CODES =
     "COLLECTION_SET|SPECIES_COUNT|POKEMON_COUNT|SHINY|BACKGROUND|COSTUME|XXL|SPECIAL_MOVE"
 
@@ -55,7 +72,7 @@ class UserPreferencesRepository(private val context: Context) {
 
     val masterDataUpdateUrl: Flow<String> = context.collectionPreferencesDataStore.data
         .catch { emit(androidx.datastore.preferences.core.emptyPreferences()) }
-        .map { it[Keys.masterDataUpdateUrl].orEmpty().ifBlank { DEFAULT_MASTER_DATA_UPDATE_URL } }
+        .map { normalizeMasterDataUpdateUrl(it[Keys.masterDataUpdateUrl]) }
 
     val automaticMasterDataUpdateEnabled: Flow<Boolean> = context.collectionPreferencesDataStore.data
         .catch { emit(androidx.datastore.preferences.core.emptyPreferences()) }
@@ -97,7 +114,7 @@ class UserPreferencesRepository(private val context: Context) {
     }
 
     suspend fun setMasterDataUpdateUrl(url: String) {
-        context.collectionPreferencesDataStore.edit { it[Keys.masterDataUpdateUrl] = url.trim() }
+        context.collectionPreferencesDataStore.edit { it[Keys.masterDataUpdateUrl] = normalizeMasterDataUpdateUrl(url) }
     }
 
     suspend fun setAutomaticMasterDataUpdateEnabled(enabled: Boolean) {
