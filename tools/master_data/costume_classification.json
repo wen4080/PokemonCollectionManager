@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "description": "補充 Game Master 未明確標示 isCostume 時的裝扮型態語意標記。官方 isCostume 仍優先；這些標記只用於避免新裝扮被誤列為型態。",
+  "semanticTokens": [
+    "ASTRONAUT",
+    "SPACE",
+    "ESA",
+    "SPACESTATION",
+    "SPACE_CENTER",
+    "SPACE_EXPO",
+    "OUTFIT",
+    "DRESS",
+    "SUIT",
+    "UNIFORM",
+    "HELMET",
+    "MASK",
+    "CROWN",
+    "BOWTIE",
+    "SCARF",
+    "BACKPACK",
+    "JACKET",
+    "COAT"
+  ]
+}
+
