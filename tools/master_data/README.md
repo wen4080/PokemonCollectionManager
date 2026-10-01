@@ -38,6 +38,8 @@ python validate_master_data.py --manifest generated/master_manifest_optimized.js
 
 更新時會優先讀取 `master/background_image_index.json` 與既有的 `images/background_optimized/` 快取；舊城市／地區背卡不會因上游暫時 403 或逾時而被清空，只有新出現且沒有快取的背景才需要下載原始圖。新的完整合成預覽仍會優先取代舊底圖，若預覽遺失則退回底圖並保留稽核狀態。
 
+完整預覽更新另有一層防護：`optimize_background_assets.py` 會將候選預覽縮圖與遊戲底圖做差異比對。若外部索引回傳的圖片實際上與底圖幾乎相同，就標記為 `STATIC_BASE_ONLY`；若上一版已有已驗證的完整合成圖，則保留上一版，不讓新一次更新把月亮、硬幣、寶可夢剪影或其他活動圖層覆蓋掉。指定款式（例如十週年索財靈、GO Fest 超夢款式）的直接預覽下載失敗時，也禁止退回同一底圖的通用預覽頁面。
+
 解析器會同時處理兩種 Pokémon GO 圖片資產格式：舊版 `Addressable Assets/pm*.c*.icon.png`，以及活動型態使用的 `pokemon_icon_pm*_pgo_*.png`／`pm*.f*.icon.png`。活動型態會轉成裝扮相容資料，不會只停留在「特殊型態」清單。
 
 背卡會同時掃描 `Images/LocationCards/lc_*.png` 與 `sb_*.png`。能由 Game Master 高信心配對的圖片會綁定既有背卡；無法安全判讀的圖片會建立穩定的 `ASSET_` 背卡鍵，並保留縮圖與可讀名稱，避免因代號格式不同而漏資料或錯配。
