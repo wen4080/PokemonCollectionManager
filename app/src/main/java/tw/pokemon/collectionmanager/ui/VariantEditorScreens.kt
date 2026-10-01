@@ -908,9 +908,13 @@ private fun BackgroundChoiceList(
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
-                        } else if (!background.vfxKeys.isNullOrBlank() || !background.vfxKey.isNullOrBlank()) {
+                        } else if (
+                            background.previewStatus == "STATIC_BASE_ONLY" ||
+                                !background.vfxKeys.isNullOrBlank() ||
+                                !background.vfxKey.isNullOrBlank()
+                        ) {
                             Text(
-                                "目前只有靜態底圖；尚缺遊戲內特效圖層",
+                                "目前只有靜態底圖；完整圖層預覽尚未取得，遊戲內效果可能不同",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.error,
                             )
@@ -966,6 +970,10 @@ fun VariantDetailScreen(
     val aggregateFlow = remember(selectedIds) { viewModel.selectedVariants(selectedIds) }
     val aggregateVariants by aggregateFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val aggregate = aggregateVariants.firstOrNull { it.variantId == variantId }
+    val combinationFlow = remember(accountId, selectedIds) {
+        if (accountId != null) viewModel.accountCombinations(accountId) else viewModel.selectedCombinations(selectedIds)
+    }
+    val allCombinations by combinationFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     val bucketFlow = remember(accountId, variantId) { accountId?.let { viewModel.buckets(it, variantId) } ?: flowOf(emptyList()) }
     val buckets by bucketFlow.collectAsStateWithLifecycle(initialValue = emptyList())
     var showEditor by remember { mutableStateOf(false) }
@@ -976,6 +984,7 @@ fun VariantDetailScreen(
         return
     }
     val currentInfo = info!!
+    val groupCombinations = allCombinations.forDisplayKey(currentInfo)
     val title = buildVariantTitle(currentInfo)
     Column(
         Modifier
@@ -1008,9 +1017,13 @@ fun VariantDetailScreen(
         InfoLine("背景", currentInfo.backgroundName)
         InfoLine("背景分類", currentInfo.backgroundCategoryName)
         InfoLine("裝扮", currentInfo.costumeName)
-        InfoLine("性別", currentInfo.gender.label)
         InfoLine("暗影／淨化", currentInfo.shadowState.label)
         InfoLine("極巨狀態", currentInfo.dynamaxState.label)
+        Text(
+            "性別、尺寸、特招與交換狀態會合併顯示在下方的實際收藏組合中。",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         if (customTags.isNotEmpty()) {
             CustomVariantTagSection(
                 tags = customTags,
@@ -1025,26 +1038,39 @@ fun VariantDetailScreen(
         }
         HorizontalDivider()
         if (accountId != null) {
-            val total = buckets.sumOf { it.quantity }
+            val summaries = groupCombinations.summarizeCombinations()
+            val total = groupCombinations.sumOf { it.quantity }
             SectionTitle("${currentInfo.speciesName} · ${sources.firstOrNull { it.accountId == accountId }?.accountName ?: "此帳號"}")
             Text("總數：$total", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            buckets.forEach { bucket -> BucketLine(bucket, viewModel) }
-            if (buckets.isEmpty()) Text("此帳號目前沒有這個收藏組合的數量。", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            CombinationSummaryList(summaries)
+            if (buckets.isNotEmpty()) {
+                Text(
+                    "以下可調整目前開啟的收藏版本數量：",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                buckets.forEach { bucket -> BucketLine(bucket, viewModel) }
+            }
+            if (summaries.isEmpty()) Text("此帳號目前沒有這個核心版本的數量。", color = MaterialTheme.colorScheme.onSurfaceVariant)
         } else {
             SectionTitle("來源帳號")
-            Text("總數：${aggregate?.totalQuantity ?: selectedSourceRows.sumOf { it.quantity }}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            aggregate?.let {
-                Text("特大：${it.xxlQuantity} · 特小：${it.xxsQuantity} · 特招：${it.specialMoveQuantity}", style = MaterialTheme.typography.bodyMedium)
-                Text("未交換：${it.untradedQuantity} · 已交換：${it.tradedQuantity}", style = MaterialTheme.typography.bodyMedium)
-            }
-            selectedSourceRows.forEach { source ->
-                Row(Modifier.fillMaxWidth().padding(vertical = 3.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text(source.accountName, modifier = Modifier.weight(1f))
-                    Text("×${source.quantity}", fontWeight = FontWeight.Bold)
-                    TextButton(onClick = { onOpenAccount(source.accountId) }) { Text("查看") }
+            Text("總數：${groupCombinations.sumOf { it.quantity }}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            groupCombinations
+                .groupBy { it.accountId to it.accountName }
+                .toList()
+                .forEach { (account, rows) ->
+                    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+                        Column(Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(account.second, modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
+                                Text("×${rows.sumOf { it.quantity }}", fontWeight = FontWeight.Bold)
+                                TextButton(onClick = { onOpenAccount(account.first) }) { Text("查看") }
+                            }
+                            CombinationSummaryList(rows.summarizeCombinations())
+                        }
+                    }
                 }
-            }
-            if (selectedSourceRows.isEmpty()) Text("目前選取的帳號沒有這個收藏組合。", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (groupCombinations.isEmpty()) Text("目前選取的帳號沒有這個核心版本。", color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Spacer(Modifier.height(20.dp))
     }
@@ -1058,6 +1084,20 @@ fun VariantDetailScreen(
             confirmButton = { Button(onClick = { viewModel.deleteVariant(variantId); showDelete = false; onBack() }) { Text("確定刪除") } },
             dismissButton = { TextButton(onClick = { showDelete = false }) { Text("取消") } },
         )
+    }
+}
+
+@Composable
+private fun CombinationSummaryList(summaries: List<CollectionCombinationSummary>) {
+    if (summaries.isEmpty()) return
+    Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+        summaries.forEach { summary ->
+            Text(
+                summary.displayText(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 
