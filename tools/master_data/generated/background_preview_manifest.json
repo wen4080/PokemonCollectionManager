@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-28T21:21:03.213221+00:00",
+  "generatedAt": "2026-09-30T05:01:18.527011+00:00",
   "previews": [
     {
       "sourceImageStem": "sb_2024_decemberCdRecap",
@@ -387,6 +387,14 @@
     },
     {
       "sourceImageStem": null,
+      "backgroundKey": "SPECIALBACKGROUND_2026_MEWTWO_002",
+      "previewImageKey": "background_previews/go-fest-2026-mega-mewtwo.png",
+      "previewSource": "Bulbagarden Archives",
+      "sourcePage": "https://archives.bulbagarden.net/wiki/File:GO_Fest_2026_Mega_Mewtwo_background.png",
+      "sourceImage": "https://archives.bulbagarden.net/wiki/Special:Redirect/file/GO_Fest_2026_Mega_Mewtwo_background.png"
+    },
+    {
+      "sourceImageStem": null,
       "backgroundKey": "SPECIALBACKGROUND_2026_WCS",
       "previewImageKey": "background_previews/worlds-special-blue-2026.png",
       "previewSource": "Bulbagarden Archives",
@@ -408,10 +416,2570 @@
       "previewSource": "Bulbagarden Archives",
       "sourcePage": "https://archives.bulbagarden.net/wiki/File:GO_10th_Anniversary_background.png",
       "sourceImage": "https://archives.bulbagarden.net/wiki/Special:Redirect/file/GO_10th_Anniversary_background.png"
+    },
+    {
+      "sourceImageStem": "sb_MidAutumn",
+      "backgroundKey": "ASSET_SB_MIDAUTUMN",
+      "previewImageKey": "background_previews/pogomate-moonlight-3a331840.webp",
+      "previewSource": "PoGoMate",
+      "sourcePage": "https://pogomate.com/en/backgrounds",
+      "sourceImage": "https://cdn.pogomate.com/backgrounds/moonlight.3a331840.webp"
     }
   ],
-  "downloadedFiles": 45,
-  "mappedSourceImages": 39,
-  "mappedBackgroundKeys": 12,
-  "failures": []
-}
+  "downloadedFiles": 46,
+  "mappedSourceImages": 40,
+  "mappedBackgroundKeys": 14,
+  "failures": [],
+  "audit": {
+    "provider": "PoGoMate",
+    "providerIndex": "https://pogomate.com/en/backgrounds",
+    "providerPreviewCount": 218,
+    "matchedBackgroundCount": 163,
+    "matchedProviderImageCount": 155,
+    "ambiguousMatches": [
+      {
+        "backgroundKey": "2023_BARCELONA_CITYSAFARI_001",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 77
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          },
+          {
+            "title": "Seoul, South Korea",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2023_LASVEGAS_GOTOUR_001",
+        "candidates": [
+          {
+            "title": "Las Vegas, Nevada, USA",
+            "score": 61
+          },
+          {
+            "title": "GO Tour 2026 Los Angeles",
+            "score": 61
+          },
+          {
+            "title": "GO Tour 2026 Tainan",
+            "score": 61
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2023_MEXICOCITY_CITYSAFARI_001",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          },
+          {
+            "title": "Seoul, South Korea",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2023_SEOUL_CITYSAFARI_001",
+        "candidates": [
+          {
+            "title": "Seoul, South Korea",
+            "score": 77
+          },
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2024_MILAN_CITYSAFARI_001",
+        "candidates": [
+          {
+            "title": "City Safari 2025 Milan",
+            "score": 77
+          },
+          {
+            "title": "City Safari 2024 Hong Kong",
+            "score": 77
+          },
+          {
+            "title": "City Safari 2024 Sao Paulo",
+            "score": 77
+          },
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2024_MUMBAI_CITYSAFARI_001",
+        "candidates": [
+          {
+            "title": "City Safari 2025 Mumbai",
+            "score": 77
+          },
+          {
+            "title": "City Safari 2024 Hong Kong",
+            "score": 77
+          },
+          {
+            "title": "City Safari 2024 Sao Paulo",
+            "score": 77
+          },
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2024_NYC_GOFEST_001",
+        "candidates": [
+          {
+            "title": "Chicago, Illinois, USA",
+            "score": 61
+          },
+          {
+            "title": "Copenhagen, Denmark",
+            "score": 61
+          },
+          {
+            "title": "Tokyo, Japan",
+            "score": 61
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          },
+          {
+            "title": "New York City, New York, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2024_SANTIAGO_CITYSAFARI_001",
+        "candidates": [
+          {
+            "title": "City Safari 2025 Santiago",
+            "score": 77
+          },
+          {
+            "title": "City Safari 2024 Hong Kong",
+            "score": 77
+          },
+          {
+            "title": "City Safari 2024 Sao Paulo",
+            "score": 77
+          },
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2024_SINGAPORE_CITYSAFARI_001",
+        "candidates": [
+          {
+            "title": "City Safari 2025 Singapore",
+            "score": 77
+          },
+          {
+            "title": "City Safari 2024 Hong Kong",
+            "score": 77
+          },
+          {
+            "title": "City Safari 2024 Sao Paulo",
+            "score": 77
+          },
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2025_CHERRY_BLOSSOM_FESTIVAL",
+        "candidates": [
+          {
+            "title": "Tokyo, Japan",
+            "score": 61
+          },
+          {
+            "title": "Pyeongchang Winter Festival",
+            "score": 61
+          },
+          {
+            "title": "Osaka Expo 2025 (1)",
+            "score": 61
+          },
+          {
+            "title": "Paris 2025 (1)",
+            "score": 61
+          },
+          {
+            "title": "Jangheung Water Festival 2025",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2025_KR_PYEONGCHANG_WINTER_FESTIVAL",
+        "candidates": [
+          {
+            "title": "Pyeongchang Winter Festival",
+            "score": 77
+          },
+          {
+            "title": "Bali, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Jangheung Water Festival 2025",
+            "score": 61
+          },
+          {
+            "title": "Osaka Expo 2025 (3)",
+            "score": 61
+          },
+          {
+            "title": "Busan Fireworks Festival 2025",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2025_LOSANGELES_GOTOUR_001",
+        "candidates": [
+          {
+            "title": "Las Vegas, Nevada, USA",
+            "score": 61
+          },
+          {
+            "title": "GO Tour 2026 Los Angeles",
+            "score": 61
+          },
+          {
+            "title": "GO Tour 2026 Tainan",
+            "score": 61
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          },
+          {
+            "title": "Los Angeles, California, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2025_NFL_001",
+        "candidates": [
+          {
+            "title": "NFL Arizona Cardinals",
+            "score": 69
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2025_OSAKA_EVENT_001",
+        "candidates": [
+          {
+            "title": "Osaka Expo 2025 (1)",
+            "score": 69
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 69
+          },
+          {
+            "title": "Osaka Expo 2025 (3)",
+            "score": 69
+          },
+          {
+            "title": "Tokyo, Japan",
+            "score": 61
+          },
+          {
+            "title": "Pokémon Center osaka",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2025_OSAKA_EVENT_002",
+        "candidates": [
+          {
+            "title": "Osaka Expo 2025 (2)",
+            "score": 69
+          },
+          {
+            "title": "Osaka Expo 2025 (3)",
+            "score": 69
+          },
+          {
+            "title": "Pokémon Center osaka",
+            "score": 61
+          },
+          {
+            "title": "Pokélid Osaka",
+            "score": 61
+          },
+          {
+            "title": "Osaka Expo 2025 (1)",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2025_PARIS_001",
+        "candidates": [
+          {
+            "title": "Paris 2025 (1)",
+            "score": 69
+          },
+          {
+            "title": "Tokyo, Japan",
+            "score": 61
+          },
+          {
+            "title": "Osaka Expo 2025 (1)",
+            "score": 61
+          },
+          {
+            "title": "Paris 2025 (2)",
+            "score": 61
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2025_PARIS_002",
+        "candidates": [
+          {
+            "title": "Paris 2025 (2)",
+            "score": 69
+          },
+          {
+            "title": "Osaka Expo 2025 (2)",
+            "score": 61
+          },
+          {
+            "title": "Paris 2025 (1)",
+            "score": 61
+          },
+          {
+            "title": "Bali, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Sendai, Japan",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2025_TAIPEICITY_AMUSEMENT_PARK",
+        "candidates": [
+          {
+            "title": "Taipei Amusement Park 2025",
+            "score": 69
+          },
+          {
+            "title": "Pokémon Park 2026",
+            "score": 61
+          },
+          {
+            "title": "T-Mobile Park, Seattle, Washington, USA",
+            "score": 61
+          },
+          {
+            "title": "loanDepot Park, Miami, Florida, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_COLOGNE_CARNIVAL_001",
+        "candidates": [
+          {
+            "title": "Carnival Flamigo Cologne 2026",
+            "score": 69
+          },
+          {
+            "title": "Pyeongchang Winter Festival",
+            "score": 61
+          },
+          {
+            "title": "Carnival Flamigo Rio 2026",
+            "score": 61
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          },
+          {
+            "title": "Jangheung Water Festival 2025",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_JP_RED",
+        "candidates": [
+          {
+            "title": "Red Pokémon Jet 2026",
+            "score": 69
+          },
+          {
+            "title": "Green Pokémon Jet 2026",
+            "score": 61
+          },
+          {
+            "title": "MLB Boston Red Sox",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_001",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_002",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_004",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_005",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_006",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_008",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_009",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_010",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_011",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_012",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_NPB_013",
+        "candidates": [
+          {
+            "title": "NPB Chiba Lotte Marines 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Chunichi Dragons 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Nippon-Ham Fighters 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Orix Buffaloes 2026",
+            "score": 61
+          },
+          {
+            "title": "NPB Seibu Lions 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_PPK_001",
+        "candidates": [
+          {
+            "title": "Osaka Expo 2025 (2)",
+            "score": 61
+          },
+          {
+            "title": "Paris 2025 (2)",
+            "score": 61
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          },
+          {
+            "title": "Bali, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Sendai, Japan",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "2026_RIODEJANEIRO_CARNIVAL_001",
+        "candidates": [
+          {
+            "title": "Carnival Flamigo Rio 2026",
+            "score": 69
+          },
+          {
+            "title": "Pyeongchang Winter Festival",
+            "score": 61
+          },
+          {
+            "title": "Carnival Flamigo Cologne 2026",
+            "score": 61
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          },
+          {
+            "title": "Jangheung Water Festival 2025",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "CR_2026_001",
+        "candidates": [
+          {
+            "title": "Mexico City, Mexico",
+            "score": 61
+          },
+          {
+            "title": "Chicago, Illinois, USA",
+            "score": 61
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          },
+          {
+            "title": "Jersey City, New Jersey, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ID_CAR_FREE_DAY",
+        "candidates": [
+          {
+            "title": "Indonesia Car Free Day",
+            "score": 80
+          },
+          {
+            "title": "Bali, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Jakarta, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Surabaya, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Yogyakarta, Indonesia",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "JEJU_STAMP_RALLY",
+        "candidates": [
+          {
+            "title": "Stamp Rally Jeju Island",
+            "score": 77
+          },
+          {
+            "title": "Pokélid Aichi",
+            "score": 69
+          },
+          {
+            "title": "Pokélid Akita",
+            "score": 69
+          },
+          {
+            "title": "Pokélid Aomori",
+            "score": 69
+          },
+          {
+            "title": "Pokélid Chiba",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_1",
+        "candidates": [
+          {
+            "title": "Tokyo, Japan",
+            "score": 61
+          },
+          {
+            "title": "Osaka Expo 2025 (1)",
+            "score": 61
+          },
+          {
+            "title": "Paris 2025 (1)",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_10",
+        "candidates": [
+          {
+            "title": "Osaka Expo 2025 (2)",
+            "score": 61
+          },
+          {
+            "title": "Paris 2025 (2)",
+            "score": 61
+          },
+          {
+            "title": "Bali, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Tainan, Taiwan",
+            "score": 61
+          },
+          {
+            "title": "Sendai, Japan",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_11",
+        "candidates": [
+          {
+            "title": "Bali, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Surabaya, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Osaka Expo 2025 (3)",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_12",
+        "candidates": [
+          {
+            "title": "Mexico City, Mexico",
+            "score": 61
+          },
+          {
+            "title": "Copenhagen, Denmark",
+            "score": 61
+          },
+          {
+            "title": "Surabaya, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "London, England",
+            "score": 61
+          },
+          {
+            "title": "Osaka, Japan",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_13",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 61
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 61
+          },
+          {
+            "title": "Chicago, Illinois, USA",
+            "score": 61
+          },
+          {
+            "title": "Jersey City, New Jersey, USA",
+            "score": 61
+          },
+          {
+            "title": "T-Mobile Park, Seattle, Washington, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_14",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 61
+          },
+          {
+            "title": "Copenhagen, Denmark",
+            "score": 61
+          },
+          {
+            "title": "London, England",
+            "score": 61
+          },
+          {
+            "title": "Osaka, Japan",
+            "score": 61
+          },
+          {
+            "title": "Madrid, Spain",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_15",
+        "candidates": [
+          {
+            "title": "Seoul, South Korea",
+            "score": 61
+          },
+          {
+            "title": "Chicago, Illinois, USA",
+            "score": 61
+          },
+          {
+            "title": "Paris, France",
+            "score": 61
+          },
+          {
+            "title": "loanDepot Park, Miami, Florida, USA",
+            "score": 61
+          },
+          {
+            "title": "Anaheim, California, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_16",
+        "candidates": [
+          {
+            "title": "Seoul, South Korea",
+            "score": 61
+          },
+          {
+            "title": "Fukuoka, Japan",
+            "score": 61
+          },
+          {
+            "title": "Madrid, Spain",
+            "score": 61
+          },
+          {
+            "title": "Jersey City, New Jersey, USA",
+            "score": 61
+          },
+          {
+            "title": "Honolulu, Hawaii, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_17",
+        "candidates": [
+          {
+            "title": "Fukuoka, Japan",
+            "score": 61
+          },
+          {
+            "title": "Tainan, Taiwan",
+            "score": 61
+          },
+          {
+            "title": "Los Angeles, California, USA",
+            "score": 61
+          },
+          {
+            "title": "Anaheim, California, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_18",
+        "candidates": [
+          {
+            "title": "Las Vegas, Nevada, USA",
+            "score": 61
+          },
+          {
+            "title": "Tainan, Taiwan",
+            "score": 61
+          },
+          {
+            "title": "New York City, New York, USA",
+            "score": 61
+          },
+          {
+            "title": "Los Angeles, California, USA",
+            "score": 61
+          },
+          {
+            "title": "loanDepot Park, Miami, Florida, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_19",
+        "candidates": [
+          {
+            "title": "Las Vegas, Nevada, USA",
+            "score": 61
+          },
+          {
+            "title": "Surabaya, Indonesia",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_2",
+        "candidates": [
+          {
+            "title": "Copenhagen, Denmark",
+            "score": 61
+          },
+          {
+            "title": "Osaka Expo 2025 (2)",
+            "score": 61
+          },
+          {
+            "title": "Paris 2025 (2)",
+            "score": 61
+          },
+          {
+            "title": "Bali, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Surabaya, Indonesia",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_20",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 61
+          },
+          {
+            "title": "New York City, New York, USA",
+            "score": 61
+          },
+          {
+            "title": "T-Mobile Park, Seattle, Washington, USA",
+            "score": 61
+          },
+          {
+            "title": "Honolulu, Hawaii, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_21",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 61
+          },
+          {
+            "title": "Copenhagen, Denmark",
+            "score": 61
+          },
+          {
+            "title": "Jakarta, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Madrid, Spain",
+            "score": 61
+          },
+          {
+            "title": "New Taipei City, Taiwan",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_22",
+        "candidates": [
+          {
+            "title": "Jakarta, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Paris, France",
+            "score": 61
+          },
+          {
+            "title": "T-Mobile Park, Seattle, Washington, USA",
+            "score": 61
+          },
+          {
+            "title": "Anaheim, California, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_23",
+        "candidates": [
+          {
+            "title": "Fukuoka, Japan",
+            "score": 61
+          },
+          {
+            "title": "Madrid, Spain",
+            "score": 61
+          },
+          {
+            "title": "New Taipei City, Taiwan",
+            "score": 61
+          },
+          {
+            "title": "Honolulu, Hawaii, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_24",
+        "candidates": [
+          {
+            "title": "Fukuoka, Japan",
+            "score": 61
+          },
+          {
+            "title": "Yogyakarta, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Los Angeles, California, USA",
+            "score": 61
+          },
+          {
+            "title": "Anaheim, California, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_25",
+        "candidates": [
+          {
+            "title": "Las Vegas, Nevada, USA",
+            "score": 61
+          },
+          {
+            "title": "Yogyakarta, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "New York City, New York, USA",
+            "score": 61
+          },
+          {
+            "title": "Los Angeles, California, USA",
+            "score": 61
+          },
+          {
+            "title": "loanDepot Park, Miami, Florida, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_26",
+        "candidates": [
+          {
+            "title": "Las Vegas, Nevada, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_27",
+        "candidates": [
+          {
+            "title": "Incheon, South Korea",
+            "score": 61
+          },
+          {
+            "title": "New York City, New York, USA",
+            "score": 61
+          },
+          {
+            "title": "Honolulu, Hawaii, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_3",
+        "candidates": [
+          {
+            "title": "Bali, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "Jakarta, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "New Taipei City, Taiwan",
+            "score": 61
+          },
+          {
+            "title": "Osaka Expo 2025 (3)",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_4",
+        "candidates": [
+          {
+            "title": "Mexico City, Mexico",
+            "score": 61
+          },
+          {
+            "title": "Jakarta, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "London, England",
+            "score": 61
+          },
+          {
+            "title": "Osaka, Japan",
+            "score": 61
+          },
+          {
+            "title": "T-Mobile Park, Seattle, Washington, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_5",
+        "candidates": [
+          {
+            "title": "Mexico City, Mexico",
+            "score": 61
+          },
+          {
+            "title": "Chicago, Illinois, USA",
+            "score": 61
+          },
+          {
+            "title": "Jersey City, New Jersey, USA",
+            "score": 61
+          },
+          {
+            "title": "New Taipei City, Taiwan",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_6",
+        "candidates": [
+          {
+            "title": "Yogyakarta, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "London, England",
+            "score": 61
+          },
+          {
+            "title": "Osaka, Japan",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_7",
+        "candidates": [
+          {
+            "title": "Seoul, South Korea",
+            "score": 61
+          },
+          {
+            "title": "Chicago, Illinois, USA",
+            "score": 61
+          },
+          {
+            "title": "Yogyakarta, Indonesia",
+            "score": 61
+          },
+          {
+            "title": "loanDepot Park, Miami, Florida, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_8",
+        "candidates": [
+          {
+            "title": "Seoul, South Korea",
+            "score": 61
+          },
+          {
+            "title": "Jersey City, New Jersey, USA",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "NT_9",
+        "candidates": [
+          {
+            "title": "Incheon, South Korea",
+            "score": 61
+          },
+          {
+            "title": "Tainan, Taiwan",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2024_GLOBAL_GOFEST_RADIANCE_001",
+        "candidates": [
+          {
+            "title": "GO Fest 2024 Wormhole Moon",
+            "score": 77
+          },
+          {
+            "title": "GO Fest 2024 Wormhole Sun",
+            "score": 77
+          },
+          {
+            "title": "Dark Skies",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2024",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2025 Global",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2024_GLOBAL_GOFEST_UMBRA_001",
+        "candidates": [
+          {
+            "title": "GO Fest 2024 Wormhole Moon",
+            "score": 77
+          },
+          {
+            "title": "GO Fest 2024 Wormhole Sun",
+            "score": 77
+          },
+          {
+            "title": "Dark Skies",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2024",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2025 Global",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2024_GLOBAL_GOWA_001",
+        "candidates": [
+          {
+            "title": "GO Wild Area 2024",
+            "score": 77
+          },
+          {
+            "title": "GO Wild Area 2025 Global",
+            "score": 77
+          },
+          {
+            "title": "GO Wild Area 2025 Nagasaki",
+            "score": 61
+          },
+          {
+            "title": "Brazil Event 2026",
+            "score": 61
+          },
+          {
+            "title": "Community Day 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2025_GOWA_GLOBAL",
+        "candidates": [
+          {
+            "title": "GO Wild Area 2024",
+            "score": 77
+          },
+          {
+            "title": "GO Wild Area 2025 Global",
+            "score": 77
+          },
+          {
+            "title": "GO Wild Area 2025 Nagasaki",
+            "score": 61
+          },
+          {
+            "title": "Community Day 2026",
+            "score": 61
+          },
+          {
+            "title": "Concierge",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2026_ARRAIA",
+        "candidates": [
+          {
+            "title": "Pokémon GO Arraiá",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2026_COMMUNITYDAY",
+        "candidates": [
+          {
+            "title": "Community Day 2026",
+            "score": 61
+          },
+          {
+            "title": "Community Day December 2024",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2026_GLOBAL_GOFEST_001",
+        "candidates": [
+          {
+            "title": "GO Fest 2024 Wormhole Moon",
+            "score": 69
+          },
+          {
+            "title": "GO Fest 2024 Wormhole Sun",
+            "score": 69
+          },
+          {
+            "title": "GO Fest 2026: Mewtwo",
+            "score": 69
+          },
+          {
+            "title": "Dark Skies",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2024",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2026_GLOBAL_MEGA_001",
+        "candidates": [
+          {
+            "title": "GO Fest 2024 Wormhole Moon",
+            "score": 69
+          },
+          {
+            "title": "GO Fest 2024 Wormhole Sun",
+            "score": 69
+          },
+          {
+            "title": "Dark Skies",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2024",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2025 Global",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2026_GLOBAL_SAPPHIRE_001",
+        "candidates": [
+          {
+            "title": "GO Tour 2026 Sapphire",
+            "score": 69
+          },
+          {
+            "title": "GO Tour 2026 Diamond",
+            "score": 61
+          },
+          {
+            "title": "GO Tour 2026 Gold",
+            "score": 61
+          },
+          {
+            "title": "GO Tour 2026 Pearl",
+            "score": 61
+          },
+          {
+            "title": "GO Tour 2026 Ruby",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2026_MEWTWO_001",
+        "candidates": [
+          {
+            "title": "GO Fest 2026: Mewtwo",
+            "score": 77
+          },
+          {
+            "title": "GO Fest 2024 Wormhole Moon",
+            "score": 69
+          },
+          {
+            "title": "GO Fest 2024 Wormhole Sun",
+            "score": 69
+          },
+          {
+            "title": "Tokyo, Japan",
+            "score": 61
+          },
+          {
+            "title": "Dark Skies",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2026_MEWTWO_002",
+        "candidates": [
+          {
+            "title": "GO Fest 2026: Mewtwo",
+            "score": 77
+          },
+          {
+            "title": "GO Fest 2024 Wormhole Moon",
+            "score": 69
+          },
+          {
+            "title": "GO Fest 2024 Wormhole Sun",
+            "score": 69
+          },
+          {
+            "title": "Dark Skies",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2024",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_2026_WCS",
+        "candidates": [
+          {
+            "title": "WCS 2026 San Francisco",
+            "score": 69
+          },
+          {
+            "title": "Concierge",
+            "score": 69
+          },
+          {
+            "title": "Observatory Exhibition Tour",
+            "score": 69
+          },
+          {
+            "title": "Pokopia",
+            "score": 69
+          },
+          {
+            "title": "GO Fest 2024 Wormhole Moon",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_LEGO_2026_01",
+        "candidates": [
+          {
+            "title": "LEGO Pokémon 2026",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_POK2026",
+        "candidates": [
+          {
+            "title": "Seoul, South Korea",
+            "score": 69
+          },
+          {
+            "title": "Barcelona, Spain",
+            "score": 61
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 61
+          },
+          {
+            "title": "Chicago, Illinois, USA",
+            "score": 61
+          },
+          {
+            "title": "Incheon, South Korea",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_TEAM_BLUE",
+        "candidates": [
+          {
+            "title": "Team Mystic",
+            "score": 77
+          },
+          {
+            "title": "Team Valor",
+            "score": 69
+          },
+          {
+            "title": "Team Instinct",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_TEAM_RED",
+        "candidates": [
+          {
+            "title": "Team Valor",
+            "score": 77
+          },
+          {
+            "title": "Team Mystic",
+            "score": 69
+          },
+          {
+            "title": "Team Instinct",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "SPECIALBACKGROUND_TEAM_YELLOW",
+        "candidates": [
+          {
+            "title": "Team Instinct",
+            "score": 77
+          },
+          {
+            "title": "Team Mystic",
+            "score": 69
+          },
+          {
+            "title": "Team Valor",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "TOKMUN_STAMP_01",
+        "candidates": [
+          {
+            "title": "Tokyo Shinagawa",
+            "score": 80
+          },
+          {
+            "title": "Pokélid Tokyo",
+            "score": 77
+          },
+          {
+            "title": "Osaka Expo 2025 (1)",
+            "score": 77
+          },
+          {
+            "title": "Tokyo Koto",
+            "score": 77
+          },
+          {
+            "title": "Tokyo Minato",
+            "score": 77
+          }
+        ]
+      },
+      {
+        "backgroundKey": "TOKMUN_STAMP_02",
+        "candidates": [
+          {
+            "title": "Tokyo Koto",
+            "score": 80
+          },
+          {
+            "title": "Pokélid Tokyo",
+            "score": 77
+          },
+          {
+            "title": "Osaka Expo 2025 (2)",
+            "score": 77
+          },
+          {
+            "title": "Tokyo Minato",
+            "score": 77
+          },
+          {
+            "title": "Tokyo Shinagawa",
+            "score": 77
+          }
+        ]
+      },
+      {
+        "backgroundKey": "TOKMUN_STAMP_03",
+        "candidates": [
+          {
+            "title": "Tokyo Minato",
+            "score": 80
+          },
+          {
+            "title": "Pokélid Tokyo",
+            "score": 77
+          },
+          {
+            "title": "Tokyo Koto",
+            "score": 77
+          },
+          {
+            "title": "Tokyo Shinagawa",
+            "score": 77
+          },
+          {
+            "title": "Pokélid Aichi",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_CITYSAFARI2026_BOSTON",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          },
+          {
+            "title": "Seoul, South Korea",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_CITYSAFARI2026_BRISBANE",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          },
+          {
+            "title": "Seoul, South Korea",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_CITYSAFARI2026_LISBON",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          },
+          {
+            "title": "Seoul, South Korea",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_CITYSAFARI2026_MARSEILLE",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          },
+          {
+            "title": "Seoul, South Korea",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_CITYSAFARI2026_MUNICH",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          },
+          {
+            "title": "Seoul, South Korea",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_CITYSAFARI2026_RIO",
+        "candidates": [
+          {
+            "title": "Barcelona, Spain",
+            "score": 69
+          },
+          {
+            "title": "Mexico City, Mexico",
+            "score": 69
+          },
+          {
+            "title": "Seoul, South Korea",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_ESA_CITEDEESPACE",
+        "candidates": [
+          {
+            "title": "Paris 2025 (1)",
+            "score": 77
+          },
+          {
+            "title": "Red Pokémon Jet 2026",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Buenos Aires",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_ESA_CIUDADDELASARTES",
+        "candidates": [
+          {
+            "title": "Paris 2025 (2)",
+            "score": 77
+          },
+          {
+            "title": "T-Mobile Park, Seattle, Washington, USA",
+            "score": 77
+          },
+          {
+            "title": "MLB Tampa Bay Rays 2",
+            "score": 77
+          },
+          {
+            "title": "Red Pokémon Jet 2026",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_ESA_EUROSPACECENTER",
+        "candidates": [
+          {
+            "title": "Red Pokémon Jet 2026",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Buenos Aires",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Cancún",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_ESA_SCIENCEMUSEUMLONDON",
+        "candidates": [
+          {
+            "title": "Red Pokémon Jet 2026",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Buenos Aires",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Cancún",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_ESA_SPACECENTERGERMANY",
+        "candidates": [
+          {
+            "title": "Red Pokémon Jet 2026",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Buenos Aires",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Cancún",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_LC_ESA_SPACEEXPONL",
+        "candidates": [
+          {
+            "title": "Red Pokémon Jet 2026",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Amsterdam",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Bangkok",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Buenos Aires",
+            "score": 69
+          },
+          {
+            "title": "City Safari 2025 Cancún",
+            "score": 69
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_SB_PATTERNWILD",
+        "candidates": [
+          {
+            "title": "Community Day 2026",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2024",
+            "score": 61
+          },
+          {
+            "title": "GO Wild Area 2025 Global",
+            "score": 61
+          }
+        ]
+      },
+      {
+        "backgroundKey": "ASSET_SB_S24_SEP_2026",
+        "candidates": [
+          {
+            "title": "Pokémon Horizons: The Series",
+            "score": 69
+          }
+        ]
+      }
+    ],
+    "unmatchedBackgroundKeys": [
+      "2023_BARCELONA_CITYSAFARI_001",
+      "2023_JEJU_AIRADVENTURES_001",
+      "2023_LASVEGAS_GOTOUR_001",
+      "2023_LONDON_GOFEST_001",
+      "2023_MEXICOCITY_CITYSAFARI_001",
+      "2023_NYC_GOFEST_001",
+      "2023_OSAKA_GOFEST_001",
+      "2023_SEOUL_CITYSAFARI_001",
+      "2024_BALI_AIRADVENTURES_001",
+      "2024_FUKUOKA_GOWA_001",
+      "2024_HONGKONG_CITYSAFARI_001",
+      "2024_HONOLULU_WORLD_CHAMPIONSHIPS_001",
+      "2024_INCHEON_SAFARI_ZONE_001",
+      "2024_JAKARTA_AIRADVENTURES_001",
+      "2024_LOSANGELES_GOTOUR_001",
+      "2024_MADRID_GOFEST_001",
+      "2024_MILAN_CITYSAFARI_001",
+      "2024_MLB_001",
+      "2024_MLB_002",
+      "2024_MLB_003",
+      "2024_MLB_004",
+      "2024_MLB_005",
+      "2024_MLB_006",
+      "2024_MLB_007",
+      "2024_MLB_008",
+      "2024_MLB_009",
+      "2024_MLB_010",
+      "2024_MLB_011",
+      "2024_MLB_012",
+      "2024_MLB_013",
+      "2024_MLB_014",
+      "2024_MUMBAI_CITYSAFARI_001",
+      "2024_NYC_GOFEST_001",
+      "2024_SANTIAGO_CITYSAFARI_001",
+      "2024_SAOPAULO_CITYSAFARI_001",
+      "2024_SENDAI_GOFEST_001",
+      "2024_SINGAPORE_CITYSAFARI_001",
+      "2024_SURABAYA_AIRADVENTURES_001",
+      "2024_TAINAN_CITYSAFARI_001",
+      "2024_YOGYAKARTA_AIRADVENTURES_001",
+      "2025_AMSTERDAM_CITYSAFARI_001",
+      "2025_ANAHEIM_WORLD_CHAMPIONSHIPS_001",
+      "2025_BANGKOK_CITYSAFARI_001",
+      "2025_BERLIN_ROADTRIP_001",
+      "2025_CANCUN_CITYSAFARI_001",
+      "2025_CHERRY_BLOSSOM_FESTIVAL",
+      "2025_COLOGNE_ROADTRIP_001",
+      "2025_GOWA_NAGASAKI",
+      "2025_HAGUE_ROADTRIP_001",
+      "2025_JANGHEUNG_SUMMER_FESTIVAL",
+      "2025_JERSEYCITY_GOFEST_001",
+      "2025_KR_PYEONGCHANG_WINTER_FESTIVAL",
+      "2025_LONDON_ROADTRIP_001",
+      "2025_LOSANGELES_GOTOUR_001",
+      "2025_MANCHESTER_ROADTRIP_001",
+      "2025_NEWTAIPEICITY_GOTOUR_001",
+      "2025_NFL_001",
+      "2025_OSAKA_EVENT_001",
+      "2025_OSAKA_EVENT_002",
+      "2025_OSAKA_EVENT_003",
+      "2025_OSAKA_GOFEST_001",
+      "2025_PARIS_001",
+      "2025_PARIS_002",
+      "2025_PARIS_GOFEST_001",
+      "2025_PARIS_ROADTRIP_001",
+      "2025_TAIPEICITY_AMUSEMENT_PARK",
+      "2025_VALENCIA_CITYSAFARI_001",
+      "2025_VALENCIA_ROADTRIP_001",
+      "2025_VANCOUVER_CITYSAFARI_001",
+      "2026_BR_001",
+      "2026_CHICAGO_GOFEST_001",
+      "2026_COLOGNE_CARNIVAL_001",
+      "2026_COPENHAGEN_GOFEST_001",
+      "2026_JP_RED",
+      "2026_LOSANGELES_GOTOUR_001",
+      "2026_MLB_TBRAYS",
+      "2026_NPB_001",
+      "2026_NPB_002",
+      "2026_NPB_003",
+      "2026_NPB_004",
+      "2026_NPB_005",
+      "2026_NPB_006",
+      "2026_NPB_007",
+      "2026_NPB_008",
+      "2026_NPB_009",
+      "2026_NPB_010",
+      "2026_NPB_011",
+      "2026_NPB_012",
+      "2026_NPB_013",
+      "2026_PPK_001",
+      "2026_RIODEJANEIRO_CARNIVAL_001",
+      "2026_SANFRANCISCO_WCS_001",
+      "2026_TAINAN_GOTOUR_001",
+      "2026_TOKYO_GOFEST_001",
+      "ASSET_LC_2026_COMICCON_MALAGA",
+      "ASSET_LC_2026_JP_GREEN",
+      "ASSET_LC_BUSANFIREWORKSFESTIVAL_2025",
+      "ASSET_LC_CITYSAFARI2026_BOSTON",
+      "ASSET_LC_CITYSAFARI2026_BRISBANE",
+      "ASSET_LC_CITYSAFARI2026_LISBON",
+      "ASSET_LC_CITYSAFARI2026_MARSEILLE",
+      "ASSET_LC_CITYSAFARI2026_MUNICH",
+      "ASSET_LC_CITYSAFARI2026_RIO",
+      "ASSET_LC_ESA_CITEDEESPACE",
+      "ASSET_LC_ESA_CIUDADDELASARTES",
+      "ASSET_LC_ESA_EUROSPACECENTER",
+      "ASSET_LC_ESA_SCIENCEMUSEUMLONDON",
+      "ASSET_LC_ESA_SPACECENTERGERMANY",
+      "ASSET_LC_ESA_SPACEEXPONL",
+      "ASSET_LC_TPC30TH_MALAYSIA",
+      "ASSET_LC_TPC30TH_PHILIPPINES",
+      "ASSET_LC_TPC30TH_SINGAPORE",
+      "ASSET_LC_TPC30TH_TAIWAN",
+      "ASSET_SB_PATTERNWILD",
+      "CITYSAFARI2025_BUENOSAIRES",
+      "CITYSAFARI2025_MIAMI",
+      "CITYSAFARI2025_SYDNEY",
+      "CR_2026_001",
+      "ID_CAR_FREE_DAY",
+      "JAPAN_STAMP_RALLY_1",
+      "JAPAN_STAMP_RALLY_10",
+      "JAPAN_STAMP_RALLY_11",
+      "JAPAN_STAMP_RALLY_12",
+      "JAPAN_STAMP_RALLY_13",
+      "JAPAN_STAMP_RALLY_14",
+      "JAPAN_STAMP_RALLY_15",
+      "JAPAN_STAMP_RALLY_16",
+      "JAPAN_STAMP_RALLY_17",
+      "JAPAN_STAMP_RALLY_18",
+      "JAPAN_STAMP_RALLY_2",
+      "JAPAN_STAMP_RALLY_3",
+      "JAPAN_STAMP_RALLY_4",
+      "JAPAN_STAMP_RALLY_5",
+      "JAPAN_STAMP_RALLY_6",
+      "JAPAN_STAMP_RALLY_7",
+      "JAPAN_STAMP_RALLY_8",
+      "JAPAN_STAMP_RALLY_9",
+      "JEJU_STAMP_RALLY",
+      "NT_1",
+      "NT_10",
+      "NT_11",
+      "NT_12",
+      "NT_13",
+      "NT_14",
+      "NT_15",
+      "NT_16",
+      "NT_17",
+      "NT_18",
+      "NT_19",
+      "NT_2",
+      "NT_20",
+      "NT_21",
+      "NT_22",
+      "NT_23",
+      "NT_24",
+      "NT_25",
+      "NT_26",
+      "NT_27",
+      "NT_3",
+      "NT_4",
+      "NT_5",
+      "NT_6",
+      "NT_7",
+      "NT_8",
+      "NT_9",
+      "POKELID_AICHI",
+      "POKELID_AKITA",
+      "POKELID_AOMORI",
+      "POKELID_CHIBA",
+      "POKELID_EHIME",
+      "POKELID_FUKUI",
+      "POKELID_FUKUOKA",
+      "POKELID_FUKUSHIMA",
+      "POKELID_GIFU",
+      "POKELID_HOKKAIDO",
+      "POKELID_HYOGO",
+      "POKELID_IBARAKI",
+      "POKELID_ISHIKAWA",
+      "POKELID_IWATE",
+      "POKELID_KAGAWA",
+      "POKELID_KAGOSHIMA",
+      "POKELID_KANAGAWA",
+      "POKELID_KOCHI",
+      "POKELID_KYOTO",
+      "POKELID_MIE",
+      "POKELID_MIYAGI",
+      "POKELID_MIYAZAKI",
+      "POKELID_NAGASAKI",
+      "POKELID_NARA",
+      "POKELID_NIIGATA",
+      "POKELID_OKAYAMA",
+      "POKELID_OKINAWA",
+      "POKELID_OSAKA",
+      "POKELID_SAGA",
+      "POKELID_SAITAMA",
+      "POKELID_SHIGA",
+      "POKELID_SHIMANE",
+      "POKELID_SHIZUOKA",
+      "POKELID_TOCHIGI",
+      "POKELID_TOKUSHIMA",
+      "POKELID_TOKYO",
+      "POKELID_TOTTORI",
+      "POKELID_TOYAMA",
+      "POKELID_WAKAYAMA",
+      "POKELID_YAMAGATA",
+      "POKELID_YAMAGUCHI",
+      "SPECIALBACKGROUND_2024_GLOBAL_GOWA_001",
+      "SPECIALBACKGROUND_EXTRA_2025_02",
+      "SPECIALBACKGROUND_KR2025_LOTTE_01",
+      "SPECIALBACKGROUND_POK2026",
+      "TOKMUN_STAMP_01",
+      "TOKMUN_STAMP_02",
+      "TOKMUN_STAMP_03"
+    ],
+    "catalogBackgroundCount": 262,
+    "skippedBaseOnlySources": [
+      "2023_JEJU_AIRADVENTURES_001／Jeju Island, South Korea／assets.dittobase.com",
+      "2023_LONDON_GOFEST_001／London, England／assets.dittobase.com",
+      "2023_NYC_GOFEST_001／New York City, New York, USA／assets.dittobase.com",
+      "2023_OSAKA_GOFEST_001／Osaka, Japan／assets.dittobase.com",
+      "2024_BALI_AIRADVENTURES_001／Bali, Indonesia／assets.dittobase.com",
+      "2024_FUKUOKA_GOWA_001／GO Wild Area 2024／assets.dittobase.com",
+      "2024_HONGKONG_CITYSAFARI_001／City Safari 2024 Hong Kong／assets.dittobase.com",
+      "2024_HONOLULU_WORLD_CHAMPIONSHIPS_001／Honolulu, Hawaii, USA／assets.dittobase.com",
+      "2024_INCHEON_SAFARI_ZONE_001／Incheon, South Korea／assets.dittobase.com",
+      "2024_JAKARTA_AIRADVENTURES_001／Jakarta, Indonesia／assets.dittobase.com",
+      "2024_LOSANGELES_GOTOUR_001／Los Angeles, California, USA／assets.dittobase.com",
+      "2024_MADRID_GOFEST_001／Madrid, Spain／assets.dittobase.com",
+      "2024_MLB_001／loanDepot Park, Miami, Florida, USA／assets.dittobase.com",
+      "2024_MLB_002／T-Mobile Park, Seattle, Washington, USA／assets.dittobase.com",
+      "2024_MLB_003／MLB Cleveland Guardians／assets.dittobase.com",
+      "2024_MLB_004／MLB Tampa Bay Rays／assets.dittobase.com",
+      "2024_MLB_005／MLB Milwaukee Brewers／assets.dittobase.com",
+      "2024_MLB_006／MLB Washington Nationals／assets.dittobase.com",
+      "2024_MLB_007／MLB Arizona Diamondbacks／assets.dittobase.com",
+      "2024_MLB_008／MLB Chicago White Sox／assets.dittobase.com",
+      "2024_MLB_009／MLB Baltimore Orioles／assets.dittobase.com",
+      "2024_MLB_010／MLB New York Mets／assets.dittobase.com",
+      "2024_MLB_011／MLB San Francisco Giants／assets.dittobase.com",
+      "2024_MLB_012／MLB Boston Red Sox／assets.dittobase.com",
+      "2024_MLB_013／MLB Minnesota Twins／assets.dittobase.com",
+      "2024_MLB_014／MLB Texas Rangers／assets.dittobase.com",
+      "2024_SAOPAULO_CITYSAFARI_001／City Safari 2024 Sao Paulo／assets.dittobase.com",
+      "2024_SENDAI_GOFEST_001／Sendai, Japan／assets.dittobase.com",
+      "2024_SURABAYA_AIRADVENTURES_001／Surabaya, Indonesia／assets.dittobase.com",
+      "2024_TAINAN_CITYSAFARI_001／Tainan, Taiwan／assets.dittobase.com",
+      "2024_YOGYAKARTA_AIRADVENTURES_001／Yogyakarta, Indonesia／assets.dittobase.com",
+      "2025_AMSTERDAM_CITYSAFARI_001／City Safari 2025 Amsterdam／assets.dittobase.com",
+      "2025_ANAHEIM_WORLD_CHAMPIONSHIPS_001／Anaheim, California, USA／assets.dittobase.com",
+      "2025_BANGKOK_CITYSAFARI_001／City Safari 2025 Bangkok／assets.dittobase.com",
+      "2025_BERLIN_ROADTRIP_001／Roadtrip 2025 Berlin／assets.dittobase.com",
+      "2025_CANCUN_CITYSAFARI_001／City Safari 2025 Cancún／assets.dittobase.com",
+      "2025_COLOGNE_ROADTRIP_001／Roadtrip 2025 Cologne／assets.dittobase.com",
+      "2025_GOWA_NAGASAKI／GO Wild Area 2025 Global／assets.dittobase.com",
+      "2025_HAGUE_ROADTRIP_001／Roadtrip 2025 Hague／assets.dittobase.com",
+      "2025_JANGHEUNG_SUMMER_FESTIVAL／Jangheung Water Festival 2025／assets.dittobase.com",
+      "2025_JERSEYCITY_GOFEST_001／Jersey City, New Jersey, USA／assets.dittobase.com",
+      "2025_LONDON_ROADTRIP_001／Roadtrip 2025 London／assets.dittobase.com",
+      "2025_MANCHESTER_ROADTRIP_001／Roadtrip 2025 Manchester／assets.dittobase.com",
+      "2025_NEWTAIPEICITY_GOTOUR_001／New Taipei City, Taiwan／assets.dittobase.com",
+      "2025_OSAKA_EVENT_003／Osaka Expo 2025 (3)／assets.dittobase.com",
+      "2025_OSAKA_GOFEST_001／GO Fest 2025: Eternatus／assets.dittobase.com",
+      "2025_PARIS_GOFEST_001／Paris, France／assets.dittobase.com",
+      "2025_PARIS_ROADTRIP_001／Roadtrip 2025 Paris／assets.dittobase.com",
+      "2025_VALENCIA_CITYSAFARI_001／City Safari 2025 Valencia／assets.dittobase.com",
+      "2025_VALENCIA_ROADTRIP_001／Roadtrip 2025 Valencia／assets.dittobase.com",
+      "2025_VANCOUVER_CITYSAFARI_001／City Safari 2025 Vancouver／assets.dittobase.com",
+      "2026_BR_001／Brazil Event 2026／assets.dittobase.com",
+      "2026_CHICAGO_GOFEST_001／Chicago, Illinois, USA／assets.dittobase.com",
+      "2026_COPENHAGEN_GOFEST_001／Copenhagen, Denmark／assets.dittobase.com",
+      "2026_LOSANGELES_GOTOUR_001／GO Tour 2026 Los Angeles／assets.dittobase.com",
+      "2026_MLB_TBRAYS／MLB Tampa Bay Rays 2／assets.dittobase.com",
+      "2026_NPB_003／NPB Yakult Swallows 2026／assets.dittobase.com",
+      "2026_NPB_007／NPB All-Star Game 2026／assets.dittobase.com",
+      "2026_SANFRANCISCO_WCS_001／WCS 2026 San Francisco／assets.dittobase.com",
+      "2026_TAINAN_GOTOUR_001／GO Tour 2026 Tainan／assets.dittobase.com",
+      "2026_TOKYO_GOFEST_001／Tokyo, Japan／assets.dittobase.com",
+      "CITYSAFARI2025_BUENOSAIRES／City Safari 2025 Buenos Aires／assets.dittobase.com",
+      "CITYSAFARI2025_MIAMI／City Safari 2025 Miami／assets.dittobase.com",
+      "CITYSAFARI2025_SYDNEY／City Safari 2025 Sydney／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_1／Pokémon Center sapporo／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_10／Pokémon Center kanazawa／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_11／Pokémon Center kyoto／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_12／Pokémon Center osakaDX／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_13／Pokémon Center osaka／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_14／Pokémon Center hiroshima／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_15／Pokémon Center kagawa／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_16／Pokémon Center fukuoka／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_17／Pokémon Center okinawa／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_18／Pokémon Center GOLab／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_2／Pokémon Center tohoku／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_3／Pokémon Center tokyoDX／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_4／Pokémon Center megaTokyo／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_5／Pokémon Center shibuya／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_6／Pokémon Center skytreeTown／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_7／Pokémon Center tokyoBay／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_8／Pokémon Center yokohama／assets.dittobase.com",
+      "JAPAN_STAMP_RALLY_9／Pokémon Center nagoya／assets.dittobase.com",
+      "POKELID_AICHI／Pokélid Aichi／assets.dittobase.com",
+      "POKELID_AKITA／Pokélid Akita／assets.dittobase.com",
+      "POKELID_AOMORI／Pokélid Aomori／assets.dittobase.com",
+      "POKELID_CHIBA／Pokélid Chiba／assets.dittobase.com",
+      "POKELID_EHIME／Pokélid ehime／assets.dittobase.com",
+      "POKELID_FUKUI／Pokélid Fukui／assets.dittobase.com",
+      "POKELID_FUKUOKA／Pokélid Fukuoka／assets.dittobase.com",
+      "POKELID_FUKUSHIMA／Pokélid Fukushima／assets.dittobase.com",
+      "POKELID_GIFU／Pokélid Gifu／assets.dittobase.com",
+      "POKELID_HOKKAIDO／Pokélid Hokkaido／assets.dittobase.com",
+      "POKELID_HYOGO／Pokélid Hyogo／assets.dittobase.com",
+      "POKELID_IBARAKI／Pokélid Ibaraki／assets.dittobase.com",
+      "POKELID_ISHIKAWA／Pokélid Ishikawa／assets.dittobase.com",
+      "POKELID_IWATE／Pokélid Iwate／assets.dittobase.com",
+      "POKELID_KAGAWA／Pokélid kagawa／assets.dittobase.com",
+      "POKELID_KAGOSHIMA／Pokélid Kagoshima／assets.dittobase.com",
+      "POKELID_KANAGAWA／Pokélid Kanagawa／assets.dittobase.com",
+      "POKELID_KOCHI／Pokélid kochi／assets.dittobase.com",
+      "POKELID_KYOTO／Pokélid Kyoto／assets.dittobase.com",
+      "POKELID_MIE／Pokélid Mie／assets.dittobase.com",
+      "POKELID_MIYAGI／Pokélid Miyagi／assets.dittobase.com",
+      "POKELID_MIYAZAKI／Pokélid Miyazaki／assets.dittobase.com",
+      "POKELID_NAGASAKI／Pokélid Nagasaki／assets.dittobase.com",
+      "POKELID_NARA／Pokélid Nara／assets.dittobase.com",
+      "POKELID_NIIGATA／Pokélid Niigata／assets.dittobase.com",
+      "POKELID_OKAYAMA／Pokélid okayama／assets.dittobase.com",
+      "POKELID_OKINAWA／Pokélid Okinawa／assets.dittobase.com",
+      "POKELID_OSAKA／Pokélid Osaka／assets.dittobase.com",
+      "POKELID_SAGA／Pokélid Saga／assets.dittobase.com",
+      "POKELID_SAITAMA／Pokélid Saitama／assets.dittobase.com",
+      "POKELID_SHIGA／Pokélid Shiga／assets.dittobase.com",
+      "POKELID_SHIMANE／Pokélid shimane／assets.dittobase.com",
+      "POKELID_SHIZUOKA／Pokélid Shizuoka／assets.dittobase.com",
+      "POKELID_TOCHIGI／Pokélid Tochigi／assets.dittobase.com",
+      "POKELID_TOKUSHIMA／Pokélid tokushima／assets.dittobase.com",
+      "POKELID_TOKYO／Pokélid Tokyo／assets.dittobase.com",
+      "POKELID_TOTTORI／Pokélid tottori／assets.dittobase.com",
+      "POKELID_TOYAMA／Pokélid Toyama／assets.dittobase.com",
+      "POKELID_WAKAYAMA／Pokélid Wakayama／assets.dittobase.com",
+      "POKELID_YAMAGATA／Pokélid Yamagata／assets.dittobase.com",
+      "POKELID_YAMAGUCHI／Pokélid yamaguchi／assets.dittobase.com",
+      "SPECIALBACKGROUND_EXTRA_2025_02／Taipei Flow Festival 2026／assets.dittobase.com",
+      "SPECIALBACKGROUND_KR2025_LOTTE_01／Lotte Giants／assets.dittobase.com",
+      "ASSET_LC_2026_JP_GREEN／Green Pokémon Jet 2026／assets.dittobase.com",
+      "ASSET_LC_BUSANFIREWORKSFESTIVAL_2025／Busan Fireworks Festival 2025／assets.dittobase.com",
+      "ASSET_LC_TPC30TH_MALAYSIA／PokéXciting Malaysia／assets.dittobase.com",
+      "ASSET_LC_TPC30TH_PHILIPPINES／PokéXciting Philippines／assets.dittobase.com",
+      "ASSET_LC_TPC30TH_SINGAPORE／PokéXciting Singapore／assets.dittobase.com",
+      "ASSET_LC_TPC30TH_TAIWAN／PokéXciting Taiwan／assets.dittobase.com"
+    ],
+    "completePreviewMappedCount": 51
+  },
+  "directPreviewKeys": [
+    "SPECIALBACKGROUND_2026_10TH_ANNIVERSARY_001",
+    "SPECIALBACKGROUND_2026_MEWTWO_001",
+    "SPECIALBACKGROUND_2026_MEWTWO_002",
+    "SPECIALBACKGROUND_2026_WCS",
+    "SPECIALBACKGROUND_GG2026"
+  ],
+  "directPreviewFailures": []
+}\n
