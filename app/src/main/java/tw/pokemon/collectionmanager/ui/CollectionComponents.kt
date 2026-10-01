@@ -450,7 +450,9 @@ fun VariantGrid(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        gridItems(groups, key = { it.key }) { group ->
+        // 使用資料庫中的字串 ID 作為可保存且穩定的 key；不要把複合資料物件
+        // 直接交給 Android 的 Lazy Grid 狀態保存機制。
+        gridItems(groups, key = { it.representative.variantId }) { group ->
             VariantCardItem(group = group, imageRepository = imageRepository, onClick = { onClick(group) })
         }
     }
