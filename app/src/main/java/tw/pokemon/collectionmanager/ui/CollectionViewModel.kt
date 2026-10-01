@@ -154,6 +154,23 @@ class CollectionViewModel(
         "數量已更新"
     }
 
+    fun updateCombinationQuantity(accountId: String, combination: CollectionCombinationRow, quantity: Int) = launchAction {
+        repository.updateOwnershipCombinationQuantity(accountId, combination, quantity)
+        "數量已更新"
+    }
+
+    fun updateOwnershipCombination(
+        accountId: String,
+        source: CollectionCombinationRow,
+        draft: VariantDraft,
+        bucket: BucketDraft,
+        quantity: Int,
+        tagIds: Set<String>,
+    ) = launchAction {
+        repository.updateOwnershipCombination(accountId, source, draft, bucket, quantity, tagIds)
+        "收藏組合已更新"
+    }
+
     fun deleteVariant(variantId: String) = launchAction { repository.deleteVariant(variantId); "收藏組合已刪除" }
 
     fun createCustomTag(name: String, description: String?, onCreated: (CollectionTagEntity) -> Unit = {}) {
