@@ -258,10 +258,15 @@ def main() -> None:
         for item in preview_manifest.get("previews", [])
         if item.get("sourceImageStem")
     }
+    # 指定款式的完整預覽即使暫時下載失敗，也不能退回同底圖的通用頁面。
+    # 否則會把只有底圖的圖片誤標成完整圖層，並覆蓋上一版正確快取。
+    direct_preview_keys = set(preview_manifest.get("directPreviewKeys", []))
     for background in backgrounds:
         image_key = background.get("imageKey")
         stem = pathlib.PurePosixPath(image_key).stem if image_key else None
-        preview = previews_by_key.get(background.get("backgroundKey")) or previews_by_stem.get(stem)
+        preview = previews_by_key.get(background.get("backgroundKey"))
+        if preview is None and background.get("backgroundKey") not in direct_preview_keys:
+            preview = previews_by_stem.get(stem)
         if preview:
             background["previewImageKey"] = preview["previewImageKey"]
             background["previewSource"] = preview["previewSource"]
