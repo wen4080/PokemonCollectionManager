@@ -110,5 +110,17 @@ class CollectionDisplayGroupingTest {
         assertTrue(summaries.any { it.displayText() == "公 · XXS · 特招 · 已交換 ×4" })
         assertTrue(summaries.none { "無特招" in it.displayText() })
     }
+
+    @Test
+    fun keepsSpecialMoveForBothGendersAsSeparateCombinations() {
+        val summaries = listOf(
+            combination(Gender.MALE, SizeType.NORMAL, special = true, quantity = 2),
+            combination(Gender.FEMALE, SizeType.NORMAL, special = true, quantity = 1),
+        ).summarizeCombinations()
+
+        assertEquals(2, summaries.size)
+        assertTrue(summaries.any { it.displayText() == "公 · 特招 · 未交換 ×2" })
+        assertTrue(summaries.any { it.displayText() == "母 · 特招 · 未交換 ×1" })
+    }
 }
 
