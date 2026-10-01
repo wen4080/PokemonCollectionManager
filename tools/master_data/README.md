@@ -36,9 +36,9 @@ python validate_master_data.py --manifest generated/master_manifest_optimized.js
 
 `optimize_background_assets.py` 會把背景轉成最長邊 512 像素、保留透明度的 WebP，並在成功後移除 APK 不再使用的原始大圖。原始 PokeMiners 圖片鍵會保留在 `sourceImageKey`／`sourcePreviewImageKey`，不會失去來源追蹤。這能大幅降低 APK 大小與手機 Grid 解碼負擔。
 
-更新時會優先讀取 `master/background_image_index.json` 與既有的 `images/background_optimized/` 快取；舊城市／地區背卡不會因上游暫時 403 或逾時而被清空，只有新出現且沒有快取的背景才需要下載原始圖。新的完整合成預覽仍會優先取代舊底圖，若預覽遺失則退回底圖並保留稽核狀態。
+更新時會優先讀取 `master/background_image_index.json`、`master/background_preview_integrity_index.json` 與既有的 `images/background_optimized/` 快取；舊城市／地區背卡不會因上游暫時 403 或逾時而被清空，只有新出現且沒有快取的背景才需要下載原始圖。新的完整合成預覽仍會優先取代舊底圖，若預覽遺失則退回底圖並保留稽核狀態。完整預覽索引會把曾驗證的硬幣、月亮、剪影、圖騰等圖層標記持續帶到下一次更新。
 
-完整預覽更新另有一層防護：`optimize_background_assets.py` 會將候選預覽縮圖與遊戲底圖做差異比對。若外部索引回傳的圖片實際上與底圖幾乎相同，就標記為 `STATIC_BASE_ONLY`；若上一版已有已驗證的完整合成圖，則保留上一版，不讓新一次更新把月亮、硬幣、寶可夢剪影或其他活動圖層覆蓋掉。指定款式（例如十週年索財靈、GO Fest 超夢款式）的直接預覽下載失敗時，也禁止退回同一底圖的通用預覽頁面。
+完整預覽更新另有一層防護：`optimize_background_assets.py` 會將候選預覽縮圖與遊戲底圖做差異比對。若外部索引回傳的圖片實際上與底圖幾乎相同，就標記為 `STATIC_BASE_ONLY`；若上一版已有已驗證的完整合成圖，則保留上一版，不讓新一次更新把月亮、硬幣、寶可夢剪影或其他活動圖層覆蓋掉。指定款式（例如十週年索財靈、GO Fest 超夢款式）的直接預覽下載失敗時，也禁止退回同一底圖的通用預覽頁面。GitHub Actions 成功發佈後會回存最佳化主資料、索引與 WebP 快取，確保新發現的完整圖層也能在未來每日更新中持續存在。
 
 解析器會同時處理兩種 Pokémon GO 圖片資產格式：舊版 `Addressable Assets/pm*.c*.icon.png`，以及活動型態使用的 `pokemon_icon_pm*_pgo_*.png`／`pm*.f*.icon.png`。活動型態會轉成裝扮相容資料，不會只停留在「特殊型態」清單。
 
@@ -88,7 +88,7 @@ python build_remote_update_manifest.py --manifest generated/master_manifest.json
 
 把輸出的 `master_manifest_remote.json` 直接下載網址填入 App。此檔會讓背景圖片指向同一個靜態資產根網址；新背卡只需重新執行 Windows 產生流程並替換靜態檔，不需要修改 Android 程式或重新發 APK。
 
-專案另附 `.github/workflows/update-master-data.yml`。把專案放進自己的 GitHub 儲存庫並將 Pages 的來源設為 GitHub Actions 後，工作流程會每天自動執行同一套下載、產生、背景完整性驗證及靜態網站發佈。App 應填入的網址會是：
+專案另附 `.github/workflows/update-master-data.yml`。把專案放進自己的 GitHub 儲存庫並將 Pages 的來源設為 GitHub Actions 後，工作流程會每天自動執行同一套下載、產生、背景完整性驗證、回存快取及靜態網站發佈。App 應填入的網址會是：
 
 `https://你的帳號.github.io/儲存庫名稱/master-data/master_manifest.json`
 
