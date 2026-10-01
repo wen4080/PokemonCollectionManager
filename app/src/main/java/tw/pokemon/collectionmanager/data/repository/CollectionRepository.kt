@@ -13,6 +13,7 @@ import tw.pokemon.collectionmanager.data.local.AccountGroupEntity
 import tw.pokemon.collectionmanager.data.local.AccountSummaryRow
 import tw.pokemon.collectionmanager.data.local.CollectionDatabase
 import tw.pokemon.collectionmanager.data.local.CollectionTagEntity
+import tw.pokemon.collectionmanager.data.local.CollectionCombinationRow
 import tw.pokemon.collectionmanager.data.local.CollectionVariantEntity
 import tw.pokemon.collectionmanager.data.local.CollectionVariantTagEntity
 import tw.pokemon.collectionmanager.data.local.MasterDataDao
@@ -50,6 +51,7 @@ class CollectionRepository(private val database: CollectionDatabase) {
     fun variantsForAccount(accountId: String): Flow<List<VariantCardRow>> = variants.observeForAccount(accountId).recoverToEmpty("帳號收藏")
     fun variantsForAllAccounts(): Flow<List<VariantCardRow>> = variants.observeForAllAccounts().recoverToEmpty("全部收藏")
     fun variantsForAccounts(accountIds: List<String>): Flow<List<VariantCardRow>> = variants.observeForAccounts(accountIds).recoverToEmpty("選取帳號收藏")
+    val ownershipCombinations: Flow<List<CollectionCombinationRow>> = variants.observeOwnershipCombinations().recoverToEmpty("收藏組合明細")
     fun variantInfo(variantId: String): Flow<VariantInfoRow?> = variants.observeInfo(variantId).recoverToNull("收藏組合")
     fun variantSources(variantId: String): Flow<List<SourceAccountRow>> = variants.observeSources(variantId).recoverToEmpty("收藏來源帳號")
     fun bucketsForVariant(accountId: String, variantId: String) = buckets.observeForVariant(accountId, variantId).recoverToEmpty("收藏數量")
