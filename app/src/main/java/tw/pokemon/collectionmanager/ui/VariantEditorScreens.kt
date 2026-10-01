@@ -58,6 +58,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.flowOf
 import tw.pokemon.collectionmanager.data.local.BackgroundEntity
+import tw.pokemon.collectionmanager.data.local.CollectionCombinationRow
 import tw.pokemon.collectionmanager.data.local.CollectionVariantEntity
 import tw.pokemon.collectionmanager.data.local.CollectionTagEntity
 import tw.pokemon.collectionmanager.data.local.CostumeEntity
@@ -111,6 +112,7 @@ fun QuickAddSheet(
     viewModel: CollectionViewModel,
     accountId: String?,
     initialInfo: VariantInfoRow? = null,
+    initialCombination: CollectionCombinationRow? = null,
     onDismiss: () -> Unit,
     onSaved: () -> Unit = {},
 ) {
@@ -118,7 +120,7 @@ fun QuickAddSheet(
     val costumes by viewModel.costumes.collectAsStateWithLifecycle()
     val backgrounds by viewModel.backgrounds.collectAsStateWithLifecycle()
     val customTags by viewModel.customTags.collectAsStateWithLifecycle()
-    var step by remember(initialInfo?.variantId) {
+    var step by remember(initialInfo?.variantId, initialCombination?.variantId) {
         mutableStateOf(if (initialInfo == null) AddStep.PICK_POKEMON else AddStep.CONFIGURE_VARIANT)
     }
     var searchText by remember { mutableStateOf("") }
@@ -131,10 +133,10 @@ fun QuickAddSheet(
     var gender by remember(initialInfo?.variantId) { mutableStateOf(initialInfo?.gender ?: Gender.UNKNOWN) }
     var shadow by remember(initialInfo?.variantId) { mutableStateOf(initialInfo?.shadowState ?: ShadowState.NORMAL) }
     var dynamax by remember(initialInfo?.variantId) { mutableStateOf(initialInfo?.dynamaxState ?: DynamaxState.NONE) }
-    var size by remember { mutableStateOf(SizeType.NORMAL) }
-    var specialMove by remember { mutableStateOf(false) }
-    var tradeState by remember { mutableStateOf(TradeState.UNTRADED) }
-    var quantityText by remember { mutableStateOf("1") }
+    var size by remember(initialCombination) { mutableStateOf(initialCombination?.sizeType ?: SizeType.NORMAL) }
+    var specialMove by remember(initialCombination) { mutableStateOf(initialCombination?.hasSpecialMove ?: false) }
+    var tradeState by remember(initialCombination) { mutableStateOf(initialCombination?.tradeState ?: TradeState.UNTRADED) }
+    var quantityText by remember(initialCombination) { mutableStateOf(initialCombination?.quantity?.toString() ?: "1") }
     val existingTagIdsFlow = remember(initialInfo?.variantId) {
         initialInfo?.variantId?.let(viewModel::variantTagIds) ?: flowOf(emptyList<String>())
     }
@@ -280,6 +282,17 @@ fun QuickAddSheet(
                                     quantity,
                                     tagIds = selectedTagIds,
                                 )
+                                onDismiss()
+                            } else if (initialCombination != null) {
+                                viewModel.updateOwnershipCombination(
+                                    accountId = accountId,
+                                    source = initialCombination,
+                                    draft = VariantDraft(speciesId, formId, costumeId, backgroundId, shiny, gender, shadow, dynamax),
+                                    bucket = BucketDraft(size, specialMove, tradeState),
+                                    quantity = quantity,
+                                    tagIds = selectedTagIds,
+                                )
+                                onSaved()
                                 onDismiss()
                             } else {
                                 viewModel.updateVariant(
@@ -974,9 +987,7 @@ fun VariantDetailScreen(
         if (accountId != null) viewModel.accountCombinations(accountId) else viewModel.selectedCombinations(selectedIds)
     }
     val allCombinations by combinationFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    val bucketFlow = remember(accountId, variantId) { accountId?.let { viewModel.buckets(it, variantId) } ?: flowOf(emptyList()) }
-    val buckets by bucketFlow.collectAsStateWithLifecycle(initialValue = emptyList())
-    var showEditor by remember { mutableStateOf(false) }
+    var editingCombination by remember { mutableStateOf<CollectionCombinationRow?>(null) }
     var showDelete by remember { mutableStateOf(false) }
 
     if (info == null) {
@@ -996,7 +1007,15 @@ fun VariantDetailScreen(
         Row(verticalAlignment = Alignment.CenterVertically) {
             TextButton(onClick = onBack) { Text("‹ 返回") }
             Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-            TextButton(onClick = { showEditor = true }) { Text("編輯") }
+            if (accountId != null) {
+                TextButton(
+                    onClick = {
+                        editingCombination = groupCombinations.firstOrNull { it.variantId == currentInfo.variantId }
+                            ?: groupCombinations.firstOrNull()
+                    },
+                    enabled = groupCombinations.isNotEmpty(),
+                ) { Text("編輯") }
+            }
             TextButton(onClick = { showDelete = true }) { Text("刪除") }
         }
         Box(Modifier.fillMaxWidth().height(210.dp), contentAlignment = Alignment.Center) {
@@ -1042,14 +1061,19 @@ fun VariantDetailScreen(
             val total = groupCombinations.sumOf { it.quantity }
             SectionTitle("${currentInfo.speciesName} · ${sources.firstOrNull { it.accountId == accountId }?.accountName ?: "此帳號"}")
             Text("總數：$total", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            CombinationSummaryList(summaries)
-            if (buckets.isNotEmpty()) {
+            if (summaries.isNotEmpty()) {
                 Text(
-                    "以下可調整目前開啟的收藏版本數量：",
+                    "以下每一列都是獨立的收藏組合，可單獨調整數量或編輯性別、尺寸、特招與交換狀態：",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                buckets.forEach { bucket -> BucketLine(bucket, viewModel) }
+                groupCombinations.forEach { combination ->
+                    CombinationLine(
+                        combination = combination,
+                        viewModel = viewModel,
+                        onEdit = { editingCombination = combination },
+                    )
+                }
             }
             if (summaries.isEmpty()) Text("此帳號目前沒有這個核心版本的數量。", color = MaterialTheme.colorScheme.onSurfaceVariant)
         } else {
@@ -1075,7 +1099,19 @@ fun VariantDetailScreen(
         Spacer(Modifier.height(20.dp))
     }
 
-    if (showEditor) QuickAddSheet(viewModel, accountId, currentInfo, onDismiss = { showEditor = false })
+    val combinationToEdit = editingCombination
+    if (combinationToEdit != null && accountId != null) {
+        val editInfo by viewModel.variantInfo(combinationToEdit.variantId).collectAsStateWithLifecycle(initialValue = null)
+        editInfo?.let { infoForEdit ->
+            QuickAddSheet(
+                viewModel = viewModel,
+                accountId = accountId,
+                initialInfo = infoForEdit,
+                initialCombination = combinationToEdit,
+                onDismiss = { editingCombination = null },
+            )
+        }
+    }
     if (showDelete) {
         AlertDialog(
             onDismissRequest = { showDelete = false },
@@ -1097,6 +1133,36 @@ private fun CombinationSummaryList(summaries: List<CollectionCombinationSummary>
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+    }
+}
+
+@Composable
+private fun CombinationLine(
+    combination: CollectionCombinationRow,
+    viewModel: CollectionViewModel,
+    onEdit: () -> Unit,
+) {
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)) {
+        Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    combination.displayLabel(),
+                    modifier = Modifier.weight(1f),
+                    fontWeight = FontWeight.Medium,
+                )
+                TextButton(onClick = onEdit) { Text("編輯") }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("數量", color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
+                TextButton(onClick = { viewModel.updateCombinationQuantity(combination.accountId, combination, combination.quantity.toInt() - 1) }) {
+                    Text("−")
+                }
+                Text("×${combination.quantity}", fontWeight = FontWeight.Bold)
+                TextButton(onClick = { viewModel.updateCombinationQuantity(combination.accountId, combination, combination.quantity.toInt() + 1) }) {
+                    Text("＋")
+                }
+            }
         }
     }
 }
@@ -1141,19 +1207,6 @@ private fun CustomVariantTagSection(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-    }
-}
-
-@Composable
-private fun BucketLine(bucket: OwnershipBucketEntity, viewModel: CollectionViewModel) {
-    Row(Modifier.fillMaxWidth().padding(vertical = 3.dp), verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f)) {
-            Text("${bucket.sizeType.label} · ${if (bucket.hasSpecialMove) "有特招" else "無特招"}", fontWeight = FontWeight.Medium)
-            Text(bucket.tradeState.label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        TextButton(onClick = { viewModel.updateBucket(bucket, bucket.quantity - 1) }) { Text("−") }
-        Text("×${bucket.quantity}", fontWeight = FontWeight.Bold)
-        TextButton(onClick = { viewModel.updateBucket(bucket, bucket.quantity + 1) }) { Text("＋") }
     }
 }
 
