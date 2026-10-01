@@ -42,6 +42,28 @@ def load_previous_backgrounds(path: pathlib.Path | None) -> dict[str, dict]:
     }
 
 
+def load_verified_preview_index(path: pathlib.Path | None) -> dict[str, dict]:
+    """讀取已驗證的完整合成預覽索引。
+
+    這個索引是跨次更新的安全標記。即使上游暫時只回傳底圖，
+    只要對應的完整 WebP 仍在快取中，就不能把它降級成底圖預覽。
+    """
+    if path is None or not path.is_file():
+        return {}
+    try:
+        root = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    items = root.get("previews", []) if isinstance(root, dict) else root
+    if not isinstance(items, list):
+        return {}
+    return {
+        str(item.get("backgroundId")): item
+        for item in items
+        if isinstance(item, dict) and item.get("backgroundId")
+    }
+
+
 def image_difference_score(left: pathlib.Path, right: pathlib.Path) -> float | None:
     """比較預覽與底圖的縮圖差異；數值越接近 0 代表幾乎是同一張圖。"""
     try:
@@ -73,6 +95,11 @@ def main() -> None:
         type=pathlib.Path,
         help="上一版已發布主資料；用來保留已驗證的完整合成預覽",
     )
+    parser.add_argument(
+        "--verified-preview-index",
+        type=pathlib.Path,
+        help="跨次更新的完整合成預覽索引；避免上游缺圖時退化成底圖",
+    )
     parser.add_argument("--output-manifest", type=pathlib.Path, required=True)
     parser.add_argument("--backgrounds-output", type=pathlib.Path)
     parser.add_argument("--quality", type=int, default=84)
@@ -87,6 +114,11 @@ def main() -> None:
         inferred = args.asset_root / "master" / "master_manifest.json"
         previous_manifest = inferred if inferred.is_file() else None
     previous_backgrounds = load_previous_backgrounds(previous_manifest)
+    verified_preview_index = args.verified_preview_index
+    if verified_preview_index is None:
+        inferred = args.asset_root / "master" / "background_preview_integrity_index.json"
+        verified_preview_index = inferred if inferred.is_file() else None
+    verified_previews = load_verified_preview_index(verified_preview_index)
     output_dir = args.asset_root / "images" / "background_optimized"
     output_dir.mkdir(parents=True, exist_ok=True)
     existing_index: dict[str, str] = {}
@@ -111,6 +143,8 @@ def main() -> None:
         "baseEquivalentBackgroundKeys": [],
         "preservedPreviousCompletePreviewCount": 0,
         "preservedPreviousBackgroundKeys": [],
+        "restoredVerifiedPreviewCount": 0,
+        "restoredVerifiedBackgroundKeys": [],
         "previewComparisonThreshold": 1.5,
     }
     base_equivalent_keys: list[str] = []
@@ -124,6 +158,35 @@ def main() -> None:
         cached_path = asset_path(args.asset_root, cached_key) if cached_key else None
         cached_is_available = bool(cached_key and cached_path and cached_path.is_file())
         current_preview_key = background.get("previewImageKey")
+        verified = verified_previews.get(background_id)
+        verified_key = verified.get("previewImageKey") if verified else None
+        verified_path = (
+            asset_path(args.asset_root, str(verified_key))
+            if verified_key and not str(verified_key).startswith("https://")
+            else None
+        )
+        # 新版主資料可能暫時沒有預覽欄位，但上一版已驗證的完整 WebP
+        # 仍然存在。先恢復完整預覽，再進入一般最佳化流程，避免只留下
+        # 索財靈底圖、月光底圖或其他多圖層背卡的單層版本。
+        if (
+            not current_preview_key
+            and verified_key
+            and verified_path
+            and verified_path.is_file()
+        ):
+            background["previewImageKey"] = verified_key
+            background["previewSource"] = verified.get("previewSource") or "已驗證完整快取"
+            background["previewStatus"] = "COMPLETE_STATIC_PREVIEW"
+            background["sourcePreviewImageKey"] = verified.get(
+                "sourcePreviewImageKey",
+                background.get("sourcePreviewImageKey"),
+            )
+            current_preview_key = verified_key
+            integrity_audit["restoredVerifiedPreviewCount"] = int(
+                integrity_audit["restoredVerifiedPreviewCount"]
+            ) + 1
+            restored_key = str(background.get("backgroundKey") or background_id)
+            integrity_audit["restoredVerifiedBackgroundKeys"].append(restored_key)
         previous_preview_key = previous.get("previewImageKey") if previous else None
         previous_preview_path = (
             asset_path(args.asset_root, str(previous_preview_key))
@@ -308,6 +371,12 @@ def main() -> None:
     integrity_audit["baseEquivalentBackgroundKeys"] = sorted(set(base_equivalent_keys))
     integrity_audit["preservedPreviousCompletePreviewCount"] = len(set(preserved_previous_keys))
     integrity_audit["preservedPreviousBackgroundKeys"] = sorted(set(preserved_previous_keys))
+    integrity_audit["restoredVerifiedPreviewCount"] = len(
+        set(integrity_audit["restoredVerifiedBackgroundKeys"])
+    )
+    integrity_audit["restoredVerifiedBackgroundKeys"] = sorted(
+        set(integrity_audit["restoredVerifiedBackgroundKeys"])
+    )
     root["backgroundPreviewIntegrityAudit"] = integrity_audit
     # 重新寫入一次，讓稽核資訊和最佳化後的背景欄位一起進入主資料。
     args.output_manifest.write_text(json.dumps(root, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -316,6 +385,7 @@ def main() -> None:
     print(f"Background image index entries: {len(image_index)}")
     print(f"Base-equivalent previews: {len(set(base_equivalent_keys))}")
     print(f"Preserved previous complete previews: {len(set(preserved_previous_keys))}")
+    print(f"Restored verified complete previews: {integrity_audit['restoredVerifiedPreviewCount']}")
 
 
 if __name__ == "__main__":
