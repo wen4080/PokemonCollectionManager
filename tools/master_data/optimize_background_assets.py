@@ -120,6 +120,9 @@ def main() -> None:
     for background in backgrounds:
         background_id = str(background.get("id") or "")
         previous = previous_backgrounds.get(background_id)
+        cached_key = existing_index.get(background_id)
+        cached_path = asset_path(args.asset_root, cached_key) if cached_key else None
+        cached_is_available = bool(cached_key and cached_path and cached_path.is_file())
         current_preview_key = background.get("previewImageKey")
         previous_preview_key = previous.get("previewImageKey") if previous else None
         previous_preview_path = (
@@ -158,7 +161,18 @@ def main() -> None:
             base_key = background.get("imageKey")
             base_path = asset_path(args.asset_root, str(base_key)) if base_key and not str(base_key).startswith("https://") else None
             score = image_difference_score(current_preview_path, base_path) if base_path and current_preview_path.is_file() and base_path.is_file() else None
-            if score is not None:
+            cached_score = image_difference_score(cached_path, current_preview_path) if cached_is_available and current_preview_path.is_file() else None
+            cached_protected = False
+            if cached_score is not None and cached_score > float(integrity_audit["previewComparisonThreshold"]):
+                # 穩定索引中的既有圖比本次外部候選圖明顯不同，代表
+                # 既有快取可能包含硬幣、月亮、剪影等合成圖層；外部
+                # 候選不具可信度時，寧可保留已收錄的完整版本。
+                background["previewImageKey"] = cached_key
+                background["previewSource"] = (previous or {}).get("previewSource") or "已驗證完整快取"
+                background["previewStatus"] = "COMPLETE_STATIC_PREVIEW"
+                preserved_previous_keys.append(str(background.get("backgroundKey") or background_id))
+                cached_protected = True
+            if score is not None and not cached_protected:
                 integrity_audit["checkedPreviewCount"] = int(integrity_audit["checkedPreviewCount"]) + 1
                 if score <= float(integrity_audit["previewComparisonThreshold"]):
                     base_equivalent_keys.append(str(background.get("backgroundKey") or background_id))
@@ -226,8 +240,7 @@ def main() -> None:
                 if not image_key or image_key.startswith("https://"):
                     continue
                 source = asset_path(args.asset_root, image_key)
-            cached_key = existing_index.get(background_id)
-            cached_source = asset_path(args.asset_root, cached_key) if cached_key else None
+            cached_source = cached_path
             if cached_key and cached_source and cached_source.is_file():
                 background.setdefault(
                     "sourceImageKey" if field == "imageKey" else "sourcePreviewImageKey",
