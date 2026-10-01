@@ -116,6 +116,7 @@ data class BackgroundEntity(
     val effectNote: String? = null,
     val previewImageKey: String? = null,
     val previewSource: String? = null,
+    val previewStatus: String? = null,
     val sortOrder: Int = 0,
     val isActive: Boolean = true,
 )
@@ -289,6 +290,34 @@ data class VariantCardRow(
     val specialMoveQuantity: Long,
     val untradedQuantity: Long,
     val tradedQuantity: Long,
+)
+
+/**
+ * 收藏數量的最小實際組合。畫面可以把相同核心版本合併成一張卡，
+ * 但仍保留性別、尺寸、特招與交換狀態的完整數量資訊。
+ */
+data class CollectionCombinationRow(
+    val accountId: String,
+    val accountName: String,
+    val accountIsArchived: Boolean,
+    val variantId: String,
+    val speciesId: String,
+    val formId: String,
+    val costumeId: String,
+    val speciesName: String,
+    val dexNumber: Int,
+    val formName: String,
+    val backgroundName: String,
+    val backgroundCategoryName: String,
+    val backgroundId: String,
+    val isShiny: Boolean,
+    val gender: Gender,
+    val shadowState: ShadowState,
+    val dynamaxState: DynamaxState,
+    val sizeType: SizeType,
+    val hasSpecialMove: Boolean,
+    val tradeState: TradeState,
+    val quantity: Long,
 )
 
 data class VariantInfoRow(
