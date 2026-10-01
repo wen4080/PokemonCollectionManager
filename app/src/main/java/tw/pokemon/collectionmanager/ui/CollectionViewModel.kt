@@ -19,6 +19,7 @@ import tw.pokemon.collectionmanager.data.local.AccountGroupEntity
 import tw.pokemon.collectionmanager.data.local.AccountSummaryRow
 import tw.pokemon.collectionmanager.data.local.BackgroundEntity
 import tw.pokemon.collectionmanager.data.local.CollectionVariantEntity
+import tw.pokemon.collectionmanager.data.local.CollectionCombinationRow
 import tw.pokemon.collectionmanager.data.local.CollectionTagEntity
 import tw.pokemon.collectionmanager.data.local.CostumeEntity
 import tw.pokemon.collectionmanager.data.local.OwnershipBucketEntity
@@ -86,6 +87,10 @@ class CollectionViewModel(
     fun accountVariants(accountId: String) = repository.variantsForAccount(accountId)
     fun allVariants() = repository.variantsForAllAccounts()
     fun selectedVariants(accountIds: List<String>) = if (accountIds.isEmpty()) repository.variantsForAllAccounts() else repository.variantsForAccounts(accountIds)
+    fun accountCombinations(accountId: String) = repository.ownershipCombinations.map { rows -> rows.filter { it.accountId == accountId } }
+    fun selectedCombinations(accountIds: List<String>) = repository.ownershipCombinations.map { rows ->
+        rows.filter { row -> !row.accountIsArchived && (accountIds.isEmpty() || row.accountId in accountIds) }
+    }
     fun variantInfo(variantId: String) = repository.variantInfo(variantId)
     fun variantSources(variantId: String) = repository.variantSources(variantId)
     fun buckets(accountId: String, variantId: String) = repository.bucketsForVariant(accountId, variantId)
