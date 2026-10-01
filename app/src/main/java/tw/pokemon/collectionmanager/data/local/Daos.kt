@@ -354,7 +354,7 @@ interface VariantDao {
         LEFT JOIN costumes c ON c.id = cv.costumeId
         LEFT JOIN backgrounds b ON b.id = cv.backgroundId
         WHERE ob.quantity > 0
-        GROUP BY ob.accountId, cv.id, ob.sizeType, ob.hasSpecialMove, ob.tradeState
+        GROUP BY ob.accountId, cv.id, cv.gender, ob.sizeType, ob.hasSpecialMove, ob.tradeState
         ORDER BY a.sortOrder ASC, a.createdAt ASC, s.dexNumber ASC, cv.updatedAt DESC,
                  cv.gender ASC, ob.sizeType ASC, ob.hasSpecialMove ASC, ob.tradeState ASC
         """,
