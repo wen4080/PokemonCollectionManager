@@ -200,6 +200,7 @@ fun AccountCollectionScreen(
             assignedTagIds = tagIdsByVariant[it.variantId].orEmpty(),
         )
     }
+    val displayGroups = filtered.groupForDisplay()
 
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 18.dp)) {
@@ -207,7 +208,7 @@ fun AccountCollectionScreen(
                 TextButton(onClick = onBack) { Text("‹ 返回") }
                 PageTitle(
                     title = account?.name ?: "帳號收藏",
-                    subtitle = "${variants.size} 種收藏組合 · ${variants.sumOf { it.totalQuantity }} 隻",
+                    subtitle = "${displayGroups.size} 張收藏卡 · ${variants.sumOf { it.totalQuantity }} 隻",
                     modifier = Modifier.padding(start = 4.dp),
                 )
             }
@@ -226,9 +227,9 @@ fun AccountCollectionScreen(
                 EmptyState("沒有符合的收藏", "這只表示目前沒有登記符合條件的收藏組合，不代表帳號沒有這隻 Pokémon。", "新增收藏") { showAdd = true }
             } else {
                 VariantGrid(
-                    variants = filtered,
+                    groups = displayGroups,
                     imageRepository = viewModel.imageRepository,
-                    onClick = { onOpenVariant(it.variantId) },
+                    onClick = { onOpenVariant(it.representative.variantId) },
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -245,7 +246,7 @@ fun AccountCollectionScreen(
 }
 
 private fun List<VariantCardRow>.summaryValue(metric: OverviewSummaryMetric): Long = when (metric) {
-    OverviewSummaryMetric.COLLECTION_SET -> size.toLong()
+    OverviewSummaryMetric.COLLECTION_SET -> groupForDisplay().size.toLong()
     OverviewSummaryMetric.SPECIES_COUNT -> distinctBy { it.speciesId }.size.toLong()
     OverviewSummaryMetric.POKEMON_COUNT -> sumOf { it.totalQuantity }
     OverviewSummaryMetric.SHINY -> filter { it.isShiny }.sumOf { it.totalQuantity }
@@ -543,6 +544,7 @@ fun OverviewScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Un
             assignedTagIds = tagIdsByVariant[it.variantId].orEmpty(),
         )
     }
+    val displayGroups = visible.groupForDisplay()
     val selectedSummaryMetrics = buildList {
         OverviewSummaryMetric.entries.filter { it.code in summaryCodes }.forEach { add(it.asSummaryItem()) }
         customTags.filter { "$CUSTOM_SUMMARY_TAG_PREFIX${it.id}" in summaryCodes }.forEach { add(it.asSummaryItem()) }
@@ -558,7 +560,7 @@ fun OverviewScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Un
         overscrollEffect = null,
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
-            PageTitle("總覽", subtitle = "跨帳號聚合收藏組合；每張卡代表一種完整組合，×數量是實際隻數。")
+            PageTitle("總覽", subtitle = "跨帳號合併相同性別以外的核心版本；×數量是實際隻數。")
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
             Column {
@@ -629,8 +631,8 @@ fun OverviewScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Un
                 EmptyState("沒有符合的收藏組合", "請調整帳號或篩選條件。未登記項目不會被自動當成未擁有。")
             }
         } else {
-            gridItems(visible, key = { it.variantId }) { variant ->
-                VariantCardItem(variant = variant, imageRepository = viewModel.imageRepository, onClick = { onOpenVariant(variant.variantId) })
+            gridItems(displayGroups, key = { it.key }) { group ->
+                VariantCardItem(group = group, imageRepository = viewModel.imageRepository, onClick = { onOpenVariant(group.representative.variantId) })
             }
         }
     }
