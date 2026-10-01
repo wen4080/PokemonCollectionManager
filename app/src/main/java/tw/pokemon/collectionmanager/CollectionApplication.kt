@@ -19,6 +19,26 @@ import tw.pokemon.collectionmanager.data.repository.LocalFirstPokemonImageReposi
 import tw.pokemon.collectionmanager.data.repository.UserPreferencesRepository
 
 class CollectionApplication : Application() {
+    private fun hasColumn(database: SupportSQLiteDatabase, table: String, column: String): Boolean {
+        var found = false
+        database.query("PRAGMA table_info(`$table`)").use { cursor ->
+            val nameIndex = cursor.getColumnIndex("name")
+            while (nameIndex >= 0 && cursor.moveToNext()) {
+                if (cursor.getString(nameIndex) == column) {
+                    found = true
+                    break
+                }
+            }
+        }
+        return found
+    }
+
+    private fun ensureBackgroundPreviewStatusColumn(database: SupportSQLiteDatabase) {
+        if (!hasColumn(database, "backgrounds", "previewStatus")) {
+            database.execSQL("ALTER TABLE backgrounds ADD COLUMN previewStatus TEXT")
+        }
+    }
+
     private val migration1To2 = object : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("ALTER TABLE pokemon_species ADD COLUMN shinyImageKey TEXT")
@@ -149,10 +169,26 @@ class CollectionApplication : Application() {
         }
     }
 
+    private val migration7To8 = object : Migration(7, 8) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            ensureBackgroundPreviewStatusColumn(database)
+        }
+    }
+
+    /**
+     * 修復曾安裝過中間版本的資料庫：若資料庫版本號已經是 8，
+     * 但欄位尚未實際建立，啟動時仍可安全補上，不刪除收藏資料。
+     */
+    private val migration8To9 = object : Migration(8, 9) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            ensureBackgroundPreviewStatusColumn(database)
+        }
+    }
+
     val database: CollectionDatabase by lazy {
         Room.databaseBuilder(this, CollectionDatabase::class.java, "pokemon_collection.db")
             .enableMultiInstanceInvalidation()
-            .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7)
+            .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9)
             .build()
     }
 
