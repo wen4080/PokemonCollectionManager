@@ -127,6 +127,11 @@ DIRECT_PREVIEWS = {
     },
 }
 
+# 這些背景有明確的「指定款式」完整預覽。若指定來源暫時無法下載，
+# 不得用同一張遊戲底圖的通用 Dittobase 頁面冒充完整預覽；後續流程會
+# 優先保留上一版已驗證的合成圖，沒有快取時則明確退回底圖。
+DIRECT_PREVIEW_KEYS = frozenset(DIRECT_PREVIEWS)
+
 
 def request_bytes(url: str) -> tuple[bytes, str | None]:
     request = urllib.request.Request(url, headers={"User-Agent": "PokemonCollectionManager/1.0"})
@@ -408,6 +413,7 @@ def main() -> int:
         )
 
     failures: list[str] = []
+    direct_preview_failures: list[str] = []
     for stem, slug in SOURCE_PREVIEWS.items():
         try:
             spec = slug_cache.setdefault(slug, dittobase_preview(slug))
@@ -425,6 +431,7 @@ def main() -> int:
             materialize(None, background_key, spec)
         except Exception as exc:
             failures.append(f"{background_key}: {exc}")
+            direct_preview_failures.append(background_key)
 
     catalog_backgrounds: list[dict] = []
     if args.catalog and args.catalog.exists():
@@ -504,6 +511,8 @@ def main() -> int:
     manifest = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "previews": rows,
+        "directPreviewKeys": sorted(DIRECT_PREVIEW_KEYS),
+        "directPreviewFailures": sorted(direct_preview_failures),
         "downloadedFiles": len({row["previewImageKey"] for row in rows}),
         "mappedSourceImages": sum(bool(row.get("sourceImageStem")) for row in rows),
         "mappedBackgroundKeys": sum(bool(row.get("backgroundKey")) for row in rows),
