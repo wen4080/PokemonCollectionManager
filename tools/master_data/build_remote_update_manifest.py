@@ -34,6 +34,13 @@ def main() -> None:
     root = json.loads(args.manifest.read_text(encoding="utf-8"))
     rewritten = 0
     for background in root.get("backgrounds", []):
+        # 最佳化流程可能只保留完整預覽的 WebP，而把原始 PokeMiners
+        # 底圖移除。遠端主資料的 imageKey 也要指向可公開取得的優先圖，
+        # 不能留下更新站上不存在的 Images/LocationCards 原始路徑。
+        preview_key = background.get("previewImageKey")
+        image_key = background.get("imageKey")
+        if preview_key and isinstance(image_key, str) and image_key.startswith("pogo/"):
+            background["imageKey"] = preview_key
         for field in ("imageKey", "previewImageKey"):
             image_key = background.get(field)
             if image_key:
@@ -49,3 +56,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
