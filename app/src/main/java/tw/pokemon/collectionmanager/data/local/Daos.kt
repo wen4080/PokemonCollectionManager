@@ -325,6 +325,44 @@ interface VariantDao {
 
     @Query(
         """
+        SELECT ob.accountId AS accountId,
+               COALESCE(a.name, ob.accountId) AS accountName,
+               COALESCE(a.isArchived, 0) AS accountIsArchived,
+               cv.id AS variantId,
+               cv.speciesId AS speciesId,
+               cv.formId AS formId,
+               cv.costumeId AS costumeId,
+               COALESCE(s.nameZhTw, cv.speciesId) AS speciesName,
+               COALESCE(s.dexNumber, 0) AS dexNumber,
+               COALESCE(f.displayName, cv.formId) AS formName,
+               COALESCE(b.displayName, cv.backgroundId) AS backgroundName,
+               COALESCE(b.categoryName, cv.backgroundId) AS backgroundCategoryName,
+               cv.backgroundId AS backgroundId,
+               cv.isShiny AS isShiny,
+               cv.gender AS gender,
+               cv.shadowState AS shadowState,
+               cv.dynamaxState AS dynamaxState,
+               ob.sizeType AS sizeType,
+               ob.hasSpecialMove AS hasSpecialMove,
+               ob.tradeState AS tradeState,
+               SUM(ob.quantity) AS quantity
+        FROM ownership_buckets ob
+        JOIN collection_variants cv ON cv.id = ob.variantId
+        LEFT JOIN accounts a ON a.id = ob.accountId
+        LEFT JOIN pokemon_species s ON s.id = cv.speciesId
+        LEFT JOIN pokemon_forms f ON f.id = cv.formId
+        LEFT JOIN costumes c ON c.id = cv.costumeId
+        LEFT JOIN backgrounds b ON b.id = cv.backgroundId
+        WHERE ob.quantity > 0
+        GROUP BY ob.accountId, cv.id, ob.sizeType, ob.hasSpecialMove, ob.tradeState
+        ORDER BY a.sortOrder ASC, a.createdAt ASC, s.dexNumber ASC, cv.updatedAt DESC,
+                 cv.gender ASC, ob.sizeType ASC, ob.hasSpecialMove ASC, ob.tradeState ASC
+        """,
+    )
+    fun observeOwnershipCombinations(): Flow<List<CollectionCombinationRow>>
+
+    @Query(
+        """
         SELECT cv.id AS variantId,
                cv.speciesId AS speciesId,
                COALESCE(s.nameZhTw, cv.speciesId) AS speciesName,
