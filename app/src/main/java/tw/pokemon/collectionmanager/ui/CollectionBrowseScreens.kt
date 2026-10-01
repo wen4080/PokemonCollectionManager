@@ -631,7 +631,9 @@ fun OverviewScreen(viewModel: CollectionViewModel, onOpenVariant: (String) -> Un
                 EmptyState("沒有符合的收藏組合", "請調整帳號或篩選條件。未登記項目不會被自動當成未擁有。")
             }
         } else {
-            gridItems(displayGroups, key = { it.key }) { group ->
+            // variantId 是資料庫中的穩定字串 key，避免複合資料物件造成
+            // Android Lazy Grid 在首次載入／狀態恢復時無法保存 key。
+            gridItems(displayGroups, key = { it.representative.variantId }) { group ->
                 VariantCardItem(group = group, imageRepository = viewModel.imageRepository, onClick = { onOpenVariant(group.representative.variantId) })
             }
         }
