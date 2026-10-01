@@ -323,6 +323,104 @@ class CollectionRepository(private val database: CollectionDatabase) {
             destination.id
         }
 
+    /**
+     * 編輯單一帳號中的一筆實際收藏組合。
+     *
+     * 性別、尺寸、特招與交換狀態都可能是同一張顯示卡中的不同資料列，
+     * 因此這裡只搬移呼叫端指定的 bucket，不再把同一 variant 的其他組合
+     * 一起搬走。若編輯後與既有 variant 或 bucket 碰撞，則在交易中合併，
+     * 避免留下重複或數量遺失的資料。
+     */
+    suspend fun updateOwnershipCombination(
+        accountId: String,
+        source: CollectionCombinationRow,
+        draft: VariantDraft,
+        bucketDraft: BucketDraft,
+        quantity: Int,
+        tagIds: Set<String> = emptySet(),
+    ): String = database.withTransaction {
+        require(quantity > 0) { "數量必須大於 0" }
+        require(source.accountId == accountId) { "收藏組合不屬於目前帳號" }
+        validateAccountAndVariantDraft(accountId, draft)
+
+        val current = variants.getById(source.variantId) ?: error("找不到原收藏組合")
+        val sourceBucket = buckets.find(
+            accountId = accountId,
+            variantId = source.variantId,
+            sizeType = source.sizeType,
+            hasSpecialMove = source.hasSpecialMove,
+            tradeState = source.tradeState,
+        ) ?: error("找不到原收藏數量")
+        require(sourceBucket.quantity > 0) { "原收藏數量已不存在" }
+
+        val now = System.currentTimeMillis()
+        val newKey = VariantKeyFactory.build(draft)
+        val collision = variants.findByKey(newKey)?.takeUnless { it.id == current.id }
+        val destination = collision ?: if (newKey == current.variantKey) {
+            current
+        } else {
+            CollectionVariantEntity(
+                id = UUID.randomUUID().toString(),
+                speciesId = draft.speciesId,
+                formId = draft.formId,
+                costumeId = draft.costumeId,
+                backgroundId = draft.backgroundId,
+                isShiny = draft.isShiny,
+                gender = draft.gender,
+                shadowState = draft.shadowState,
+                dynamaxState = draft.dynamaxState,
+                variantKey = newKey,
+                createdAt = now,
+                updatedAt = now,
+            )
+        }
+        if (destination.id != current.id || collision == null && newKey != current.variantKey) {
+            variants.upsert(destination.copy(updatedAt = now))
+        }
+
+        val targetBucket = buckets.find(
+            accountId = accountId,
+            variantId = destination.id,
+            sizeType = bucketDraft.sizeType,
+            hasSpecialMove = bucketDraft.hasSpecialMove,
+            tradeState = bucketDraft.tradeState,
+        )
+        val isSameBucket = targetBucket?.id == sourceBucket.id
+        if (isSameBucket) {
+            buckets.upsert(sourceBucket.copy(quantity = quantity, updatedAt = now))
+        } else {
+            if (targetBucket == null) {
+                buckets.upsert(
+                    OwnershipBucketEntity(
+                        id = UUID.randomUUID().toString(),
+                        accountId = accountId,
+                        variantId = destination.id,
+                        sizeType = bucketDraft.sizeType,
+                        hasSpecialMove = bucketDraft.hasSpecialMove,
+                        tradeState = bucketDraft.tradeState,
+                        quantity = quantity,
+                        createdAt = now,
+                        updatedAt = now,
+                    ),
+                )
+            } else {
+                buckets.upsert(
+                    targetBucket.copy(
+                        quantity = OwnershipRules.mergeQuantity(targetBucket.quantity, quantity),
+                        updatedAt = now,
+                    ),
+                )
+            }
+            buckets.deleteById(sourceBucket.id)
+        }
+
+        if (current.id != destination.id && buckets.getAll().none { it.variantId == current.id && it.quantity > 0 }) {
+            variants.deleteById(current.id)
+        }
+        replaceTagsInTransaction(destination.id, tagIds)
+        destination.id
+    }
+
     private suspend fun mergeVariantBuckets(fromVariantId: String, toVariantId: String) {
         val now = System.currentTimeMillis()
         val source = buckets.getAll().filter { it.variantId == fromVariantId }
@@ -338,6 +436,25 @@ class CollectionRepository(private val database: CollectionDatabase) {
 
     suspend fun updateBucket(bucket: OwnershipBucketEntity, newQuantity: Int) {
         database.withTransaction {
+            if (newQuantity <= 0) buckets.deleteById(bucket.id)
+            else buckets.upsert(bucket.copy(quantity = newQuantity, updatedAt = System.currentTimeMillis()))
+        }
+    }
+
+    suspend fun updateOwnershipCombinationQuantity(
+        accountId: String,
+        combination: CollectionCombinationRow,
+        newQuantity: Int,
+    ) {
+        database.withTransaction {
+            require(combination.accountId == accountId) { "收藏組合不屬於目前帳號" }
+            val bucket = buckets.find(
+                accountId = accountId,
+                variantId = combination.variantId,
+                sizeType = combination.sizeType,
+                hasSpecialMove = combination.hasSpecialMove,
+                tradeState = combination.tradeState,
+            ) ?: error("找不到收藏數量")
             if (newQuantity <= 0) buckets.deleteById(bucket.id)
             else buckets.upsert(bucket.copy(quantity = newQuantity, updatedAt = System.currentTimeMillis()))
         }
