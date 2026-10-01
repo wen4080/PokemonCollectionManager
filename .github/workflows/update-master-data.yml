@@ -14,6 +14,8 @@ permissions:
   pages: write
   id-token: write
 
+# 背卡圖片索引與上一版完整預覽快取會一併參與每次發佈，避免完整圖層退化。
+
 concurrency:
   group: pokemon-master-pages
   cancel-in-progress: true
