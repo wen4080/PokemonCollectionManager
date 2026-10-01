@@ -438,9 +438,9 @@ fun BackgroundFilterRow(
 
 @Composable
 fun VariantGrid(
-    variants: List<VariantCardRow>,
+    groups: List<CollectionDisplayGroup>,
     imageRepository: PokemonImageRepository,
-    onClick: (VariantCardRow) -> Unit,
+    onClick: (CollectionDisplayGroup) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
@@ -450,14 +450,15 @@ fun VariantGrid(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        gridItems(variants, key = { it.variantId }) { variant ->
-            VariantCardItem(variant = variant, imageRepository = imageRepository, onClick = { onClick(variant) })
+        gridItems(groups, key = { it.key }) { group ->
+            VariantCardItem(group = group, imageRepository = imageRepository, onClick = { onClick(group) })
         }
     }
 }
 
 @Composable
-fun VariantCardItem(variant: VariantCardRow, imageRepository: PokemonImageRepository, onClick: () -> Unit) {
+fun VariantCardItem(group: CollectionDisplayGroup, imageRepository: PokemonImageRepository, onClick: () -> Unit) {
+    val variant = group.representative
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -496,14 +497,14 @@ fun VariantCardItem(variant: VariantCardRow, imageRepository: PokemonImageReposi
                     shiny = variant.isShiny,
                     label = variant.speciesName,
                 )
-                if (variant.totalQuantity > 1) {
+                if (group.totalQuantity > 1) {
                     Surface(
                         modifier = Modifier.align(Alignment.TopEnd).padding(8.dp),
                         shape = MaterialTheme.shapes.small,
                         color = MaterialTheme.colorScheme.inverseSurface,
                     ) {
                         Text(
-                            text = "×${variant.totalQuantity}",
+                            text = "×${group.totalQuantity}",
                             modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp),
                             color = MaterialTheme.colorScheme.inverseOnSurface,
                             style = MaterialTheme.typography.labelLarge,
@@ -528,6 +529,14 @@ fun VariantCardItem(variant: VariantCardRow, imageRepository: PokemonImageReposi
                 overflow = TextOverflow.Ellipsis,
             )
             BadgeRow(variant)
+            if (group.variants.size > 1) {
+                Text(
+                    text = "已合併 ${group.variants.size} 種性別組合",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+            }
         }
     }
 }
@@ -537,15 +546,10 @@ fun VariantCardItem(variant: VariantCardRow, imageRepository: PokemonImageReposi
 fun BadgeRow(variant: VariantCardRow, compact: Boolean = true) {
     val badges = buildList {
         if (variant.isShiny) add("✨ 異色")
-        if (variant.gender == Gender.MALE) add("♂")
-        if (variant.gender == Gender.FEMALE) add("♀")
         if (variant.backgroundId != "BACKGROUND_NONE") add("🌆 ${variant.backgroundCategoryName}")
         if (variant.costumeName != "無裝扮") add("🎩 ${variant.costumeName}")
         if (variant.shadowState.code != "NORMAL") add("🌑 ${variant.shadowState.label}")
         if (variant.dynamaxState.code != "NONE") add("⚡ ${variant.dynamaxState.label}")
-        if (variant.xxlQuantity > 0) add("特大 ×${variant.xxlQuantity}")
-        if (variant.xxsQuantity > 0) add("特小 ×${variant.xxsQuantity}")
-        if (variant.specialMoveQuantity > 0) add("特招 ×${variant.specialMoveQuantity}")
     }
     if (badges.isNotEmpty()) {
         // 卡片內不再放水平可滾動列。非預設版本一定會產生徽章，
