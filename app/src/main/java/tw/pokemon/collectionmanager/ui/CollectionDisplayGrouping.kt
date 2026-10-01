@@ -129,6 +129,16 @@ fun CollectionCombinationSummary.displayLabel(): String = buildList {
 
 fun CollectionCombinationSummary.displayText(): String = "${displayLabel()} ×$quantity"
 
+fun CollectionCombinationRow.displayLabel(): String = CollectionCombinationSummary(
+    gender = gender,
+    sizeType = sizeType,
+    hasSpecialMove = hasSpecialMove,
+    tradeState = tradeState,
+    quantity = quantity,
+).displayLabel()
+
+fun CollectionCombinationRow.displayText(): String = "${displayLabel()} ×$quantity"
+
 fun CollectionCombinationRow.matchesDisplayKey(info: VariantInfoRow): Boolean =
     speciesId == info.speciesId &&
         formId == info.formId &&
@@ -140,5 +150,4 @@ fun CollectionCombinationRow.matchesDisplayKey(info: VariantInfoRow): Boolean =
 
 fun List<CollectionCombinationRow>.forDisplayKey(info: VariantInfoRow): List<CollectionCombinationRow> =
     filter { it.matchesDisplayKey(info) }
-
 
