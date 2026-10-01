@@ -58,17 +58,57 @@ jobs:
           New-Item -ItemType Directory -Force "$site/images/background_previews" | Out-Null
           New-Item -ItemType Directory -Force "$site/images/background_optimized" | Out-Null
           New-Item -ItemType Directory -Force "$site/master" | Out-Null
-          Copy-Item app/src/main/assets/master/master_manifest.json "$site/master/previous_master_manifest.json" -Force
+          $repositoryName = "${{ github.event.repository.name }}"
+          $assetBase = "https://${{ github.repository_owner }}.github.io/$repositoryName/master-data"
+          $previousManifestPath = "$site/master/previous_master_manifest.json"
+          $previousManifestUrl = "$assetBase/master_manifest.json"
+          try {
+            Invoke-WebRequest -Uri $previousManifestUrl -OutFile $previousManifestPath -UseBasicParsing
+            Write-Host "已讀取上一版 GitHub Pages 主資料：$previousManifestUrl"
+          } catch {
+            Write-Warning "上一版公開主資料尚不可用，改用 App 內建主資料。"
+            Copy-Item app/src/main/assets/master/master_manifest.json $previousManifestPath -Force
+          }
           if (Test-Path app/src/main/assets/images/background_previews) {
             Copy-Item app/src/main/assets/images/background_previews/* "$site/images/background_previews/" -Force -ErrorAction SilentlyContinue
           }
           Copy-Item app/src/main/assets/images/background_optimized/* "$site/images/background_optimized/" -Force
           Copy-Item app/src/main/assets/master/background_image_index.json "$site/master/background_image_index.json" -Force
+          Copy-Item app/src/main/assets/master/background_preview_integrity_index.json "$site/master/background_preview_integrity_index.json" -Force
+          # GitHub Pages 不需要寫入主分支；每次執行從上一版公開 manifest
+          # 下載已發佈的完整 WebP，讓新內容能跨次更新持續保留。
+          try {
+            $previous = Get-Content $previousManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+            $previousUrls = @{}
+            foreach ($background in $previous.backgrounds) {
+              foreach ($field in @("previewImageKey", "imageKey")) {
+                $value = [string]$background.$field
+                if (-not $value) { continue }
+                if ($value -match '^https://.+/images/background_optimized/[^/]+\.webp$') {
+                  $previousUrls[$value] = $true
+                } elseif ($value -match '^background_optimized/[^/]+\.webp$') {
+                  $previousUrls["$assetBase/images/$value"] = $true
+                }
+              }
+            }
+            foreach ($url in $previousUrls.Keys) {
+              $filename = [IO.Path]::GetFileName(([Uri]$url).AbsolutePath)
+              $destination = Join-Path "$site/images/background_optimized" $filename
+              if (-not (Test-Path $destination)) {
+                try {
+                  Invoke-WebRequest -Uri $url -OutFile $destination -UseBasicParsing
+                } catch {
+                  Write-Warning "上一版背卡快取下載失敗：$url"
+                }
+              }
+            }
+            Write-Host "已回讀上一版完整背卡快取：$($previousUrls.Count) 張"
+          } catch {
+            Write-Warning "上一版背卡快取索引無法解析，繼續使用內建快取。"
+          }
           python tools/master_data/build_asset_manifest.py --manifest tools/master_data/generated/master_manifest.json --output tools/master_data/generated/background_asset_manifest.json --asset-dir $site --download --skip-cached-backgrounds --groups backgrounds
-          python tools/master_data/optimize_background_assets.py --manifest tools/master_data/generated/master_manifest.json --asset-root $site --previous-manifest "$site/master/previous_master_manifest.json" --output-manifest tools/master_data/generated/master_manifest_optimized.json --quality 84 --max-size 512 --prune-sources
+          python tools/master_data/optimize_background_assets.py --manifest tools/master_data/generated/master_manifest.json --asset-root $site --previous-manifest "$site/master/previous_master_manifest.json" --output-manifest tools/master_data/generated/master_manifest_optimized.json --backgrounds-output tools/master_data/generated/pokemon_backgrounds_optimized.json --quality 84 --max-size 512 --prune-sources
           python tools/master_data/validate_master_data.py --manifest tools/master_data/generated/master_manifest_optimized.json --asset-root $site --require-background-assets
-          $repositoryName = "${{ github.event.repository.name }}"
-          $assetBase = "https://${{ github.repository_owner }}.github.io/$repositoryName/master-data"
           python tools/master_data/build_remote_update_manifest.py --manifest tools/master_data/generated/master_manifest_optimized.json --output "$site/master_manifest.json" --asset-base-url $assetBase
           Copy-Item tools/master_data/generated/pokemon_*.json $site -Force
 
