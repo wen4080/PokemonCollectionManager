@@ -56,13 +56,14 @@ jobs:
           New-Item -ItemType Directory -Force "$site/images/background_previews" | Out-Null
           New-Item -ItemType Directory -Force "$site/images/background_optimized" | Out-Null
           New-Item -ItemType Directory -Force "$site/master" | Out-Null
+          Copy-Item app/src/main/assets/master/master_manifest.json "$site/master/previous_master_manifest.json" -Force
           if (Test-Path app/src/main/assets/images/background_previews) {
             Copy-Item app/src/main/assets/images/background_previews/* "$site/images/background_previews/" -Force -ErrorAction SilentlyContinue
           }
           Copy-Item app/src/main/assets/images/background_optimized/* "$site/images/background_optimized/" -Force
           Copy-Item app/src/main/assets/master/background_image_index.json "$site/master/background_image_index.json" -Force
           python tools/master_data/build_asset_manifest.py --manifest tools/master_data/generated/master_manifest.json --output tools/master_data/generated/background_asset_manifest.json --asset-dir $site --download --skip-cached-backgrounds --groups backgrounds
-          python tools/master_data/optimize_background_assets.py --manifest tools/master_data/generated/master_manifest.json --asset-root $site --output-manifest tools/master_data/generated/master_manifest_optimized.json --quality 84 --max-size 512 --prune-sources
+          python tools/master_data/optimize_background_assets.py --manifest tools/master_data/generated/master_manifest.json --asset-root $site --previous-manifest "$site/master/previous_master_manifest.json" --output-manifest tools/master_data/generated/master_manifest_optimized.json --quality 84 --max-size 512 --prune-sources
           python tools/master_data/validate_master_data.py --manifest tools/master_data/generated/master_manifest_optimized.json --asset-root $site --require-background-assets
           $repositoryName = "${{ github.event.repository.name }}"
           $assetBase = "https://${{ github.repository_owner }}.github.io/$repositoryName/master-data"
