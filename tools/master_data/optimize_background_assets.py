@@ -9,16 +9,9 @@ import pathlib
 import shutil
 
 try:
-    from PIL import Image
+    from PIL import Image, ImageChops, ImageStat
 except ImportError as error:  # pragma: no cover - only an environment setup failure.
     raise SystemExit("缺少 Pillow；請先執行：python -m pip install Pillow") from error
-
-
-def asset_path(asset_root: pathlib.Path, image_key: str) -> pathlib.Path:
-    relative = image_key.removeprefix("pogo/")
-    if not pathlib.PurePosixPath(relative).suffix:
-        relative = f"{relative}.png"
-    return asset_root / "images" / pathlib.Path(*pathlib.PurePosixPath(relative).parts)
 
 
 def backgrounds_from(root: object) -> list[dict]:
@@ -29,10 +22,57 @@ def backgrounds_from(root: object) -> list[dict]:
     raise ValueError("不支援的背景 JSON 格式")
 
 
+def background_root(root: object) -> dict:
+    if isinstance(root, dict):
+        return root
+    raise ValueError("最佳化主資料必須是物件格式")
+
+
+def load_previous_backgrounds(path: pathlib.Path | None) -> dict[str, dict]:
+    if path is None or not path.is_file():
+        return {}
+    try:
+        root = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {
+        str(item.get("id")): item
+        for item in backgrounds_from(root)
+        if item.get("id")
+    }
+
+
+def image_difference_score(left: pathlib.Path, right: pathlib.Path) -> float | None:
+    """比較預覽與底圖的縮圖差異；數值越接近 0 代表幾乎是同一張圖。"""
+    try:
+        with Image.open(left) as left_image, Image.open(right) as right_image:
+            left_rgb = left_image.convert("RGB")
+            right_rgb = right_image.convert("RGB")
+            left_rgb.thumbnail((64, 64), Image.Resampling.LANCZOS)
+            right_rgb = right_rgb.resize(left_rgb.size, Image.Resampling.LANCZOS)
+            difference = ImageChops.difference(left_rgb, right_rgb)
+            means = ImageStat.Stat(difference).mean
+            return sum(means) / len(means)
+    except (OSError, ValueError):
+        return None
+
+
+def asset_path(asset_root: pathlib.Path, image_key: str) -> pathlib.Path:
+    relative = image_key.removeprefix("pogo/")
+    if not pathlib.PurePosixPath(relative).suffix:
+        relative = f"{relative}.png"
+    return asset_root / "images" / pathlib.Path(*pathlib.PurePosixPath(relative).parts)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="最佳化 Android 背景圖片資產")
     parser.add_argument("--manifest", type=pathlib.Path, required=True)
     parser.add_argument("--asset-root", type=pathlib.Path, required=True)
+    parser.add_argument(
+        "--previous-manifest",
+        type=pathlib.Path,
+        help="上一版已發布主資料；用來保留已驗證的完整合成預覽",
+    )
     parser.add_argument("--output-manifest", type=pathlib.Path, required=True)
     parser.add_argument("--backgrounds-output", type=pathlib.Path)
     parser.add_argument("--quality", type=int, default=84)
@@ -40,8 +80,13 @@ def main() -> None:
     parser.add_argument("--prune-sources", action="store_true")
     args = parser.parse_args()
 
-    root = json.loads(args.manifest.read_text(encoding="utf-8"))
+    root = background_root(json.loads(args.manifest.read_text(encoding="utf-8")))
     backgrounds = backgrounds_from(root)
+    previous_manifest = args.previous_manifest
+    if previous_manifest is None:
+        inferred = args.asset_root / "master" / "master_manifest.json"
+        previous_manifest = inferred if inferred.is_file() else None
+    previous_backgrounds = load_previous_backgrounds(previous_manifest)
     output_dir = args.asset_root / "images" / "background_optimized"
     output_dir.mkdir(parents=True, exist_ok=True)
     existing_index: dict[str, str] = {}
@@ -60,8 +105,110 @@ def main() -> None:
     converted: dict[pathlib.Path, str] = {}
     used_output_paths: set[pathlib.Path] = set()
     source_paths: set[pathlib.Path] = set()
+    integrity_audit: dict[str, object] = {
+        "checkedPreviewCount": 0,
+        "baseEquivalentPreviewCount": 0,
+        "baseEquivalentBackgroundKeys": [],
+        "preservedPreviousCompletePreviewCount": 0,
+        "preservedPreviousBackgroundKeys": [],
+        "previewComparisonThreshold": 1.5,
+    }
+    base_equivalent_keys: list[str] = []
+    preserved_previous_keys: list[str] = []
+    untrusted_sources = {"Dittobase", "PoGoMate"}
 
     for background in backgrounds:
+        background_id = str(background.get("id") or "")
+        previous = previous_backgrounds.get(background_id)
+        current_preview_key = background.get("previewImageKey")
+        previous_preview_key = previous.get("previewImageKey") if previous else None
+        previous_preview_path = (
+            asset_path(args.asset_root, str(previous_preview_key))
+            if previous_preview_key and not str(previous_preview_key).startswith("https://")
+            else None
+        )
+        # 舊版主資料可能只記錄了原始 background_previews/ 鍵，
+        # 但同一張已驗證 WebP 已由穩定索引保留；以索引中的實體檔
+        # 作為可沿用的上一版完整預覽。
+        if previous and previous_preview_path and not previous_preview_path.is_file():
+            cached_previous_key = existing_index.get(background_id)
+            cached_previous_path = (
+                asset_path(args.asset_root, cached_previous_key)
+                if cached_previous_key
+                else None
+            )
+            if cached_previous_key and cached_previous_path and cached_previous_path.is_file():
+                previous_preview_key = cached_previous_key
+                previous_preview_path = cached_previous_path
+        previous_is_complete = bool(
+            previous
+            and (
+                previous.get("previewStatus") == "COMPLETE_STATIC_PREVIEW"
+                or previous.get("previewSource")
+            )
+            and previous_preview_path
+            and previous_preview_path.is_file()
+        )
+
+        # 外部收藏索引有時只提供遊戲的靜態底圖。若它與本次底圖幾乎
+        # 相同，不能把它標成完整圖層；若上一版有已驗證合成圖，則保留
+        # 上一版，避免一次更新讓已能辨識的背景退化成無硬幣／無月亮。
+        if current_preview_key and background.get("previewSource") in untrusted_sources:
+            current_preview_path = asset_path(args.asset_root, str(current_preview_key))
+            base_key = background.get("imageKey")
+            base_path = asset_path(args.asset_root, str(base_key)) if base_key and not str(base_key).startswith("https://") else None
+            score = image_difference_score(current_preview_path, base_path) if base_path and current_preview_path.is_file() and base_path.is_file() else None
+            if score is not None:
+                integrity_audit["checkedPreviewCount"] = int(integrity_audit["checkedPreviewCount"]) + 1
+                if score <= float(integrity_audit["previewComparisonThreshold"]):
+                    base_equivalent_keys.append(str(background.get("backgroundKey") or background_id))
+                    if previous_is_complete:
+                        background["previewImageKey"] = previous_preview_key
+                        background["previewSource"] = previous.get("previewSource")
+                        background["previewStatus"] = "COMPLETE_STATIC_PREVIEW"
+                        if previous.get("sourcePreviewImageKey"):
+                            background["sourcePreviewImageKey"] = previous["sourcePreviewImageKey"]
+                        preserved_previous_keys.append(str(background.get("backgroundKey") or background_id))
+                    else:
+                        background["previewImageKey"] = None
+                        background["previewSource"] = None
+                        background["previewStatus"] = "STATIC_BASE_ONLY"
+
+            # --skip-cached-backgrounds 可能讓本次底圖原檔不必重新下載，
+            # 此時無法計算差異；對已驗證的上一版仍採保守策略保留合成圖。
+            if score is None and previous_is_complete:
+                background["previewImageKey"] = previous_preview_key
+                background["previewSource"] = previous.get("previewSource")
+                background["previewStatus"] = "COMPLETE_STATIC_PREVIEW"
+                if previous.get("sourcePreviewImageKey"):
+                    background["sourcePreviewImageKey"] = previous["sourcePreviewImageKey"]
+                preserved_previous_keys.append(str(background.get("backgroundKey") or background_id))
+
+        # 建置機器可能沒有重新下載到上一版預覽原檔，但上一版最佳化
+        # WebP 仍在快取中；此時直接沿用快取，不讓後面的缺檔分支把它
+        # 降級成底圖。
+        current_preview_path = (
+            asset_path(args.asset_root, str(background.get("previewImageKey")))
+            if background.get("previewImageKey") and not str(background.get("previewImageKey")).startswith("https://")
+            else None
+        )
+        if background.get("previewImageKey") and previous_is_complete and current_preview_path and not current_preview_path.is_file():
+            background["previewImageKey"] = previous_preview_key
+            background["previewSource"] = previous.get("previewSource")
+            background["previewStatus"] = "COMPLETE_STATIC_PREVIEW"
+            if previous.get("sourcePreviewImageKey"):
+                background["sourcePreviewImageKey"] = previous["sourcePreviewImageKey"]
+            preserved_previous_keys.append(str(background.get("backgroundKey") or background_id))
+
+        # 預覽來源暫時抓不到時，仍可直接沿用上一版已驗證的合成檔。
+        if not background.get("previewImageKey") and previous_is_complete:
+            background["previewImageKey"] = previous_preview_key
+            background["previewSource"] = previous.get("previewSource")
+            background["previewStatus"] = "COMPLETE_STATIC_PREVIEW"
+            if previous.get("sourcePreviewImageKey"):
+                background["sourcePreviewImageKey"] = previous["sourcePreviewImageKey"]
+            preserved_previous_keys.append(str(background.get("backgroundKey") or background_id))
+
         field = "previewImageKey" if background.get("previewImageKey") else "imageKey"
         image_key = background.get(field)
         if not image_key or image_key.startswith("https://"):
@@ -79,7 +226,7 @@ def main() -> None:
                 if not image_key or image_key.startswith("https://"):
                     continue
                 source = asset_path(args.asset_root, image_key)
-            cached_key = existing_index.get(str(background.get("id") or ""))
+            cached_key = existing_index.get(background_id)
             cached_source = asset_path(args.asset_root, cached_key) if cached_key else None
             if cached_key and cached_source and cached_source.is_file():
                 background.setdefault(
@@ -144,9 +291,18 @@ def main() -> None:
             images_folder.rmdir()
 
     optimized_bytes = sum(path.stat().st_size for path in used_output_paths)
+    integrity_audit["baseEquivalentPreviewCount"] = len(base_equivalent_keys)
+    integrity_audit["baseEquivalentBackgroundKeys"] = sorted(set(base_equivalent_keys))
+    integrity_audit["preservedPreviousCompletePreviewCount"] = len(set(preserved_previous_keys))
+    integrity_audit["preservedPreviousBackgroundKeys"] = sorted(set(preserved_previous_keys))
+    root["backgroundPreviewIntegrityAudit"] = integrity_audit
+    # 重新寫入一次，讓稽核資訊和最佳化後的背景欄位一起進入主資料。
+    args.output_manifest.write_text(json.dumps(root, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Optimized background files: {len(used_output_paths)}")
     print(f"Optimized background bytes: {optimized_bytes}")
     print(f"Background image index entries: {len(image_index)}")
+    print(f"Base-equivalent previews: {len(set(base_equivalent_keys))}")
+    print(f"Preserved previous complete previews: {len(set(preserved_previous_keys))}")
 
 
 if __name__ == "__main__":
