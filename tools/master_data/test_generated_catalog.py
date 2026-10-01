@@ -159,6 +159,21 @@ class GeneratedCatalogTest(unittest.TestCase):
             preview_key,
         )
 
+    def test_gimmighoul_anniversary_background_uses_coin_composite_preview(self) -> None:
+        background = next(
+            item
+            for item in self.app_manifest["backgrounds"]
+            if item["backgroundKey"] == "SPECIALBACKGROUND_GG2026"
+        )
+        self.assertEqual("COMPLETE_STATIC_PREVIEW", background.get("previewStatus"))
+        self.assertEqual("Bulbagarden Archives", background.get("previewSource"))
+        preview_key = background.get("previewImageKey")
+        self.assertTrue(preview_key)
+        self.assertTrue(
+            (ROOT.parent.parent / "app" / "src" / "main" / "assets" / "images" / preview_key).is_file(),
+            preview_key,
+        )
+
     def test_background_preview_audit_is_present_for_future_updates(self) -> None:
         audit = self.manifest.get("backgroundPreviewAudit", {})
         self.assertGreaterEqual(audit.get("providerPreviewCount", 0), 1)
