@@ -19,6 +19,9 @@ class GeneratedCatalogTest(unittest.TestCase):
         cls.background_image_index = json.loads(
             (ROOT.parent.parent / "app" / "src" / "main" / "assets" / "master" / "background_image_index.json").read_text(encoding="utf-8"),
         )
+        cls.background_preview_integrity_index = json.loads(
+            (ROOT.parent.parent / "app" / "src" / "main" / "assets" / "master" / "background_preview_integrity_index.json").read_text(encoding="utf-8"),
+        )
         tree = json.loads((ROOT / "downloads" / "pogo_assets_tree.json").read_text(encoding="utf-8"))
         cls.asset_keys = {f"pogo/{item['path']}" for item in tree["tree"] if item.get("type") == "blob"}
 
@@ -172,6 +175,23 @@ class GeneratedCatalogTest(unittest.TestCase):
         self.assertTrue(
             (ROOT.parent.parent / "app" / "src" / "main" / "assets" / "images" / preview_key).is_file(),
             preview_key,
+        )
+
+    def test_verified_background_preview_index_keeps_all_complete_layers(self) -> None:
+        rows = self.background_preview_integrity_index["previews"]
+        self.assertEqual(49, len(rows))
+        self.assertEqual(len(rows), len({item["backgroundId"] for item in rows}))
+        image_root = ROOT.parent.parent / "app" / "src" / "main" / "assets" / "images"
+        for item in rows:
+            self.assertTrue((image_root / item["previewImageKey"]).is_file(), item["previewImageKey"])
+        by_key = {item["backgroundKey"]: item for item in rows}
+        self.assertEqual(
+            "background_optimized/9d7833952b0045167bee.webp",
+            by_key["SPECIALBACKGROUND_GG2026"]["previewImageKey"],
+        )
+        self.assertEqual(
+            "background_optimized/3a331840f06730f45e8d.webp",
+            by_key["ASSET_SB_MIDAUTUMN"]["previewImageKey"],
         )
 
     def test_background_preview_audit_is_present_for_future_updates(self) -> None:
