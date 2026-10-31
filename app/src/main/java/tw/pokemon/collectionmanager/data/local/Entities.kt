@@ -111,10 +111,14 @@ data class BackgroundEntity(
     val availableUntil: String? = null,
     val dataSource: String = "GAME_MASTER",
     val imageKey: String? = null,
+    /** 原始遊戲底圖鍵；遠端最佳化圖暫時不可用時的載入備援。 */
+    val sourceImageKey: String? = null,
     val vfxKey: String? = null,
     val vfxKeys: String? = null,
     val effectNote: String? = null,
     val previewImageKey: String? = null,
+    /** 原始完整預覽鍵；不覆寫 imageKey，讓兩種視覺來源可以各自回退。 */
+    val sourcePreviewImageKey: String? = null,
     val previewSource: String? = null,
     val previewStatus: String? = null,
     val sortOrder: Int = 0,
@@ -169,6 +173,8 @@ data class MasterDataMetaEntity(
     val backgroundCount: Int,
     val imageCount: Int,
     val missingImageCount: Int,
+    /** 主資料內容雜湊。即使發布者修正同一版本的背景資訊也能重新匯入。 */
+    val manifestFingerprint: String? = null,
     val importedAt: Long,
 )
 
