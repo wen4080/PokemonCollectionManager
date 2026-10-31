@@ -185,10 +185,29 @@ class CollectionApplication : Application() {
         }
     }
 
+    /**
+     * 遠端主資料從 v10 起同時保存最佳化圖與原始圖鍵，避免新背卡的
+     * 完整預覽檔暫時不可用時沒有底圖可顯示；內容雜湊也能偵測同版修正。
+     */
+    private val migration9To10 = object : Migration(9, 10) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            ensureBackgroundPreviewStatusColumn(database)
+            if (!hasColumn(database, "backgrounds", "sourceImageKey")) {
+                database.execSQL("ALTER TABLE backgrounds ADD COLUMN sourceImageKey TEXT")
+            }
+            if (!hasColumn(database, "backgrounds", "sourcePreviewImageKey")) {
+                database.execSQL("ALTER TABLE backgrounds ADD COLUMN sourcePreviewImageKey TEXT")
+            }
+            if (!hasColumn(database, "master_data_meta", "manifestFingerprint")) {
+                database.execSQL("ALTER TABLE master_data_meta ADD COLUMN manifestFingerprint TEXT")
+            }
+        }
+    }
+
     val database: CollectionDatabase by lazy {
         Room.databaseBuilder(this, CollectionDatabase::class.java, "pokemon_collection.db")
             .enableMultiInstanceInvalidation()
-            .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9)
+            .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10)
             .build()
     }
 
