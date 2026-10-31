@@ -286,52 +286,61 @@ def main() -> None:
                 background["sourcePreviewImageKey"] = previous["sourcePreviewImageKey"]
             preserved_previous_keys.append(str(background.get("backgroundKey") or background_id))
 
-        field = "previewImageKey" if background.get("previewImageKey") else "imageKey"
-        image_key = background.get(field)
-        if not image_key or image_key.startswith("https://"):
-            continue
-        source = asset_path(args.asset_root, image_key)
-        if not source.is_file():
-            # 既有版本已將舊背景最佳化並保留索引；新版本不應因上游
-            # 暫時 403/逾時而把原本可顯示的城市背卡變成空白。
-            # 只有完整預覽檔缺失時才退回原始底圖，不能把舊底圖冒充完整合成預覽。
-            if field == "previewImageKey":
-                background["previewImageKey"] = None
-                background["previewSource"] = None
-                field = "imageKey"
-                image_key = background.get(field)
-                if not image_key or image_key.startswith("https://"):
-                    continue
-                source = asset_path(args.asset_root, image_key)
-            cached_source = cached_path
-            if cached_key and cached_source and cached_source.is_file():
-                background.setdefault(
-                    "sourceImageKey" if field == "imageKey" else "sourcePreviewImageKey",
-                    image_key,
+        def optimize_image_field(field: str) -> None:
+            """保留「完整預覽」與「遊戲底圖」兩條可用來源。
+
+            過去只最佳化 previewImageKey，並把 imageKey 改成同一張圖。
+            若預覽檔尚未同步到 Pages，Android 沒有另一張可退回的圖片，
+            就會出現新增背卡只剩文字的情況。兩種圖片各自發布，App 才能
+            先嘗試完整卡面、失敗時回退到底圖。
+            """
+            image_key = background.get(field)
+            if not image_key or str(image_key).startswith("https://"):
+                return
+            source = asset_path(args.asset_root, str(image_key))
+            if not source.is_file():
+                # 預覽來源遺失時，不把舊底圖誤標成完整預覽；保留底圖
+                # 供遠端 App 顯示，並讓狀態明確反映目前沒有完整靜態卡面。
+                if field == "previewImageKey":
+                    background["previewImageKey"] = None
+                    background["previewSource"] = None
+                    background["previewStatus"] = (
+                        "STATIC_BASE_ONLY" if background.get("imageKey") else "NO_IMAGE"
+                    )
+                    return
+                # 既有版本已保留圖片索引時，可安全沿用快取，避免上游
+                # 暫時 403／逾時使已可顯示的背景變成空白。
+                if cached_key and cached_path and cached_path.is_file():
+                    background.setdefault("sourceImageKey", image_key)
+                    background[field] = cached_key
+                    used_output_paths.add(cached_path.resolve())
+                    return
+                raise FileNotFoundError(
+                    f"找不到背景圖片：{background.get('backgroundKey')} -> {source}"
                 )
-                background[field] = cached_key
-                used_output_paths.add(cached_source.resolve())
-                continue
-            raise FileNotFoundError(f"找不到背景圖片：{background.get('backgroundKey')} -> {source}")
-        source_paths.add(source.resolve())
-        if image_key.startswith("background_optimized/"):
-            converted[source.resolve()] = image_key
-            used_output_paths.add(source.resolve())
-            continue
-        optimized_key = converted.get(source.resolve())
-        if optimized_key is None:
-            digest = hashlib.sha256(source.read_bytes()).hexdigest()[:20]
-            destination = output_dir / f"{digest}.webp"
-            with Image.open(source) as image:
-                image.load()
-                image.thumbnail((args.max_size, args.max_size), Image.Resampling.LANCZOS)
-                image.save(destination, "WEBP", quality=args.quality, method=6, lossless=False)
-            optimized_key = f"background_optimized/{destination.name}"
-            converted[source.resolve()] = optimized_key
-            used_output_paths.add(destination.resolve())
-        source_field = "sourcePreviewImageKey" if field == "previewImageKey" else "sourceImageKey"
-        background.setdefault(source_field, image_key)
-        background[field] = optimized_key
+            source_paths.add(source.resolve())
+            if str(image_key).startswith("background_optimized/"):
+                converted[source.resolve()] = str(image_key)
+                used_output_paths.add(source.resolve())
+                return
+            optimized_key = converted.get(source.resolve())
+            if optimized_key is None:
+                digest = hashlib.sha256(source.read_bytes()).hexdigest()[:20]
+                destination = output_dir / f"{digest}.webp"
+                with Image.open(source) as image:
+                    image.load()
+                    image.thumbnail((args.max_size, args.max_size), Image.Resampling.LANCZOS)
+                    image.save(destination, "WEBP", quality=args.quality, method=6, lossless=False)
+                optimized_key = f"background_optimized/{destination.name}"
+                converted[source.resolve()] = optimized_key
+                used_output_paths.add(destination.resolve())
+            source_field = "sourcePreviewImageKey" if field == "previewImageKey" else "sourceImageKey"
+            background.setdefault(source_field, image_key)
+            background[field] = optimized_key
+
+        # 即使有完整預覽，也要同時發布遊戲底圖作為遠端載入備援。
+        optimize_image_field("imageKey")
+        optimize_image_field("previewImageKey")
 
     for candidate in output_dir.glob("*.webp"):
         if candidate.resolve() not in used_output_paths:
