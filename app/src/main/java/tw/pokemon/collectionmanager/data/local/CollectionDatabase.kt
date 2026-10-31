@@ -20,7 +20,7 @@ import androidx.room.TypeConverters
         CollectionTagEntity::class,
         CollectionVariantTagEntity::class,
     ],
-    version = 9,
+    version = 10,
     exportSchema = false,
 )
 @TypeConverters(RoomConverters::class)
