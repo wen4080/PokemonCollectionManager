@@ -17,6 +17,7 @@ import tw.pokemon.collectionmanager.data.local.PokemonCostumeCompatibilityEntity
 import tw.pokemon.collectionmanager.data.local.PokemonFormEntity
 import tw.pokemon.collectionmanager.data.local.PokemonSpeciesEntity
 import java.io.ByteArrayOutputStream
+import java.security.MessageDigest
 import java.util.UUID
 import java.net.HttpURLConnection
 import java.net.URL
@@ -56,21 +57,11 @@ class MasterDataRepository(
         val manifest = runCatching {
             context.assets.open("master/master_manifest.json").bufferedReader().use { it.readText() }
         }.getOrNull() ?: return
-        val version = runCatching {
-            val root = JSONObject(manifest)
-            root.optString("masterVersion", root.optString("version", ""))
-        }.getOrDefault("")
-        val expectedCounts = runCatching {
-            val root = JSONObject(manifest)
-            listOf(
-                root.optJSONArray("species")?.length() ?: 0,
-                root.optJSONArray("forms")?.length() ?: 0,
-                root.optJSONArray("costumes")?.length() ?: 0,
-                root.optJSONArray("backgrounds")?.length() ?: 0,
-            )
-        }.getOrDefault(listOf(0, 0, 0, 0))
         val current = dao.getMeta()
-        if (current?.masterVersion == version && current.speciesCount == expectedCounts[0] && current.formCount == expectedCounts[1] && current.costumeCount == expectedCounts[2] && current.backgroundCount == expectedCounts[3] && dao.speciesCount() > 0) return
+        // 內建 manifest 只負責第一次安裝。使用者已下載過的主資料可能
+        // 比 APK 內附版本更新；每次啟動都重新 seed 會把新增背卡、圖片
+        // 和活動資訊降級回舊內容，造成「更新後又不見」的錯覺。
+        if (current != null && dao.speciesCount() > 0) return
         importManifest(manifest)
     }
 
@@ -99,6 +90,7 @@ class MasterDataRepository(
         val imageCount = root.optInt("imageCount", countImageKeys(species, forms, costumes, backgrounds))
         val missingImageCount = root.optInt("missingImageCount", 0)
         val generatedAt = root.optString("generatedAt").ifBlank { null }
+        val manifestFingerprint = sha256(json)
         onProgress(MasterDataUpdateProgress("更新本機資料庫", 0.84f, "正在保留收藏資料並更新主資料"))
         database.withTransaction {
             dao.deactivateSpecies()
@@ -123,6 +115,7 @@ class MasterDataRepository(
                     backgroundCount = backgrounds.size,
                     imageCount = imageCount,
                     missingImageCount = missingImageCount,
+                    manifestFingerprint = manifestFingerprint,
                     importedAt = System.currentTimeMillis(),
                 ),
             )
@@ -174,7 +167,8 @@ class MasterDataRepository(
         require(remoteVersion.isNotBlank()) { "主資料缺少版本資訊" }
         require((root.optJSONArray("species")?.length() ?: 0) > 0) { "主資料缺少 Pokémon 清單" }
         val currentVersion = dao.getMeta()?.masterVersion
-        if (currentVersion == remoteVersion) {
+        val remoteFingerprint = sha256(json)
+        if (currentVersion == remoteVersion && dao.getMeta()?.manifestFingerprint == remoteFingerprint) {
             MasterDataUpdateResult.AlreadyCurrent(remoteVersion)
         } else {
             importManifest(json, onProgress)
@@ -187,6 +181,10 @@ class MasterDataRepository(
         bytes >= 1024L -> "%.0f KB".format(java.util.Locale.ROOT, bytes / 1024f)
         else -> "$bytes B"
     }
+
+    private fun sha256(value: String): String = MessageDigest.getInstance("SHA-256")
+        .digest(value.toByteArray(Charsets.UTF_8))
+        .joinToString("") { byte -> "%02x".format(byte) }
 
     private fun JSONArray?.toSpecies(): List<PokemonSpeciesEntity> = buildList {
         if (this@toSpecies == null) return@buildList
@@ -266,11 +264,14 @@ class MasterDataRepository(
                     availableUntil = item.optString("availableUntil").ifBlank { null },
                     dataSource = item.optString("dataSource", "GAME_MASTER"),
                     imageKey = item.optString("imageKey").ifBlank { null },
+                    sourceImageKey = item.optString("sourceImageKey").ifBlank { null },
                     vfxKey = item.optString("vfxKey").ifBlank { null },
                     vfxKeys = item.optString("vfxKeys").ifBlank { null },
                     effectNote = item.optString("effectNote").ifBlank { null },
                     previewImageKey = item.optString("previewImageKey").ifBlank { null },
+                    sourcePreviewImageKey = item.optString("sourcePreviewImageKey").ifBlank { null },
                     previewSource = item.optString("previewSource").ifBlank { null },
+                    previewStatus = item.optString("previewStatus").ifBlank { null },
                     sortOrder = item.optInt("sortOrder", 0),
                     isActive = true,
                 ),
