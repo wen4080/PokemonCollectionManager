@@ -38,6 +38,8 @@ sealed interface ImageReference {
     data class LocalFile(val file: File, override val cacheKey: String) : ImageReference
     data class BundledAsset(val assetPath: String, override val cacheKey: String) : ImageReference
     data class RemoteStatic(val url: String, override val cacheKey: String) : ImageReference
+    /** 依序嘗試完整預覽、最佳化底圖、內建圖片與原始遊戲底圖。 */
+    data class Fallback(val candidates: List<ImageReference>, override val cacheKey: String) : ImageReference
     data class Placeholder(val label: String, override val cacheKey: String) : ImageReference
 }
 
@@ -83,24 +85,28 @@ class LocalFirstPokemonImageRepository(
 
     override suspend fun getBackgroundImage(backgroundId: String): ImageReference = withContext(Dispatchers.IO) {
         val background = master.getBackground(backgroundId)
-        val databaseKey = background?.previewImageKey ?: background?.imageKey
+        if (background == null) return@withContext ImageReference.Placeholder("找不到背景圖片", backgroundId)
 
-        // A downloaded manifest may intentionally override a bundled image with a newer HTTPS asset.
-        if (databaseKey?.startsWith("https://") == true) {
-            return@withContext resolve(databaseKey, background?.displayName ?: backgroundId, false, null)
-        }
-
-        // Resolve by stable background ID first. This is independent of Room seeding and prevents an
-        // old imageKey left by a previous app version from hiding a valid bundled background image.
-        bundledBackgroundImageIndex[backgroundId]?.let { bundledKey ->
-            val bundledReference = resolve(bundledKey, background?.displayName ?: backgroundId, false, null)
-            if (bundledReference !is ImageReference.Placeholder) return@withContext bundledReference
-        }
-
-        if (background == null) {
-            ImageReference.Placeholder("找不到背景圖片", backgroundId)
-        } else {
-            resolve(databaseKey, background.displayName, false, null)
+        // 主資料更新時，Pages 的新完整預覽圖可能比 JSON 晚數秒可用，或個別
+        // 上游來源暫時失效。不能只嘗試第一個網址，否則新增背卡會只剩文字。
+        // 依序保留：完整預覽、最佳化底圖、APK 內建舊圖、原始預覽／底圖。
+        val imageKeys = buildList {
+            add(background.previewImageKey)
+            add(background.imageKey)
+            add(bundledBackgroundImageIndex[backgroundId])
+            add(background.sourcePreviewImageKey)
+            add(background.sourceImageKey)
+        }.filterNotNull().filter(String::isNotBlank).distinct()
+        val candidates = imageKeys.map { imageKey ->
+            resolve(imageKey, background.displayName, false, null)
+        }.filterNot { it is ImageReference.Placeholder }
+        when (candidates.size) {
+            0 -> ImageReference.Placeholder(background.displayName, "placeholder:$backgroundId")
+            1 -> candidates.single()
+            else -> ImageReference.Fallback(
+                candidates = candidates,
+                cacheKey = "background:$backgroundId:${candidates.joinToString("|") { it.cacheKey }}",
+            )
         }
     }
 
@@ -121,6 +127,9 @@ class LocalFirstPokemonImageRepository(
                 is ImageReference.LocalFile -> decodeFile(reference.file, dimension)
                 is ImageReference.BundledAsset -> decodeBundledAsset(reference.assetPath, dimension)
                 is ImageReference.RemoteStatic -> download(reference, dimension)
+                is ImageReference.Fallback -> reference.candidates.firstNotNullOfOrNull { candidate ->
+                    loadBitmap(candidate, dimension)
+                }
                 is ImageReference.Placeholder -> null
             }
         } catch (error: Throwable) {
